@@ -5,7 +5,7 @@
 
 #define FRIEND_QUOTA 5
 #define RIVAL_QUOTA 3
-#define lol 1
+#define lol 12
 
 typedef struct IsraeliQueue_t * IsraeliQueue;
 
