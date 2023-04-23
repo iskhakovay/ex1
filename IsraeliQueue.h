@@ -5,13 +5,13 @@
 
 #define FRIEND_QUOTA 5
 #define RIVAL_QUOTA 3
-#define lol 12
+//<3
 
 typedef struct IsraeliQueue_t * IsraeliQueue;
 
 typedef int (*FriendshipFunction)(void*,void*);
 typedef int (*ComparisonFunction)(void*,void*);
-//hehehehehehehehehehehehe
+
 
 typedef enum { ISRAELIQUEUE_SUCCESS, ISRAELIQUEUE_ALLOC_FAILED, ISRAELIQUEUE_BAD_PARAM, ISRAELI_QUEUE_ERROR } IsraeliQueueError;
 
