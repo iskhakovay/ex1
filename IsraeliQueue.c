@@ -87,12 +87,19 @@ int IsraeliQueueSize(IsraeliQueue q){
     return q->count;
 }
 
-//TODO
 /**@param item: an object comparable to the objects in the IsraeliQueue
  *
  * Returns whether the queue contains an element equal to item. If either
  * parameter is NULL, false is returned.*/
-bool IsraeliQueueContains(IsraeliQueue, void *);
+bool IsraeliQueueContains(IsraeliQueue q, void *item){
+    Node copy = q->rear;
+    while(copy->next!=NULL){
+        if(copy->data==item){
+            return true;
+        }
+    }
+    return false;
+}
 //TODO
 /**Advances each item in the queue to the foremost position accessible to it,
  * from the back of the queue frontwards.*/
