@@ -5,13 +5,24 @@
 
 #define FRIEND_QUOTA 5
 #define RIVAL_QUOTA 3
-//<3
-
-typedef struct IsraeliQueue_t * IsraeliQueue;
+// i guess it should be here
+typedef struct node{
+    int data;
+    struct  node* next;
+}*Node;
+//and this too
 
 typedef int (*FriendshipFunction)(void*,void*);
 typedef int (*ComparisonFunction)(void*,void*);
-
+typedef struct IsraeliQueue_t{
+    int (*FriendshipFunction)(void*,void*);
+    int (*ComparisonFunction)(void*,void*);
+    int friendship_th;
+    int rivalry_th;
+    Node front;
+    Node rear;
+    int count;
+} * IsraeliQueue;
 
 typedef enum { ISRAELIQUEUE_SUCCESS, ISRAELIQUEUE_ALLOC_FAILED, ISRAELIQUEUE_BAD_PARAM, ISRAELI_QUEUE_ERROR } IsraeliQueueError;
 
