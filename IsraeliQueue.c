@@ -159,14 +159,12 @@ void* IsraeliQueueDequeue(IsraeliQueue q){
         return NULL;
     }
     Node  tmp;
-    tmp;
     void* n = q->front->data;
     if(n==NULL){
         return NULL;
     }
     tmp = q->rear;
-    while(q->rear->next->next!=NULL){
-        q->rear = q->rear->next;
+    while(true){
         if(q->rear->next->next==NULL) {
             q->rear->next = NULL;
             q->front = q->rear;
@@ -174,8 +172,9 @@ void* IsraeliQueueDequeue(IsraeliQueue q){
             q->count--;
             return n;
         }
+        q->rear = q->rear->next;
     }
-    q->rear =tmp;
+
 
 }
 /**Returns the number of elements of the given queue. If the parameter is NULL, 0
@@ -212,27 +211,39 @@ bool IsraeliQueueContains(IsraeliQueue q, void *item){
      q->rear = tmp;
     return max;
  }
-IsraeliQueueError IsraeliQueueImprovePositions(IsraeliQueue q){
-    Node  current_item, suggested_position, tmp;
+IsraeliQueueError IsraeliQueueImprovePositions(IsraeliQueue q){ //TODO CHECK
+  /**  Node  current_item, suggested_position, tmp, new_first;
     int len = maxItemValue(q);
     int hist [len] ;
-
-    for(int i = 0; i<len;i++){/** idk about it... if there's several same objects.. but people are not the same....*/
-        hist[i] = 0;
+    */
+    Node tmp, new_first;
+    int q_len = q->count;
+    while(q_len>0){
+        tmp = createNode(q->rear->data,NULL); /** MAYBE IT IS BETTER */
+        new_first = q->rear->next;
+        q->rear->next = NULL;
+        q->rear = new_first;
+        IsraeliQueueEnqueue(q,tmp);
+        q_len--;
     }
 
-    while(q->rear->next!=NULL){/** q? yes*/
-        if(hist[q->rear->data]>0){ /** check if we already improved position of current item. if we did, skip it*/
+    /**
+
+    for(int i = 0; i<len;i++){/
+        hist[i] = 0;
+    }
+    while(q->rear->next!=NULL){
+        if(hist[q->rear->data]>0){
             q->rear= q->rear->next;
             continue;
         }else{
-            tmp = q->rear->next; /** saving next of current item and removing current item from queue in order to check his possible position WITHOUT him*/
+            tmp = q->rear->next;
             q->rear->next = NULL;
-            suggested_position = getPlacement(q,q->rear); /** checking position. if the same as it was, at the end of the queue, we attach it back to queue*/
+            suggested_position = getPlacement(q,q->rear);
             if(q->rear->next==suggested_position){
                 q->rear->next = tmp;
                 continue;
-            } else{ /** if not the same, we put it in better position and ++ hist*/
+            } else{
                 current_item->data = q->rear->data;
                 current_item->next=NULL;
                 IsraeliQueueEnqueue(q,current_item);
@@ -240,7 +251,7 @@ IsraeliQueueError IsraeliQueueImprovePositions(IsraeliQueue q){
             }
         }
         q->rear= q->rear->next;
-    }/** and how to get the head of node..*/
+    } */
 
 }
 
@@ -267,7 +278,7 @@ int newRivalTh(IsraeliQueue* arr){
     }
     return  sum/(i-1);
 }
-int* mergeFriendshipFunctions(IsraeliQueue* arr){
+int* mergeFriendshipFunctions(IsraeliQueue* arr){//TODO CHECK
     int len_of_arr = *(&arr + 1)-arr;
     int len_of_all_functions_arr = 0;
     for(int i = 0; i<len_of_arr; i++){
@@ -282,26 +293,72 @@ int* mergeFriendshipFunctions(IsraeliQueue* arr){
     }
     return new_arr;
 }
-IsraeliQueue IsraeliQueueMerge(IsraeliQueue* arr,ComparisonFunction comparisonFunction){
-    IsraeliQueue new_queue;
+IsraeliQueue longestQueue(IsraeliQueue* arr, int len){//TODO CHECK
+    int max_len = 0;
+    IsraeliQueue longest_queue;
+    for(int i = 0; i<len;i++){
+        if((*arr+i)->count>max_len){
+            max_len = (*arr+i)->count;
+            longest_queue = (*arr+i);
+        }
+    }
+    return longest_queue;
+}
+IsraeliQueue IsraeliQueueMerge(IsraeliQueue* arr,ComparisonFunction comparisonFunction){//TODO CHECK
+    IsraeliQueue new_queue,tmp;
+    IsraeliQueue longest_queue;
+
     int new_friendship_th = newFriendshipTh(arr), new_rival_th = newRivalTh(arr);
     int* new_friendship_arr = mergeFriendshipFunctions(arr);
+    int len_of_arr = *(&arr + 1)-arr;
+
+    longest_queue = longestQueue(arr,len_of_arr);
+
     new_queue = IsraeliQueueCreate(new_friendship_arr,comparisonFunction,new_friendship_th,new_rival_th);
-    /** HOW THE FUCK I PUT THEM*/
+
+    Node new_item, next_item, first_item, current_item;
+    while(longest_queue->rear!=NULL) {
+        first_item = createNode((*arr)->front->data,NULL);
+        new_queue->front=first_item;
+
+        new_item = createNode((*arr+1)->front->data,first_item);
+        new_queue->rear = new_item;
+
+        next_item = new_item;                                   /**  idk.............. fishy.....*/
+
+        IsraeliQueueDequeue((*arr));
+        IsraeliQueueDequeue(tmp);
+        for (int i = 2; i < len_of_arr; i++) {
+            tmp = (*arr + i);
+            if(tmp->front==NULL){
+                continue;
+            }
+            current_item = createNode(tmp->front->data,next_item);
+            IsraeliQueueDequeue(tmp);
+            next_item = current_item;
+        }
+    }
+    return new_queue;
 
 }
 
-//TODO
+
 /**@param IsraeliQueue: an IsraeliQueue to which the function is to be added
  * @param FriendshipFunction: a FriendshipFunction to be recognized by the IsraeliQueue
  * going forward.
  *
  * Makes the IsraeliQueue provided recognize the FriendshipFunction provided.*/
  //TODO
-IsraeliQueueError IsraeliQueueAddFriendshipMeasure(IsraeliQueue q, FriendshipFunction friendshipFunction){
-    int len = q->friendship_function_len;
+IsraeliQueueError IsraeliQueueAddFriendshipMeasure(IsraeliQueue q, FriendshipFunction friendshipFunction){ /**  i don't care i'll just make a new array*/ //TODO CHECK
+    int len = q->friendship_function_len+1;
+    int* arr[len];
+    for(int i = 0; i<len-1;i++){
+        arr[i] = (q->FriendshipFunction+i);
+    }
+    arr[len] = friendshipFunction;
+    q->FriendshipFunction = arr;                /** idk...*/
 
-}//TODO STILL DON'T KNOW
+}
 
 /**@param IsraeliQueue: an IsraeliQueue whose friendship threshold is to be modified
  * @param friendship_threshold: a new friendship threshold for the IsraeliQueue*/

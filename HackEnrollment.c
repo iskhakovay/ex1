@@ -3,6 +3,7 @@
 #include "stdlib.h"
 #include "stdbool.h"
 #include "HackEnrollment.h"
+#include "IsraeliQueue.h"
 
 //------------------------------------------------
 //mini functions declaration:
@@ -58,23 +59,19 @@ int student_id_difference(char* id1,char* id2);
 
 //------------------------------------------------
 
-typedef struct enrollment_system{
-    char* Student_ID;
-    int Total_Credits;
-    int GPA;
-    char* Name;
-    char* Surname;
-    char* City;
-    char* Department;
-    int Course_Number;
-}*EnrollmentSystem;
+typedef struct EnrollmentSystem_t{
+    FILE* students;
+    FILE* courses;
+    FILE* hackers;
+}* EnrollmentSystem;
 
 EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
 {
-    if((FILE* students_file = fopen(students, r)) == NULL)
+    EnrollmentSystem  sys;
+    if(students = fopen(students,'r') == NULL ||
+            )
     {
-        return NULL;
-
+        return HACK_ENROLLMENT_FAILED_READ_FILE;
     }
 
 

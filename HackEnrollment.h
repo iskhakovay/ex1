@@ -6,7 +6,7 @@
 #include "stdlib.h"
 #include "stdbool.h"
 
-
+typedef  enum {HACK_ENROLLMENT_SUCCESS, HACK_ENROLLMENT_FAILED_READ_FILE,HACK_ENROLLMENT_MEMORY_FAIL} HackEnrollmentError;
 typedef struct EnrollmentSystem_t *EnrollmentSystem;
 
 EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers);
