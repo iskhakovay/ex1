@@ -8,7 +8,6 @@
 //mini functions declaration:
 /**
 checks to see the absolute difference between [ASCII value of Name1] - [ASCII value of Name2]
-
 Parameters :
 ----------
 - name1 : CHAR*
@@ -75,12 +74,24 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
     if((FILE* students_file = fopen(students, r)) == NULL)
     {
         return NULL;
+
     }
 
 
 
 }
 
+
+EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
+{
+
+}
+
+
+void hackEnrollment(EnrollmentSystem sys, FILE* out)
+{
+
+}
 
 //------------------------------------------------
 //mini functions:

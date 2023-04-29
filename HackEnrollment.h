@@ -1,7 +1,10 @@
-
 #ifndef EX1_HACKENROLLMENT_H
 #define EX1_HACKENROLLMENT_H
 
+#include "stdio.h"
+#include "string.h"
+#include "stdlib.h"
+#include "stdbool.h"
 
 
 typedef struct EnrollmentSystem_t *EnrollmentSystem;
