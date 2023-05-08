@@ -121,7 +121,7 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
 
 }
 
-//
+
 EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
 {
 
