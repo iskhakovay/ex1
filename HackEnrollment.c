@@ -115,23 +115,6 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
     int num_of_courses = get_number_of_lines(courses);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 
@@ -209,7 +192,8 @@ int get_number_of_lines (FILE* file)
 }
 
 
-}
+//------------------------------------------------
+
 
 int read_name(FILE* students, char* name)
 {
@@ -224,6 +208,8 @@ int read_name(FILE* students, char* name)
     }
     return i;
 }
+//------------------------------------------------
+
 
 void get_to_next_line(FILE* stream)
 {
@@ -235,12 +221,16 @@ void get_to_next_line(FILE* stream)
     }
     return;
 }
+//------------------------------------------------
+
 
 int Name_distance (char* name1, char* name2, bool caps_lock)
 {
     int res = str_ASCII_value(name1, caps_lock) - str_ASCII_value(name2, caps_lock);
     return (res >= 0) ? res : (res * (-1));
 }
+//------------------------------------------------
+
 
 int str_ASCII_value(char* str, bool caps_lock)
 {
@@ -278,6 +268,8 @@ int str_ASCII_value(char* str, bool caps_lock)
     }
 
 }
+//------------------------------------------------
+
 
 int student_id_difference(char* id1,char* id2)
 {
