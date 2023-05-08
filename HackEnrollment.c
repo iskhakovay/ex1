@@ -73,12 +73,7 @@ void get_to_next_line(FILE* stream);
 int get_number_of_lines (FILE* file);
 
 
-//------------------------------------------------
-//big mini functions declaration:
-Student read_student_from_file(FILE* students);
 
-
-//------------------------------------------------
 typedef struct student_t{
     char* name;
     int student_id;
@@ -101,9 +96,17 @@ typedef struct EnrollmentSystem_t{
     struct Courses* ques;
 }* EnrollmentSystem;
 
+//------------------------------------------------
+//big mini functions declaration:
+Student read_student_from_file(FILE* students);
+
+
+//------------------------------------------------
+
 EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
 {
     EnrollmentSystem  system;
+
     int num_of_students = get_number_of_lines(students);
     system->students = malloc(num_of_students * sizeof (Student));
 
@@ -129,11 +132,7 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
 
 
 
- /*   if(students = fopen(students,'r') == NULL ||
-            )
-    {
-        return HACK_ENROLLMENT_FAILED_READ_FILE;
-    }*/
+
 
 
 
@@ -154,6 +153,7 @@ void hackEnrollment(EnrollmentSystem sys, FILE* out)
 //big mini functions:
 Student read_student_from_file(FILE* students)
 {
+
     char[ID_SIZE] id_temp = "";
     char[TOTAL_CRADIT_GPA_SIZE] total_cradit_gpa_temp = "";
 
@@ -179,6 +179,10 @@ Student read_student_from_file(FILE* students)
 
 int get_number_of_lines (FILE* file)
 {
+    if(students = fopen(file,'r') == NULL )
+    {
+        return HACK_ENROLLMENT_FAILED_READ_FILE;
+    }
     int lines_counter = 0;
     char char_temp = "";
     fgets(char_temp, 1, file);
@@ -190,6 +194,7 @@ int get_number_of_lines (FILE* file)
         }
         fgets(char_temp, 1, file);
     }
+    fclose(FILE* file)
     return lines_counter;
 }
 
