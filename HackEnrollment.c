@@ -109,11 +109,7 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
 
     int num_of_students = get_number_of_lines(students);
     system->students = malloc(num_of_students * sizeof (Student));
-
-    for (int i= o; i < num_of_students; i++)
-    {
-        system->students[i] =  read_student_from_file(students);
-    }
+    read_student_from_file(students, num_of_students);
 
 
     int num_of_courses = get_number_of_lines(courses);
@@ -151,24 +147,32 @@ void hackEnrollment(EnrollmentSystem sys, FILE* out)
 }
 ------------------------------------------------
 //big mini functions:
-Student read_student_from_file(FILE* students)
+void read_student_from_file(FILE* students, int num_of_students)
 {
+    for (int i= o; i < num_of_students; i++)
+    {
+        char[ID_SIZE] id_temp = "";
+        char[TOTAL_CRADIT_GPA_SIZE] total_cradit_gpa_temp = "";
 
-    char[ID_SIZE] id_temp = "";
-    char[TOTAL_CRADIT_GPA_SIZE] total_cradit_gpa_temp = "";
+        fgets(id_temp, ID_SIZE, students);
+        fgets(total_cradit_gpa_temp, TOTAL_CRADIT_GPA_SIZE, students);
 
-    fgets(id_temp, ID_SIZE, students);
-    fgets(total_cradit_gpa_temp, TOTAL_CRADIT_GPA_SIZE, students);
+        char * name_temp = malloc(sizeof (char));
+        int name_len_temp = read_name(students, name_temp);
 
-    char * name_temp = malloc(sizeof (char));
-    int name_len_temp = read_name(students, name_temp);
+        Student student_temp;
+        student_temp.name[name_len_temp]= name_temp;
+        student_temp.student_id = atoi(id_temp);
 
-    Student student_temp;
-    student_temp.name[name_len_temp]= name_temp;
-    student_temp.student_id = atoi(id_temp);
+        system->students[i] =  student_temp;
 
-    get_to_next_line(students);
-    return student_temp;
+        get_to_next_line(students);
+
+    }
+    return;
+
+
+
 }
 
 
