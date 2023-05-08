@@ -8,7 +8,7 @@
 #define NEUTRAL 0
 // i guess it should be here
 typedef struct node{
-    void* data;
+    int data;
     struct  node* next;
     int friendship;
     int rival;
@@ -191,10 +191,9 @@ int IsraeliQueueSize(IsraeliQueue q){
 bool IsraeliQueueContains(IsraeliQueue q, void *item){
     Node copy = q->rear;
     while(copy->next!=NULL){
-        if(q->ComparisonFunction(copy,item)){ /** copy->data == item*/
+        if(copy->data==item){
             return true;
         }
-        copy = copy->next;
     }
     return false;
 }
