@@ -67,7 +67,10 @@ absolute value of result.
 */
 int student_id_difference(char* id1,char* id2);
 
-int read_name(FILE* students_stream, char* name);
+int read_string(FILE* stream, char* str,char stop_char ,int num_of_stops);
+
+void read_arr_of_strings(FILE* stream, int* arr);
+
 
 void get_to_next_line(FILE* stream);
 
@@ -81,7 +84,8 @@ typedef struct student_t{
 }* Student;
 
 typedef struct hacker_t{
-    int student_id;
+    int hacker_id;
+    int* desired_courses;
     int* friends;
     int* rivals;
 }* Hacker;
@@ -104,6 +108,10 @@ typedef struct EnrollmentSystem_t{
 //big mini functions declaration:
 void read_student_from_file(FILE* students, int num_of_students, EnrollmentSystem system);
 
+void read_courses_from_file(FILE* courses, int num_of_courses, EnrollmentSystem system);
+
+void read_hackers_from_file(FILE* hackers, int num_of_hackers, EnrollmentSystem system);
+
 
 //------------------------------------------------
 
@@ -118,10 +126,16 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
 
     //TODO hackers and ques
 
-
     int num_of_courses = get_number_of_lines(courses);
+    Courses * courses_arr = malloc(num_of_courses*sizeof (Courses));
+    system->ques = courses_arr;
+    read_courses_from_file(courses,num_of_courses,system);
 
 
+    int num_of_hackers = get_number_of_lines(hackers)/4;
+    Hacker * hacker_arr = malloc(num_of_hackers * sizeof (Hacker));
+    system->Hackers = hacker_arr;
+    read_hackers_from_file(hackers,num_of_hackers, system);
 }
 
 
@@ -152,7 +166,7 @@ void read_student_from_file(FILE* students, int num_of_students, EnrollmentSyste
 
 
         char* name_temp = malloc(sizeof (char));
-        int name_len_temp = read_name(students, name_temp);
+        int name_len_temp = read_string(students, name_temp, ' ',2);
 
 
         Student student_temp;
@@ -173,6 +187,82 @@ void read_student_from_file(FILE* students, int num_of_students, EnrollmentSyste
 
 }
 
+//------------------------------------------------
+
+void read_courses_from_file(FILE* courses, int num_of_courses, EnrollmentSystem system)
+{
+    if(courses = fopen(courses,'r') == NULL )
+    {
+        //HACK_ENROLLMENT_FAILED_READ_FILE;
+    }
+    for (int i= 0; i < num_of_courses; i++)
+    {
+
+        char* course_id_temp = malloc(sizeof (char));
+        read_string(courses, course_id_temp, ' ',1);
+        Courses course_temp;
+        course_temp ->course_id = atoi(course_id_temp);
+        free(course_id_temp);
+
+        char* course_size_temp = malloc(sizeof (char));
+        read_string(courses, course_id_temp, '\n',1);
+        course_temp ->size =  atoi(course_size_temp);
+        free(course_size_temp);
+
+        system ->ques[i]= course_temp;
+
+        get_to_next_line(courses);
+
+    }
+    fclose(courses);
+    return;
+
+
+
+}
+
+//------------------------------------------------
+
+void read_hackers_from_file(FILE* hackers, int num_of_hackers, EnrollmentSystem system)
+{
+    if(hackers = fopen(hackers,'r') == NULL )
+    {
+        //HACK_ENROLLMENT_FAILED_READ_FILE;
+    }
+    for (int i= 0; i < num_of_hackers; i++)
+    {
+        Hacker hacker_temp;
+
+        //read hacker id
+        char id_temp[ID_SIZE]="";
+        fgets(id_temp[0], ID_SIZE, hackers);
+        hacker_temp->hacker_id = atoi(id_temp);
+
+        char trash ='';
+        fgets(trash, 1, hackers);
+
+        //read desired courses
+        int* desired_courses_temp= malloc(sizeof (int));
+        read_arr_of_strings(hackers,desired_courses_temp);
+        hacker_temp->desired_courses = desired_courses_temp;
+
+        //read friends courses
+        int* friends_temp= malloc(sizeof (int));
+        read_arr_of_strings(hackers,friends_temp);
+        hacker_temp->friends = friends_temp;
+
+        //read rivals courses
+        int* rivals_temp= malloc(sizeof (int));
+        read_arr_of_strings(hackers,rivals_temp);
+        hacker_temp->rivals = rivals_temp;
+
+    }
+    fclose(hackers);
+    return;
+
+
+
+}
 
 
 
@@ -204,24 +294,51 @@ int get_number_of_lines (FILE* file )
 //------------------------------------------------
 
 
-int read_name(FILE* students_stream, char* name)
+int read_string(FILE* stream, char* str,char stop_char ,int num_of_stops)
 {
     char char_temp = "";
     int i = 1;
-    int num_of_spaces = 2;
-    while (num_of_spaces > 0 )
+    while (num_of_stops > 0 )
     {
         i++;
-        fgets(char_temp, 1, students_stream);
-        name = realloc(name, i * sizeof(char));
-        name[i]= char_temp;
-        if (char_temp == " ")
+        fgets(char_temp, 1, stream);
+        str = realloc(str, i * sizeof(char));
+        str[i]= char_temp;
+        if (char_temp == stop_char)
         {
-            num_of_spaces--;
+            num_of_stops--;
         }
     }
     return i;
 }
+//------------------------------------------------
+void read_arr_of_strings(FILE* stream, int* arr)
+{
+
+    char char_temp = "";
+    int j = 0;
+
+    while (char_temp != '/n')
+    {
+        char* str_temp = malloc(sizeof (char));
+        int i = 1;
+        fgets(char_temp, 1, stream);
+        str_temp[0]= char_temp;
+        while (char_temp != ' ')
+        {
+            i++;
+            fgets(char_temp, 1, stream);
+            str = realloc(str, i * sizeof(char));
+            str[i]= char_temp;
+        }
+        arr = realloc(arr, (j+1)*sizeof (int));
+        arr[j]= atoi(str_temp);
+        free( str_temp);
+    }
+
+}
+
+
 //------------------------------------------------
 
 void skip_credits_and_gpa(FILE* stream)
