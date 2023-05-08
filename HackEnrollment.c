@@ -93,9 +93,9 @@ typedef struct courses_t{
 }* Courses;
 
 typedef struct EnrollmentSystem_t{
-    struct Student* students;
-    struct Hacker* Hackers;
-    struct Courses* ques;
+     Student* students;
+     Hacker* Hackers;
+    Courses* ques;
 }* EnrollmentSystem;
 
 //------------------------------------------------
@@ -110,8 +110,11 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
     EnrollmentSystem  system;
 
     int num_of_students = get_number_of_lines(students);
-    system->students = malloc(num_of_students * sizeof (Student));
+    Student* students_arr = malloc(num_of_students*sizeof (Student));
+    system->students = students_arr;
     read_student_from_file(students, num_of_students, system);
+
+    //TODO hackers and ques
 
 
     int num_of_courses = get_number_of_lines(courses);
@@ -120,30 +123,30 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
 }
 
 
-EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
+EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)                                                        //TODO read hackers and ect
 {
 
-}
+}//TODO
 
 
 void hackEnrollment(EnrollmentSystem sys, FILE* out)
 {
 
-}
+}//TODO
 //------------------------------------------------
 //big mini functions:
 void read_student_from_file(FILE* students, int num_of_students, EnrollmentSystem system)
 {
     if(students = fopen(students,'r') == NULL )
     {
-        return HACK_ENROLLMENT_FAILED_READ_FILE;
+       //HACK_ENROLLMENT_FAILED_READ_FILE;
     }
     for (int i= 0; i < num_of_students; i++)
     {
-        char id_temp[ID_SIZE]= '';
+        char id_temp[ID_SIZE]="";
 
         fgets(id_temp[0], ID_SIZE, students);
-        skip_credits_and_gpa(students)
+        skip_credits_and_gpa(students);
 
 
         char* name_temp = malloc(sizeof (char));
@@ -151,13 +154,12 @@ void read_student_from_file(FILE* students, int num_of_students, EnrollmentSyste
 
 
         Student student_temp;
-        student_temp.name[name_len_temp]= name_temp;
+        student_temp->name[name_len_temp]= name_temp;
 
         free(name_temp);
 
-        student_temp.student_id = atoi(id_temp);
-
-        system->students[i] =  student_temp;
+        student_temp->student_id = atoi(id_temp);
+        system->students[i] = student_temp;
 
         get_to_next_line(students);
 
@@ -175,24 +177,24 @@ void read_student_from_file(FILE* students, int num_of_students, EnrollmentSyste
 //------------------------------------------------
 //mini functions:
 
-int get_number_of_lines (FILE* file)
+int get_number_of_lines (FILE* file )
 {
-    if(students = fopen(file,'r') == NULL )
+    if(file = fopen(file,'r') == NULL )
     {
         return HACK_ENROLLMENT_FAILED_READ_FILE;
     }
     int lines_counter = 0;
-    char char_temp = "";
+    char char_temp = '\0';
     fgets(char_temp, 1, file);
-    while (chr != EOF)
+    while (char_temp != EOF)
     {
-        if (chr == '\n')
+        if (char_temp == '\n')
         {
             lines_counter++;
         }
         fgets(char_temp, 1, file);
     }
-    fclose( file)
+    fclose( file);
     return lines_counter;
 }
 
@@ -202,16 +204,16 @@ int get_number_of_lines (FILE* file)
 
 int read_name(FILE* students_stream, char* name)
 {
-    char char_temp = '';
+    char char_temp = "";
     int i = 1;
     int num_of_spaces = 2;
     while (num_of_spaces > 0 )
     {
         i++;
         fgets(char_temp, 1, students_stream);
-        realloc(name, i * sizeof(char));
+        name = realloc(name, i * sizeof(char));
         name[i]= char_temp;
-        if (char_temp == ' ')
+        if (char_temp == " ")
         {
             num_of_spaces--;
         }
@@ -222,12 +224,12 @@ int read_name(FILE* students_stream, char* name)
 
 void skip_credits_and_gpa(FILE* stream)
 {
-    char char_temp = '';
+    char char_temp = "";
     int num_of_spaces = 3;
     while (num_of_spaces > 0 )
     {
         fgets(char_temp, 1, stream);
-        if (char_temp == ' ')
+        if (char_temp == " ")
         {
             num_of_spaces--;
         }
@@ -240,7 +242,7 @@ void skip_credits_and_gpa(FILE* stream)
 
 void get_to_next_line(FILE* stream)
 {
-    char char_temp = '';
+    char char_temp = "";
     while (char_temp != '\n')
     {
         fgets(char_temp, 1, stream);
@@ -259,7 +261,7 @@ int Name_distance (char* name1, char* name2, bool caps_lock)
 //------------------------------------------------
 
 
-int str_ASCII_value(char* str, bool caps_lock)
+int str_ASCII_value(char* str, bool caps_lock) //TODO
 {
     if (caps_lock)
     {
