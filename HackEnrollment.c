@@ -78,6 +78,19 @@ int get_number_of_lines (FILE* file);
 
 void skip_credits_and_gpa(FILE* stream);
 
+typedef struct node{
+    int data;
+    struct  node* next;
+    int friendship;
+    int rival;
+}*Node;
+
+typedef struct Queue{
+    Node front;
+    Node rear;
+    int count;
+} * Queue;
+
 typedef struct student_t{
     char* name;
     int student_id;
@@ -238,7 +251,7 @@ void read_hackers_from_file(FILE* hackers, int num_of_hackers, EnrollmentSystem 
         fgets(id_temp[0], ID_SIZE, hackers);
         hacker_temp->hacker_id = atoi(id_temp);
 
-        char trash ='';
+        char trash ="";
         fgets(trash, 1, hackers);
 
         //read desired courses
@@ -328,8 +341,8 @@ void read_arr_of_strings(FILE* stream, int* arr)
         {
             i++;
             fgets(char_temp, 1, stream);
-            str = realloc(str, i * sizeof(char));
-            str[i]= char_temp;
+            str_temp = realloc(str_temp, i * sizeof(char));
+            str_temp[i]= char_temp;
         }
         arr = realloc(arr, (j+1)*sizeof (int));
         arr[j]= atoi(str_temp);
