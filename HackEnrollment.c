@@ -78,6 +78,7 @@ int get_number_of_lines (FILE* file);
 
 void skip_credits_and_gpa(FILE* stream);
 
+/*
 typedef struct node{
     int data;
     struct  node* next;
@@ -90,7 +91,7 @@ typedef struct Queue{
     Node rear;
     int count;
 } * Queue;
-
+*/
 typedef struct student_t{
     char* name;
     int student_id;
@@ -154,6 +155,28 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
 
 EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)                                                        //TODO read hackers and ect
 {
+    int num_of_queues = get_number_of_lines(queues);
+    for (int i = 0; i < num_of_queues; ++i)
+    {
+        //get course number id
+        char* course_id_temp = malloc(sizeof (char));
+        read_string(queues, course_id_temp, ' ',1);
+        int current_course_id=  = atoi(course_id_temp);
+        free(course_id_temp);
+
+        // find course id in courses arr in system
+        while (current_course_id != sys ->ques)
+        {
+
+
+
+        }
+
+
+
+
+    }
+
 
 }//TODO
 
