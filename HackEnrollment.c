@@ -304,6 +304,7 @@ void read_hackers_from_file(FILE* hackers, int num_of_hackers, EnrollmentSystem 
         char* trash =""; /** IMPORTANT*/
         fgets(trash, 1, hackers);
 
+
         //read desired courses
         int* desired_courses_temp= malloc(sizeof (int));
         read_arr_of_strings(hackers,desired_courses_temp);
@@ -341,7 +342,7 @@ int get_number_of_lines (FILE* file )
         return HACK_ENROLLMENT_FAILED_READ_FILE;
     }
     int lines_counter = 0;
-    char* char_temp = "";
+    char* char_temp = malloc(sizeof (char ));/** IMPORTANT*/
     fgets(char_temp, 1, file);
     while (*char_temp != EOF) /** IMPORTANT*/ /** warning says endless loop + changed to *char temp and says it is no longer endless*/
     {
@@ -349,8 +350,9 @@ int get_number_of_lines (FILE* file )
         {
             lines_counter++;
         }
-        fgets(char_temp, 1, file); /** IMPORTANT*/ /** UNREACHABLE CODE DOWN*/
+        fgets(char_temp, 1, file); /** IMPORTANT*/ /** UNREACHABLE CODE DOWN - somehow already reachable lol*/
     }
+    free(char_temp);
     fclose( file);
     return lines_counter;
 }
@@ -361,7 +363,7 @@ int get_number_of_lines (FILE* file )
 
 int read_string(FILE* stream, char* str,char stop_char ,int num_of_stops)
 {
-    char* char_temp = "";/** IMPORTANT*/
+    char* char_temp = malloc(sizeof (char ));/** IMPORTANT*/
     int i = 1;
     while (num_of_stops > 0 )
     {
@@ -374,13 +376,14 @@ int read_string(FILE* stream, char* str,char stop_char ,int num_of_stops)
             num_of_stops--;
         }
     }
+    free(char_temp);
     return i;
 }
 //------------------------------------------------
 void read_arr_of_strings(FILE* stream, int* arr)
 {
 
-    char* char_temp = "";
+    char* char_temp = malloc(sizeof (char )); /** IMPORTANT*/
     int j = 0;
 
     while (*char_temp != '\n') /** IMPORTANT*/
@@ -400,6 +403,7 @@ void read_arr_of_strings(FILE* stream, int* arr)
         arr[j]= atoi(str_temp);
         free( str_temp);
     }
+    free(char_temp);
     return;
 
 }
@@ -409,7 +413,7 @@ void read_arr_of_strings(FILE* stream, int* arr)
 
 void skip_credits_and_gpa(FILE* stream)
 {
-    char* char_temp = ""; /** IMPORTANT*/
+    char* char_temp = malloc(sizeof (char )); /** IMPORTANT*/
     int num_of_spaces = 3;
     while (num_of_spaces > 0 )
     {
@@ -419,6 +423,7 @@ void skip_credits_and_gpa(FILE* stream)
             num_of_spaces--;
         }
     }
+    free(char_temp);
     return;
 
 }
@@ -427,12 +432,13 @@ void skip_credits_and_gpa(FILE* stream)
 
 void get_to_next_line(FILE* stream)
 {
-    char* char_temp = "";/** IMPORTANT*/
+    char* char_temp = malloc(sizeof (char ));/** IMPORTANT*/
     while (*char_temp != '\n')/** IMPORTANT*/
     {
         fgets(char_temp, 1, stream);
 
     }
+    free(char_temp);/** IMPORTANT*/
     return;
 }
 //------------------------------------------------
