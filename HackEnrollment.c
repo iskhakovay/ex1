@@ -10,7 +10,6 @@
 #define RIVAL -20;
 #define NEUTRAL 0;
 
-new_queue->rivalry_th = rivalry_th;
 
 
 //------------------------------------------------
@@ -70,7 +69,7 @@ Returns :
 - res: INT
 absolute value of result.
 */
-int student_id_difference(char* id1,char* id2);
+int student_id_difference(int id1,int id2);
 
 int read_string(FILE* stream, char* str,char stop_char ,int num_of_stops);
 
@@ -112,7 +111,7 @@ typedef struct hacker_t{
 typedef struct courses_t{
     int course_id;
     int size;
-    struct Student* enrollment_list;
+    int* enrollment_list; /** IMPORTANT*/
 }* Courses;
 
 typedef struct EnrollmentSystem_t{
@@ -142,6 +141,7 @@ int check_hacker_file_friend_status(EnrollmentSystem sys, int hacker_id, int stu
 EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
 {
     EnrollmentSystem  system;
+    system = malloc(sizeof (EnrollmentSystem)); /** IMPORTANT*/
 
     int num_of_students = get_number_of_lines(students);
     Student* students_arr = malloc(num_of_students*sizeof (Student));
@@ -163,6 +163,8 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
     system->Hackers = hacker_arr;
     read_hackers_from_file(hackers,num_of_hackers, system);
     system ->num_of_hackers = num_of_hackers;
+
+    return system; /** IMPORTANT*/
 }
 
 
@@ -174,7 +176,7 @@ EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
         //get course number id
         char* course_id_temp = malloc(sizeof (char));
         read_string(queues, course_id_temp, ' ',1);
-        int current_course_id=  = atoi(course_id_temp);
+        int current_course_id = atoi(course_id_temp);
         free(course_id_temp);
 
 
@@ -194,7 +196,7 @@ EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
         int size_of_current_course = sys->ques[course_index]->size;
         int* students_of_current_course_arr = malloc( sizeof (int));
         read_arr_of_strings(queues, students_of_current_course_arr);
-        students_of_current_course_arr = realloc(size_of_current_course*sizeof (int));
+        students_of_current_course_arr = realloc(students_of_current_course_arr,size_of_current_course*sizeof (int));
         sys->ques[course_index]->enrollment_list = students_of_current_course_arr;
 
     }
@@ -211,7 +213,7 @@ void hackEnrollment(EnrollmentSystem sys, FILE* out)
 //big mini functions:
 void read_student_from_file(FILE* students, int num_of_students, EnrollmentSystem system)
 {
-    if(students = fopen(students,'r') == NULL )
+    if(students = fopen(students,'r') == NULL )/** IMPORTANT*/ /** a lot of warnings of incompatible pointer types in every fopen. must check it*/
     {
         //HACK_ENROLLMENT_FAILED_READ_FILE;
     }
@@ -219,7 +221,7 @@ void read_student_from_file(FILE* students, int num_of_students, EnrollmentSyste
     {
         char id_temp[ID_SIZE]="";
 
-        fgets(id_temp[0], ID_SIZE, students);
+        fgets(id_temp, ID_SIZE, students); /** IMPORTANT*/
         skip_credits_and_gpa(students);
 
 
@@ -227,8 +229,8 @@ void read_student_from_file(FILE* students, int num_of_students, EnrollmentSyste
         int name_len_temp = read_string(students, name_temp, ' ',2);
 
 
-        Student student_temp;
-        student_temp->name[name_len_temp]= name_temp;
+        Student student_temp = malloc(sizeof(Student)); /** IMPORTANT*/
+        student_temp->name[name_len_temp]= *name_temp;
 
         free(name_temp);
 
@@ -236,6 +238,7 @@ void read_student_from_file(FILE* students, int num_of_students, EnrollmentSyste
         system->students[i] = student_temp;
 
         get_to_next_line(students);
+        free(student_temp);     /** IMPORTANT*/
 
     }
     fclose(students);
@@ -249,7 +252,7 @@ void read_student_from_file(FILE* students, int num_of_students, EnrollmentSyste
 
 void read_courses_from_file(FILE* courses, int num_of_courses, EnrollmentSystem system)
 {
-    if(courses = fopen(courses,'r') == NULL )
+    if(courses = fopen(courses,'r') == NULL ) /** IMPORTANT*/ /** a lot of warnings of incompatible pointer types in every fopen. must check it*/
     {
         //HACK_ENROLLMENT_FAILED_READ_FILE;
     }
@@ -258,18 +261,20 @@ void read_courses_from_file(FILE* courses, int num_of_courses, EnrollmentSystem 
 
         char* course_id_temp = malloc(sizeof (char));
         read_string(courses, course_id_temp, ' ',1);
-        Courses course_temp;
+        Courses course_temp = malloc(sizeof (Courses)); /** IMPORTANT*/
         course_temp ->course_id = atoi(course_id_temp);
-        free(course_id_temp);
+
 
         char* course_size_temp = malloc(sizeof (char));
         read_string(courses, course_id_temp, '\n',1);
         course_temp ->size =  atoi(course_size_temp);
         free(course_size_temp);
+        free(course_id_temp);/** IMPORTANT*/
 
         system ->ques[i]= course_temp;
 
         get_to_next_line(courses);
+        free( course_temp);/** IMPORTANT*/
 
     }
     fclose(courses);
@@ -283,20 +288,20 @@ void read_courses_from_file(FILE* courses, int num_of_courses, EnrollmentSystem 
 
 void read_hackers_from_file(FILE* hackers, int num_of_hackers, EnrollmentSystem system)
 {
-    if(hackers = fopen(hackers,'r') == NULL )
+    if(hackers = fopen(hackers,'r') == NULL )/** IMPORTANT*/ /** a lot of warnings of incompatible pointer types in every fopen. must check it*/
     {
         //HACK_ENROLLMENT_FAILED_READ_FILE;
     }
     for (int i= 0; i < num_of_hackers; i++)
     {
-        Hacker hacker_temp;
+        Hacker hacker_temp = malloc(sizeof (Hacker)); /** IMPORTANT*/
 
         //read hacker id
         char id_temp[ID_SIZE]="";
-        fgets(id_temp[0], ID_SIZE, hackers);
+        fgets(id_temp, ID_SIZE, hackers); /** IMPORTANT*/
         hacker_temp->hacker_id = atoi(id_temp);
 
-        char trash ="";
+        char* trash =""; /** IMPORTANT*/
         fgets(trash, 1, hackers);
 
         //read desired courses
@@ -314,6 +319,8 @@ void read_hackers_from_file(FILE* hackers, int num_of_hackers, EnrollmentSystem 
         read_arr_of_strings(hackers,rivals_temp);
         hacker_temp->rivals = rivals_temp;
 
+        free(hacker_temp);/** IMPORTANT*/
+
     }
     fclose(hackers);
     return;
@@ -329,20 +336,20 @@ void read_hackers_from_file(FILE* hackers, int num_of_hackers, EnrollmentSystem 
 
 int get_number_of_lines (FILE* file )
 {
-    if(file = fopen(file,'r') == NULL )
+    if(file = fopen(file,'r') == NULL )/** IMPORTANT*/ /** a lot of warnings of incompatible pointer types in every fopen. must check it*/
     {
         return HACK_ENROLLMENT_FAILED_READ_FILE;
     }
     int lines_counter = 0;
-    char char_temp = '\0';
+    char* char_temp = "";
     fgets(char_temp, 1, file);
-    while (char_temp != EOF)
+    while (*char_temp != EOF) /** IMPORTANT*/ /** warning says endless loop + changed to *char temp and says it is no longer endless*/
     {
-        if (char_temp == '\n')
+        if (*char_temp == '\n') /** IMPORTANT*/
         {
             lines_counter++;
         }
-        fgets(char_temp, 1, file);
+        fgets(char_temp, 1, file); /** IMPORTANT*/ /** UNREACHABLE CODE DOWN*/
     }
     fclose( file);
     return lines_counter;
@@ -354,15 +361,15 @@ int get_number_of_lines (FILE* file )
 
 int read_string(FILE* stream, char* str,char stop_char ,int num_of_stops)
 {
-    char char_temp = "";
+    char* char_temp = "";/** IMPORTANT*/
     int i = 1;
     while (num_of_stops > 0 )
     {
         i++;
         fgets(char_temp, 1, stream);
         str = realloc(str, i * sizeof(char));
-        str[i]= char_temp;
-        if (char_temp == stop_char)
+        str[i]= *char_temp; /** IMPORTANT*/
+        if (*char_temp == stop_char)/** IMPORTANT*/
         {
             num_of_stops--;
         }
@@ -373,21 +380,21 @@ int read_string(FILE* stream, char* str,char stop_char ,int num_of_stops)
 void read_arr_of_strings(FILE* stream, int* arr)
 {
 
-    char char_temp = "";
+    char* char_temp = "";
     int j = 0;
 
-    while (char_temp != "/n")
+    while (*char_temp != '\n') /** IMPORTANT*/
     {
         char* str_temp = malloc(sizeof (char));
         int i = 1;
         fgets(char_temp, 1, stream);
-        str_temp[0]= char_temp;
-        while (char_temp != " ")
+        str_temp[0]= *char_temp;/** IMPORTANT*/
+        while (*char_temp != ' ')
         {
             i++;
             fgets(char_temp, 1, stream);
             str_temp = realloc(str_temp, i * sizeof(char));
-            str_temp[i]= char_temp;
+            str_temp[i]= *char_temp;
         }
         arr = realloc(arr, (j+1)*sizeof (int));
         arr[j]= atoi(str_temp);
@@ -402,12 +409,12 @@ void read_arr_of_strings(FILE* stream, int* arr)
 
 void skip_credits_and_gpa(FILE* stream)
 {
-    char char_temp = "";
+    char* char_temp = ""; /** IMPORTANT*/
     int num_of_spaces = 3;
     while (num_of_spaces > 0 )
     {
         fgets(char_temp, 1, stream);
-        if (char_temp == " ")
+        if (*char_temp == ' ')/** IMPORTANT*/
         {
             num_of_spaces--;
         }
@@ -420,8 +427,8 @@ void skip_credits_and_gpa(FILE* stream)
 
 void get_to_next_line(FILE* stream)
 {
-    char char_temp = "";
-    while (char_temp != "\n")
+    char* char_temp = "";/** IMPORTANT*/
+    while (*char_temp != '\n')/** IMPORTANT*/
     {
         fgets(char_temp, 1, stream);
 
