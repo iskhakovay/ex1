@@ -6,6 +6,11 @@
 #include "IsraeliQueue.h"
 
 #define ID_SIZE 9
+#define FRIEND 20;
+#define RIVAL -20;
+#define NEUTRAL 0;
+
+new_queue->rivalry_th = rivalry_th;
 
 
 //------------------------------------------------
@@ -112,8 +117,11 @@ typedef struct courses_t{
 
 typedef struct EnrollmentSystem_t{
     Student* students;
+    int num_of_students;
     Hacker* Hackers;
+    int num_of_hackers;
     Courses* ques;
+    int num_of_ques;
 }* EnrollmentSystem;
 
 
@@ -126,6 +134,8 @@ void read_courses_from_file(FILE* courses, int num_of_courses, EnrollmentSystem 
 
 void read_hackers_from_file(FILE* hackers, int num_of_hackers, EnrollmentSystem system);
 
+int check_hacker_file_friend_status(EnrollmentSystem sys, int hacker_id, int student_id );
+
 
 //------------------------------------------------
 
@@ -137,23 +147,26 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
     Student* students_arr = malloc(num_of_students*sizeof (Student));
     system->students = students_arr;
     read_student_from_file(students, num_of_students, system);
+    system->num_of_students = num_of_students;
 
-    //TODO hackers and ques
 
     int num_of_courses = get_number_of_lines(courses);
     Courses * courses_arr = malloc(num_of_courses*sizeof (Courses));
     system->ques = courses_arr;
+    system->num_of_ques = num_of_courses;
     read_courses_from_file(courses,num_of_courses,system);
+
 
 
     int num_of_hackers = get_number_of_lines(hackers)/4;
     Hacker * hacker_arr = malloc(num_of_hackers * sizeof (Hacker));
     system->Hackers = hacker_arr;
     read_hackers_from_file(hackers,num_of_hackers, system);
+    system ->num_of_hackers = num_of_hackers;
 }
 
 
-EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)                                                        //TODO read hackers and ect
+EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
 {
     int num_of_queues = get_number_of_lines(queues);
     for (int i = 0; i < num_of_queues; ++i)
@@ -164,21 +177,30 @@ EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)             
         int current_course_id=  = atoi(course_id_temp);
         free(course_id_temp);
 
+
         // find course id in courses arr in system
-        while (current_course_id != sys ->ques)
+        int course_index = 0;
+        while (current_course_id != (sys ->ques[course_index]->course_id))
         {
-
-
-
+            course_index++;
+            if(course_index >= sys->num_of_ques)//not supposed to happen
+            {
+                printf("Error no course like that\n");
+                break;
+            }
         }
 
-
-
+        //enter the students ids
+        int size_of_current_course = sys->ques[course_index]->size;
+        int* students_of_current_course_arr = malloc( sizeof (int));
+        read_arr_of_strings(queues, students_of_current_course_arr);
+        students_of_current_course_arr = realloc(size_of_current_course*sizeof (int));
+        sys->ques[course_index]->enrollment_list = students_of_current_course_arr;
 
     }
 
 
-}//TODO
+}
 
 
 void hackEnrollment(EnrollmentSystem sys, FILE* out)
@@ -354,13 +376,13 @@ void read_arr_of_strings(FILE* stream, int* arr)
     char char_temp = "";
     int j = 0;
 
-    while (char_temp != '/n')
+    while (char_temp != "/n")
     {
         char* str_temp = malloc(sizeof (char));
         int i = 1;
         fgets(char_temp, 1, stream);
         str_temp[0]= char_temp;
-        while (char_temp != ' ')
+        while (char_temp != " ")
         {
             i++;
             fgets(char_temp, 1, stream);
@@ -371,6 +393,7 @@ void read_arr_of_strings(FILE* stream, int* arr)
         arr[j]= atoi(str_temp);
         free( str_temp);
     }
+    return;
 
 }
 
@@ -398,7 +421,7 @@ void skip_credits_and_gpa(FILE* stream)
 void get_to_next_line(FILE* stream)
 {
     char char_temp = "";
-    while (char_temp != '\n')
+    while (char_temp != "\n")
     {
         fgets(char_temp, 1, stream);
 
@@ -416,36 +439,33 @@ int Name_distance (char* name1, char* name2, bool caps_lock)
 //------------------------------------------------
 
 
-int str_ASCII_value(char* str, bool caps_lock) //TODO
+int str_ASCII_value(char* str, bool caps_lock)
 {
-    if (caps_lock)
+
+
+    int len = strlen(str);
+    int sum =0;
+    if (!caps_lock) // a == A
     {
-        int len = strlen(str);
-        int sum =0;
         for (int i=0; i< len; i++)
         {
-            if (!caps_lock)
+            if (str[i] >= 'A' && str[i]<= 'a')
             {
-                if (str[i] >= 'A' && str[i]<= 'a')
-                {
-                    sum += str[i] -'A';
-                }
-                else
-                {
-                    sum += str[i] -'a';
-                }
+                sum += str[i] + ('a'-'A') ;
+            }
+            else
+            {
+                sum += str[i];
             }
             sum += str[i];
         }
         return sum;
     }
-    else
+
+    else // a != A
     {
-        int len = strlen(str);
-        int sum =0;
         for (int i=0; i< len; i++)
         {
-
             sum += str[i];
         }
         return sum;
@@ -455,11 +475,49 @@ int str_ASCII_value(char* str, bool caps_lock) //TODO
 //------------------------------------------------
 
 
-int student_id_difference(char* id1,char* id2)
+int student_id_difference(int id1,int id2)
 {
-    int res = atoi(id1)- atoi(id2);
+    int res = id1 - id2;
     return (res >= 0) ? res : (res * (-1));
 
 }
 
 //------------------------------------------------
+
+int check_hacker_file_friend_status(EnrollmentSystem sys, int hacker_id, int student_id )
+{
+    //find current hacker
+    int hacker_index =0;
+    while (hacker_id!= sys ->Hackers[hacker_index]->hacker_id)
+    {
+        hacker_index ++;
+        if(hacker_index >= sys->num_of_hackers) {
+            printf("no hacker found\n");
+            break;
+        }
+    }
+    Hacker current_hacker = sys ->Hackers [hacker_index];
+
+    //find if student is in friend list
+    int num_of_friends = *(&(current_hacker->friends)+1) - (current_hacker->friends);
+    for (int i = 0; i < num_of_friends; ++i)
+    {
+        if(student_id == current_hacker->friends[i])
+        {
+            return FRIEND;
+        }
+    }
+
+    //find if student is in rival list
+    int num_of_rivals = *(&(current_hacker->rivals)+1) - (current_hacker->rivals);
+    for (int i = 0; i < num_of_rivals; ++i)
+    {
+        if(student_id == current_hacker->rivals[i])
+        {
+            return RIVAL;
+        }
+    }
+
+    return NEUTRAL;
+
+}
