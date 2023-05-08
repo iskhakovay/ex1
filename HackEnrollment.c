@@ -145,10 +145,14 @@ void hackEnrollment(EnrollmentSystem sys, FILE* out)
 {
 
 }
-------------------------------------------------
+//------------------------------------------------
 //big mini functions:
 void read_student_from_file(FILE* students, int num_of_students)
 {
+    if(students = fopen(students,'r') == NULL )
+    {
+        return HACK_ENROLLMENT_FAILED_READ_FILE;
+    }
     for (int i= o; i < num_of_students; i++)
     {
         char[ID_SIZE] id_temp = "";
@@ -159,6 +163,7 @@ void read_student_from_file(FILE* students, int num_of_students)
 
         char * name_temp = malloc(sizeof (char));
         int name_len_temp = read_name(students, name_temp);
+        free(name_temp);
 
         Student student_temp;
         student_temp.name[name_len_temp]= name_temp;
@@ -169,6 +174,7 @@ void read_student_from_file(FILE* students, int num_of_students)
         get_to_next_line(students);
 
     }
+    fclose(students);
     return;
 
 
@@ -198,7 +204,7 @@ int get_number_of_lines (FILE* file)
         }
         fgets(char_temp, 1, file);
     }
-    fclose(FILE* file)
+    fclose( file)
     return lines_counter;
 }
 
