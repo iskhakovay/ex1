@@ -98,6 +98,9 @@ typedef struct EnrollmentSystem_t{
     Courses* ques;
 }* EnrollmentSystem;
 
+
+
+
 //------------------------------------------------
 //big mini functions declaration:
 void read_student_from_file(FILE* students, int num_of_students, EnrollmentSystem system);
