@@ -4,6 +4,7 @@
 #include "stdbool.h"
 #include "HackEnrollment.h"
 #include "IsraeliQueue.h"
+#include "IsraeliQueue.c"
 
 #define ID_SIZE 9
 #define FRIEND 20
@@ -163,6 +164,7 @@ int str_ASCII_value(char* str, bool caps_lock);
 
 EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
 {
+
     EnrollmentSystem  system;
     system = malloc(sizeof (EnrollmentSystem)); /** IMPORTANT*/
 
@@ -232,9 +234,15 @@ EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
 
 
 //------------------------------------------------
-
+int* (*pt)(void*, void*);
 void hackEnrollment(EnrollmentSystem sys, FILE* out)
 {
+    IsraeliQueue q;
+    q = malloc(sizeof (IsraeliQueue));
+    (q->FriendshipFunction) = (pt);
+    (&pt)[0] = (&student_id_difference); //TODO check pointers
+    (&pt)[1] = (&Name_distance);
+    (&pt)[2] = (&check_hacker_file_friend_status);
     for (int hacker_index = 0; hacker_index < sys->num_of_hackers; ++hacker_index)
     {
         for (int i = 0; i < sys->Hackers[hacker_index]->num_of_desired_courses; ++i)
@@ -377,7 +385,7 @@ void read_hackers_from_file(FILE* hackers, int num_of_hackers, EnrollmentSystem 
 
 }
 
-
+int* (*pt)(void*, void*);
 
 //------------------------------------------------
 //mini functions:
@@ -429,6 +437,12 @@ int read_string(FILE* stream, char* str,char stop_char ,int num_of_stops)
 //------------------------------------------------
 int read_arr_of_strings(FILE* stream, int* arr)
 {
+    IsraeliQueue q;
+    q = malloc(sizeof (IsraeliQueue));
+    (q->FriendshipFunction) = (pt);
+    (&pt)[0] = (&student_id_difference); //TODO check pointers
+    (&pt)[1] = (&Name_distance);
+    (&pt)[2] = (&check_hacker_file_friend_status);
 
     char* char_temp = malloc(sizeof (char )); /** IMPORTANT*/
     int j = 0;
@@ -493,7 +507,7 @@ void get_to_next_line(FILE* stream)
 
 int Name_distance (char* name1, char* name2)
 {
-    int res = str_ASCII_value(name1, caps_lock) - str_ASCII_value(name2, caps_lock);
+    int res = str_ASCII_value(name1, capslock) - str_ASCII_value(name2, capslock);
     return (res >= 0) ? res : (res * (-1));
 }
 //------------------------------------------------
