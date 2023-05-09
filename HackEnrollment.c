@@ -137,7 +137,7 @@ absolute value of result.
 */
 int Name_distance (char* name1, char* name2);
 
-int check_hacker_file_friend_status(Hacker* hacker, Student* student );
+int check_hacker_file_friend_status(Hacker hacker, Student student );
 
 
 
@@ -204,7 +204,7 @@ EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
     for (int i = 0; i < num_of_queues; ++i)
     {
         //get course number id
-        char* course_id_temp = malloc(sizeof (char));
+        sys->ques[i] = malloc(sizeof (char));
         int q_size_temp = read_string(queues, course_id_temp, ' ',1);
         int current_course_id = atoi(course_id_temp);
         free(course_id_temp);
@@ -406,22 +406,19 @@ void read_hackers_from_file(FILE* hackers, int num_of_hackers, EnrollmentSystem 
 
 
         //read friends
-        int* friends_temp= malloc(sizeof (int));
-        int num_of_friends_temp= read_arr_of_strings(hackers,friends_temp);
-        hacker_temp->friends = friends_temp;
-        hacker_temp->num_of_friends = num_of_friends_temp;
+        system->Hackers[i]->friends= malloc(sizeof (int));
+        system->Hackers[i]->num_of_friends= read_arr_of_strings(hackers,system->Hackers[i]->friends);
+        //hacker_temp->friends = friends_temp;
+        //hacker_temp->num_of_friends = num_of_friends_temp;
 
 
         //read rivals
-        int* rivals_temp= malloc(sizeof (int));
-        int num_of_rivals_temp = read_arr_of_strings(hackers,rivals_temp);
-        hacker_temp->rivals = rivals_temp;
-        hacker_temp->num_of_rivals = num_of_rivals_temp;
-
-        system->Hackers[i]= hacker_temp;
+        system->Hackers[i]->rivals= malloc(sizeof (int));
+        system->Hackers[i]->num_of_rivals = read_arr_of_strings(hackers,  system->Hackers[i]->rivals);
 
 
-        free(hacker_temp);/** IMPORTANT*/
+
+        //free(hacker_temp);/** IMPORTANT*/
 
     }
     fclose(hackers);
@@ -598,7 +595,7 @@ int student_id_difference(int* id1,int* id2)
 
 //------------------------------------------------
 
-int check_hacker_file_friend_status(Hacker* hacker, Student* student );
+int check_hacker_file_friend_status(Hacker hacker, Student student )
 {
 
 
