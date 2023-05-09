@@ -40,7 +40,7 @@ typedef struct Queue{
 typedef struct hacker_t{
     int hacker_id;
     int* desired_courses;
-    bool register_course_succsesful;
+    int register_course_succsesful;
     int num_of_desired_courses;
     //int* friends;
     //int num_of_friends;
@@ -67,6 +67,12 @@ typedef struct EnrollmentSystem_t{
 //------------------------------------------------
 //mini functions declaration:
 
+void print_new_ques (EnrollmentSystem sys, FILE* out);
+
+void turn_enrollment_list_to_isreali_ques (EnrollmentSystem sys, IsraeliQueue* arr_of_queues, FriendshipFunction *pt);
+void enroll_hackers(EnrollmentSystem sys, IsraeliQueue* arr_of_queues);
+
+EnrollmentSystem clean_enrollment_queues(EnrollmentSystem sys, IsraeliQueue *arr_of_queues);
 
 
 int read_string(FILE* stream, char* str,char stop_char ,int num_of_stops);
@@ -231,6 +237,7 @@ EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
 bool if_enrollment_success(Hacker current_hacker,EnrollmentSystem system, IsraeliQueue needed_queue, Courses course){
     int queue_size = IsraeliQueueSize(needed_queue);
     if(queue_size<=course->size){
+        current_hacker->register_course_succsesful++;
         return true;
     }
     int diff = queue_size - course->size;
@@ -243,10 +250,14 @@ bool if_enrollment_success(Hacker current_hacker,EnrollmentSystem system, Israel
         needed_queue->rear= needed_queue->rear->next;
     }
     needed_queue->rear = tmp;
+    current_hacker->register_course_succsesful++;
     return true;
 }
 
-EnrollmentSystem clean_enrollment_queues(EnrollmentSystem sys, IsraeliQueue *arr_of_queues){
+//----------------------------------------------------------------------------
+
+EnrollmentSystem clean_enrollment_queues(EnrollmentSystem sys, IsraeliQueue *arr_of_queues)
+{
     //going through each course
     IsraeliQueue trash;
     for(int course_index = 0; course_index< sys->num_of_ques ;course_index++){
@@ -278,7 +289,6 @@ EnrollmentSystem clean_enrollment_queues(EnrollmentSystem sys, IsraeliQueue *arr
 
 
 
-
 int* (*pt)(void*, void*);
 void hackEnrollment(EnrollmentSystem sys, FILE* out)
 {
@@ -289,6 +299,60 @@ void hackEnrollment(EnrollmentSystem sys, FILE* out)
     IsraeliQueue* arr_of_queues = malloc(sizeof(IsraeliQueue)*sys->num_of_ques);
 
     // turned all enrollment lists to israeli queues
+    turn_enrollment_list_to_isreali_ques (sys, arr_of_queues, pt);
+
+    //put hackers inside of queues
+    enroll_hackers(sys, arr_of_queues);
+
+
+
+    for(int hacker_index = 0; hacker_index < sys->num_of_hackers; hacker_index++)
+    {
+        for(int i = 0; i < sys->Hackers[hacker_index]->num_of_desired_courses;i++)
+        {
+            int desired_course_id = sys->Hackers[hacker_index]->desired_courses[i];
+            int index_of_current_desired_course = find_course_index_in_system(desired_course_id,sys);
+            if_enrollment_success(sys->Hackers[hacker_index],sys,arr_of_queues[index_of_current_desired_course],sys->ques[index_of_current_desired_course]);
+
+        }
+        if(sys->Hackers[hacker_index]->register_course_succsesful < 2)
+        {
+            out = fopen("out.txt", "w");
+            fprintf(out, "Cannot satisfy constraints for %d\n", sys->Hackers[hacker_index]->hacker_id);
+            fclose(out);
+            return;
+        }
+
+    }
+    clean_enrollment_queues( sys, arr_of_queues);
+
+    print_new_ques(sys, out);
+    return;
+
+}
+
+
+
+//TODO
+//------------------------------------------------
+void enroll_hackers(EnrollmentSystem sys, IsraeliQueue* arr_of_queues)
+{
+    for(int hacker_index = 0; hacker_index < sys->num_of_hackers; hacker_index++)
+    {
+        //checking which courses hacker wants
+        for(int i = 0; i<sys->Hackers[hacker_index]->num_of_desired_courses;i++){
+            int desired_course_id = sys->Hackers[hacker_index]->desired_courses[i];
+            int index_of_current_desired_course = find_course_index_in_system(desired_course_id,sys);
+            int current_hacker_system_index = find_student_index_in_system(sys->Hackers[hacker_index]->hacker_id,sys);
+            Student current_hacker = sys->students[current_hacker_system_index];
+            IsraeliQueueEnqueue(arr_of_queues[index_of_current_desired_course],current_hacker);
+        }
+    }
+}
+
+
+void turn_enrollment_list_to_isreali_ques (EnrollmentSystem sys, IsraeliQueue* arr_of_queues, FriendshipFunction *pt)
+{
     for (int queue_index = 0; queue_index<sys->num_of_ques; queue_index++)
     {
         IsraeliQueue current_course_queue = IsraeliQueueCreate(pt,NULL,FRIENDSHIP_TH,RIVALRY_TH);
@@ -305,71 +369,26 @@ void hackEnrollment(EnrollmentSystem sys, FILE* out)
     }
     //put hackers inside of queues
 
-    for(int hacker_index = 0; hacker_index<sys->num_of_hackers; hacker_index++){
-        //checking which courses hacker wants
-        for(int i = 0; i<sys->Hackers[hacker_index]->num_of_desired_courses;i++){
-            int desired_course_id = sys->Hackers[hacker_index]->desired_courses[i];
-            int index_of_current_desired_course = find_course_index_in_system(desired_course_id,sys);
-            int current_hacker_system_index = find_student_index_in_system(sys->Hackers[hacker_index]->hacker_id,sys);
-            Student current_hacker = sys->students[current_hacker_system_index];
-            IsraeliQueueEnqueue(arr_of_queues[index_of_current_desired_course],current_hacker);
-        }
-    }
+}
 
-    for(int hacker_index = 0; hacker_index<sys->num_of_hackers; hacker_index++){
-        for(int i = 0; i<sys->Hackers[hacker_index]->num_of_desired_courses;i++){
-            int desired_course_id = sys->Hackers[hacker_index]->desired_courses[i];
-            int index_of_current_desired_course = find_course_index_in_system(desired_course_id,sys);
-                if(!(if_enrollment_success(sys->Hackers[hacker_index],sys,arr_of_queues[index_of_current_desired_course],sys->ques[index_of_current_desired_course]))){
-                    out = fopen("out.txt", "w");
-                    fprintf(out, "Cannot satisfy constraints for %d\n", sys->Hackers[hacker_index]->hacker_id);
-                    fclose(out);
-                    return;
-                }else{
 
-                }
+void print_new_ques (EnrollmentSystem sys, FILE* out)
+{
+    out = fopen("out.txt", "w");
+    for (int i = 0; i < sys->num_of_ques; ++i)
+    {
+        fprintf(out, "%d", sys->ques[i]->course_id);
+        for (int j = 0; j < sys->ques[i]->size_of_enrolment_list; ++j)
+        {
+            fprintf(out, " %d", sys->ques[i]->enrollment_list[j]);
         }
+        fprintf(out, "\n");
+
     }
+    fclose(out);
 
 }
 
-/**  for (int i = 0; i < sys->Hackers[hackerIndex]->num_of_desired_courses; ++i)
-        {
-            int currentCourseId = sys->Hackers[hackerIndex]->desired_courses[i];
-            int courseSysIndex = find_course_index_in_system (currentCourseId, sys);
-
-
-            //make isreali q from regular q
-            IsraeliQueue q = IsraeliQueueCreate(pt,NULL, FRIENDSHIP_TH,RIVALRY_TH);
-
-            for (int j = 0; j < sys->ques[courseSysIndex]->size_of_enrolment_list; ++j)
-            {
-                int* currentStudentPt = &(sys->ques[courseSysIndex]->enrollment_list[j]);
-
-                IsraeliQueueError q_attemp = IsraeliQueueEnqueue(q, currentStudentPt);
-                if (q_attemp != ISRAELIQUEUE_SUCCESS)
-                {
-                    printf("fail!!!\n");
-                }
-
-            }
-
-            //try to enter hacker into q
-            int* currentHackerPt = &(sys->Hackers[hackerIndex]->hacker_id);
-            IsraeliQueueError hacker_attemp_to_enter = IsraeliQueueEnqueue(q, currentHackerPt);
-
-            if (hacker_attemp_to_enter != ISRAELIQUEUE_SUCCESS)
-            {
-                printf("fail!!!\n");
-            }
-
-            if( q->rear->data == *currentHackerPt)
-            {
-                out = fopen("out.txt", "w");
-                fprintf(out, "Cannot satisfy costraints for %d\n", *currentHackerPt);
-                fclose(out);
-            }
-*/
 
 
 //TODO
