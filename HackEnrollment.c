@@ -245,6 +245,40 @@ bool if_enrollment_success(Hacker current_hacker,EnrollmentSystem system, Israel
     needed_queue->rear = tmp;
     return true;
 }
+
+EnrollmentSystem clean_enrollment_queues(EnrollmentSystem sys, IsraeliQueue *arr_of_queues){
+    //going through each course
+    IsraeliQueue trash;
+    for(int course_index = 0; course_index< sys->num_of_ques ;course_index++){
+        // taking queue that matches the course index
+        int queue_size = IsraeliQueueSize(*(arr_of_queues+course_index));
+        // calculating how many students we need to cut off
+        int diff = queue_size - sys->ques[course_index]->size;
+        //absolute value
+        //erase students that don't fit in current course
+        if(diff<0){
+            sys->ques[course_index]->size_of_enrolment_list = queue_size;
+        }
+        while(diff>0){
+            trash->rear =arr_of_queues[course_index]->rear;
+            arr_of_queues[course_index]->rear = arr_of_queues[course_index]->rear->next;
+            diff--;
+        }
+        IsraeliQueueDestroy(trash);
+        //updating enrollment list for current course
+        for(int current_student_index = 0; current_student_index < sys->ques[course_index]->size_of_enrolment_list; current_student_index++){
+            sys->ques[course_index]->enrollment_list[current_student_index] = arr_of_queues[course_index]->rear->data->student_id;
+        }
+        IsraeliQueueDestroy(arr_of_queues[course_index]);
+    }
+    free(arr_of_queues);
+}
+
+
+
+
+
+
 int* (*pt)(void*, void*);
 void hackEnrollment(EnrollmentSystem sys, FILE* out)
 {
@@ -290,6 +324,9 @@ void hackEnrollment(EnrollmentSystem sys, FILE* out)
                     out = fopen("out.txt", "w");
                     fprintf(out, "Cannot satisfy constraints for %d\n", sys->Hackers[hacker_index]->hacker_id);
                     fclose(out);
+                    return;
+                }else{
+
                 }
         }
     }

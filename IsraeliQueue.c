@@ -75,7 +75,13 @@ IsraeliQueue IsraeliQueueCreate(FriendshipFunction *friendshipFunction, Comparis
  * Deallocates all memory allocated by IsraeliQueueCreate for the object pointed to by
  * the parameter.*/
 void IsraeliQueueDestroy(IsraeliQueue q){
-    free(q); ///????????????????
+    Node tmp;
+    while (q->rear!=NULL){
+        tmp=q->rear;
+        q->rear = q->rear->next;
+        free(tmp);
+    }
+
 }
 
 /**@param IsraeliQueue: an IsraeliQueue in which to insert the item.
