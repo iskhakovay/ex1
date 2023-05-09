@@ -32,8 +32,17 @@ int isEmpty(IsraeliQueue q){
 Node* createNode(int data, Node *next){ /**NEW SHIT IDK*/
     Node new_node;
     new_node = malloc(sizeof(Node));
+    if(new_node==NULL){
+        return ISRAELIQUEUE_ALLOC_FAILED;
+    }
     new_node->data = data;
+    if((new_node->data=NULL)){
+        return ISRAELIQUEUE_BAD_PARAM;
+    }
     new_node->next = next;
+    if((new_node->next =NULL)){
+        return ISRAELIQUEUE_BAD_PARAM;
+    }
     new_node->friendship = FRIEND_QUOTA;
     new_node->rival = RIVAL_QUOTA;
     return new_node;
@@ -48,7 +57,13 @@ void destroyNode(Node *node){ /**  DESTROY THAT SHIT */
 IsraeliQueue IsraeliQueueCreate(FriendshipFunction *friendshipFunction, ComparisonFunction comparisonFunction, int friendship_th, int rivalry_th){//TODO how to use that function pointer
     IsraeliQueue new_queue;
     new_queue = malloc(sizeof (IsraeliQueue));
+    if(new_queue==NULL){
+        return ISRAELIQUEUE_ALLOC_FAILED;
+    }
     new_queue->count = 0;
+    if(friendshipFunction==NULL || comparisonFunction==NULL){
+        return ISRAELIQUEUE_BAD_PARAM;
+    }
     new_queue->friendship_th = friendship_th;
     new_queue->rivalry_th = rivalry_th;
     new_queue->FriendshipFunction = friendshipFunction[0];
@@ -150,6 +165,7 @@ IsraeliQueueError IsraeliQueueEnqueue(IsraeliQueue q, void* item){ /**   TODO: i
     }
     q->rear = tmp;
     q->count++;
+    return ISRAELIQUEUE_SUCCESS;
 } //TODO check
 
 /**Removes and returns the foremost element of the provided queue. If the parameter
@@ -191,7 +207,7 @@ int IsraeliQueueSize(IsraeliQueue q){
 bool IsraeliQueueContains(IsraeliQueue q, void *item){
     Node copy = q->rear;
     while(copy->next!=NULL){
-        if(copy->data==item){
+        if(q->ComparisonFunction(&(q->rear->data),item)){
             return true;
         }
     }
