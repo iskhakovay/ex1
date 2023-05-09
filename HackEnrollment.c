@@ -6,81 +6,19 @@
 #include "IsraeliQueue.h"
 
 #define ID_SIZE 9
-#define FRIEND 20;
-#define RIVAL -20;
-#define NEUTRAL 0;
+#define FRIEND 20
+#define RIVAL -20
+#define NEUTRAL 0
+#define FRIENDSHIP_TH 20
+#define RIVALRY_TH 0
+
+const bool capslock = true;
 
 
 
-//------------------------------------------------
-//mini functions declaration:
-/**
-checks to see the absolute difference between [ASCII value of Name1] - [ASCII value of Name2]
-Parameters :
-----------
-- name1 : CHAR*
-the first name.
-
-- name2 : CHAR*
-the second name.
-
-- caps_lock : BOOL
-true- 'A' != 'a'
-false- 'A' == 'a'
-
-Returns :
---------
-- res: INT
-absolute value of result.
-*/
-int Name_distance (char* name1, char* name2, bool caps_lock);
-
-/**
-sums up ASCII value of string
-
-Parameters :
-----------
-- str : CHAR*
-the string.
-
-- caps_lock : BOOL
-true- 'A' != 'a'
-false- 'A' == 'a'
-
-Returns :
---------
-- sum: int
-ASCII value of string.
-*/
-int str_ASCII_value(char* str, bool caps_lock);
-
-/**
-converts id1, and id2 from string to ints and
-checks to see the absolute difference.
-
-Parameters :
-----------
-- id1 : CHAR*
-
-- id2 : CHAR*
-
-Returns :
---------
-- res: INT
-absolute value of result.
-*/
-int student_id_difference(int id1,int id2);
-
-int read_string(FILE* stream, char* str,char stop_char ,int num_of_stops);
-
-void read_arr_of_strings(FILE* stream, int* arr);
 
 
-void get_to_next_line(FILE* stream);
 
-int get_number_of_lines (FILE* file, char* file_name);
-
-void skip_credits_and_gpa(FILE* stream);
 
 /*
 typedef struct node{
@@ -104,6 +42,7 @@ typedef struct student_t{
 typedef struct hacker_t{
     int hacker_id;
     int* desired_courses;
+    int num_of_desired_courses;
     int* friends;
     int* rivals;
 }* Hacker;
@@ -123,7 +62,23 @@ typedef struct EnrollmentSystem_t{
     int num_of_ques;
 }* EnrollmentSystem;
 
+//------------------------------------------------
+//mini functions declaration:
 
+
+
+int read_string(FILE* stream, char* str,char stop_char ,int num_of_stops);
+
+int read_arr_of_strings(FILE* stream, int* arr);//return len
+
+
+void get_to_next_line(FILE* stream);
+
+int get_number_of_lines (FILE* file, char* file_name);
+
+void skip_credits_and_gpa(FILE* stream);
+
+int find_course_index_in_system ( int current_course_id, EnrollmentSystem sys);
 
 //------------------------------------------------
 //big mini functions declaration:
@@ -133,7 +88,75 @@ void read_courses_from_file(FILE* courses, int num_of_courses, EnrollmentSystem 
 
 void read_hackers_from_file(FILE* hackers, int num_of_hackers, EnrollmentSystem system);
 
+
+//------------------------------------------------
+//the power of friendship (functions) !!!!
+
+/**
+
+checks to see the absolute difference.
+
+Parameters :
+----------
+- id1 : int*
+
+- id2 : int*
+
+Returns :
+--------
+- res: INT
+absolute value of result.
+*/
+int student_id_difference(int* id1,int* id2);
+
+/**
+checks to see the absolute difference between [ASCII value of Name1] - [ASCII value of Name2]
+Parameters :
+----------
+- name1 : CHAR*
+the first name.
+
+- name2 : CHAR*
+the second name.
+
+- caps_lock : const BOOL
+defult- true- 'A' != 'a'
+false- 'A' == 'a'
+ gets changed as flag in begining.
+
+Returns :
+--------
+- res: INT
+absolute value of result.
+*/
+int Name_distance (char* name1, char* name2);
+
 int check_hacker_file_friend_status(EnrollmentSystem sys, int hacker_id, int student_id );
+
+
+
+// help for friends
+/**
+sums up ASCII value of string
+
+Parameters :
+----------
+- str : CHAR*
+the string.
+
+- caps_lock : BOOL
+true- 'A' != 'a'
+false- 'A' == 'a'
+
+Returns :
+--------
+- sum: int
+ASCII value of string.
+*/
+int str_ASCII_value(char* str, bool caps_lock);
+
+
+
 
 
 //------------------------------------------------
@@ -181,7 +204,8 @@ EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
 
 
         // find course id in courses arr in system
-        int course_index = 0;
+        int course_index = find_course_index_in_system (current_course_id, sys);
+        /*
         while (current_course_id != (sys ->ques[course_index]->course_id))
         {
             course_index++;
@@ -190,7 +214,7 @@ EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
                 printf("Error no course like that\n");
                 break;
             }
-        }
+        }*/
 
         //enter the students ids
         int size_of_current_course = sys->ques[course_index]->size;
@@ -204,11 +228,33 @@ EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
 
 }
 
+//------------------------------------------------
+
+
+//------------------------------------------------
 
 void hackEnrollment(EnrollmentSystem sys, FILE* out)
 {
+    for (int hacker_index = 0; hacker_index < sys->num_of_hackers; ++hacker_index)
+    {
+        for (int i = 0; i < sys->Hackers[hacker_index]->num_of_desired_courses; ++i)
+        {
+            int current_course_id = sys->Hackers[hacker_index]->desired_courses[i];
+            int course_sys_index = find_course_index_in_system (current_course_id, sys);
+
+            //IsraeliQueue new_que = IsraeliQueueCreate(FriendshipFunction *friendshipFunction, ComparisonFunction comparisonFunction, FRIENDSHIP_TH, RIVALRY_TH)
+
+
+        }
+
+    }
+
+
+
 
 }//TODO
+//------------------------------------------------
+
 //------------------------------------------------
 //big mini functions:
 void read_student_from_file(FILE* students, int num_of_students, EnrollmentSystem system)
@@ -307,8 +353,9 @@ void read_hackers_from_file(FILE* hackers, int num_of_hackers, EnrollmentSystem 
 
         //read desired courses
         int* desired_courses_temp= malloc(sizeof (int));
-        read_arr_of_strings(hackers,desired_courses_temp);
+        int num_of_courses_temp= read_arr_of_strings(hackers,desired_courses_temp);
         hacker_temp->desired_courses = desired_courses_temp;
+        hacker_temp->num_of_desired_courses = num_of_courses_temp;
 
         //read friends courses
         int* friends_temp= malloc(sizeof (int));
@@ -380,7 +427,7 @@ int read_string(FILE* stream, char* str,char stop_char ,int num_of_stops)
     return i;
 }
 //------------------------------------------------
-void read_arr_of_strings(FILE* stream, int* arr)
+int read_arr_of_strings(FILE* stream, int* arr)
 {
 
     char* char_temp = malloc(sizeof (char )); /** IMPORTANT*/
@@ -404,7 +451,7 @@ void read_arr_of_strings(FILE* stream, int* arr)
         free( str_temp);
     }
     free(char_temp);
-    return;
+    return j;
 
 }
 
@@ -444,7 +491,7 @@ void get_to_next_line(FILE* stream)
 //------------------------------------------------
 
 
-int Name_distance (char* name1, char* name2, bool caps_lock)
+int Name_distance (char* name1, char* name2)
 {
     int res = str_ASCII_value(name1, caps_lock) - str_ASCII_value(name2, caps_lock);
     return (res >= 0) ? res : (res * (-1));
@@ -488,9 +535,9 @@ int str_ASCII_value(char* str, bool caps_lock)
 //------------------------------------------------
 
 
-int student_id_difference(int id1,int id2)
+int student_id_difference(int* id1,int* id2)
 {
-    int res = id1 - id2;
+    int res = &id1 - &id2;
     return (res >= 0) ? res : (res * (-1));
 
 }
@@ -533,4 +580,20 @@ int check_hacker_file_friend_status(EnrollmentSystem sys, int hacker_id, int stu
 
     return NEUTRAL;
 
+}
+
+//---------------------------------------------------------------------------
+int find_course_index_in_system ( int current_course_id, EnrollmentSystem sys)
+{
+    int course_index = 0;
+    while (current_course_id != (sys ->ques[course_index]->course_id))
+    {
+        course_index++;
+        if(course_index >= sys->num_of_ques)//not supposed to happen
+        {
+            printf("Error no course like that\n");
+            break;
+        }
+    }
+    return course_index;
 }
