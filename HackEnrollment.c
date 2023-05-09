@@ -78,7 +78,7 @@ void read_arr_of_strings(FILE* stream, int* arr);
 
 void get_to_next_line(FILE* stream);
 
-int get_number_of_lines (FILE* file);
+int get_number_of_lines (FILE* file, char* file_name);
 
 void skip_credits_and_gpa(FILE* stream);
 
@@ -143,14 +143,14 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
     EnrollmentSystem  system;
     system = malloc(sizeof (EnrollmentSystem)); /** IMPORTANT*/
 
-    int num_of_students = get_number_of_lines(students);
+    int num_of_students = get_number_of_lines(students, "students.txt");
     Student* students_arr = malloc(num_of_students*sizeof (Student));
     system->students = students_arr;
     read_student_from_file(students, num_of_students, system);
     system->num_of_students = num_of_students;
 
 
-    int num_of_courses = get_number_of_lines(courses);
+    int num_of_courses = get_number_of_lines(courses,"courses.txt");
     Courses * courses_arr = malloc(num_of_courses*sizeof (Courses));
     system->ques = courses_arr;
     system->num_of_ques = num_of_courses;
@@ -158,7 +158,7 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
 
 
 
-    int num_of_hackers = get_number_of_lines(hackers)/4;
+    int num_of_hackers = get_number_of_lines(hackers,"hackers.txt")/4;
     Hacker * hacker_arr = malloc(num_of_hackers * sizeof (Hacker));
     system->Hackers = hacker_arr;
     read_hackers_from_file(hackers,num_of_hackers, system);
@@ -170,7 +170,7 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
 
 EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
 {
-    int num_of_queues = get_number_of_lines(queues);
+    int num_of_queues = get_number_of_lines(queues,"queues.txt");
     for (int i = 0; i < num_of_queues; ++i)
     {
         //get course number id
@@ -200,7 +200,7 @@ EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
         sys->ques[course_index]->enrollment_list = students_of_current_course_arr;
 
     }
-
+    return sys;
 
 }
 
@@ -213,7 +213,7 @@ void hackEnrollment(EnrollmentSystem sys, FILE* out)
 //big mini functions:
 void read_student_from_file(FILE* students, int num_of_students, EnrollmentSystem system)
 {
-    if(students = fopen(students,'r') == NULL )/** IMPORTANT*/ /** a lot of warnings of incompatible pointer types in every fopen. must check it*/
+    if((students = fopen("students.txt","r")) == NULL )/** IMPORTANT*/ /** a lot of warnings of incompatible pointer types in every fopen. must check it*/
     {
         //HACK_ENROLLMENT_FAILED_READ_FILE;
     }
@@ -252,7 +252,7 @@ void read_student_from_file(FILE* students, int num_of_students, EnrollmentSyste
 
 void read_courses_from_file(FILE* courses, int num_of_courses, EnrollmentSystem system)
 {
-    if(courses = fopen(courses,'r') == NULL ) /** IMPORTANT*/ /** a lot of warnings of incompatible pointer types in every fopen. must check it*/
+    if((courses = fopen("courses.txt","r")) == NULL ) /** IMPORTANT*/ /** a lot of warnings of incompatible pointer types in every fopen. must check it*/
     {
         //HACK_ENROLLMENT_FAILED_READ_FILE;
     }
@@ -288,7 +288,7 @@ void read_courses_from_file(FILE* courses, int num_of_courses, EnrollmentSystem 
 
 void read_hackers_from_file(FILE* hackers, int num_of_hackers, EnrollmentSystem system)
 {
-    if(hackers = fopen(hackers,'r') == NULL )/** IMPORTANT*/ /** a lot of warnings of incompatible pointer types in every fopen. must check it*/
+    if((hackers = fopen("hackers.txt","r")) == NULL )/** IMPORTANT*/ /** a lot of warnings of incompatible pointer types in every fopen. must check it*/
     {
         //HACK_ENROLLMENT_FAILED_READ_FILE;
     }
@@ -335,9 +335,9 @@ void read_hackers_from_file(FILE* hackers, int num_of_hackers, EnrollmentSystem 
 //------------------------------------------------
 //mini functions:
 
-int get_number_of_lines (FILE* file )
+int get_number_of_lines (FILE* file, char* file_name )
 {
-    if(file = fopen(file,'r') == NULL )/** IMPORTANT*/ /** a lot of warnings of incompatible pointer types in every fopen. must check it*/
+    if((file = fopen(file_name,"r")) == NULL )/** IMPORTANT*/ /** a lot of warnings of incompatible pointer types in every fopen. must check it*/
     {
         return HACK_ENROLLMENT_FAILED_READ_FILE;
     }
