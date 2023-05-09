@@ -508,7 +508,7 @@ int check_hacker_file_friend_status(EnrollmentSystem sys, int hacker_id, int stu
             printf("no hacker found\n");
             break;
         }
-    }
+    }//
     Hacker current_hacker = sys ->Hackers [hacker_index];
 
     //find if student is in friend list
