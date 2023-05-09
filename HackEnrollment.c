@@ -253,10 +253,27 @@ void hackEnrollment(EnrollmentSystem sys, FILE* out)
     (&pt)[1] = (int *(*)(void *, void *)) (&Name_distance);
     (&pt)[2] = (int *(*)(void *, void *)) (&check_hacker_file_friend_status);
 
+    IsraeliQueue* arr_of_queues = malloc(sizeof(IsraeliQueue)*sys->num_of_ques);
 
-    for (int hackerIndex = 0; hackerIndex < sys->num_of_hackers; ++hackerIndex)
+
+    for (int queue_index = 0; queue_index<sys->num_of_ques; queue_index++)
     {
-        for (int i = 0; i < sys->Hackers[hackerIndex]->num_of_desired_courses; ++i)
+        IsraeliQueue current_course_queue = IsraeliQueueCreate(pt,NULL,FRIENDSHIP_TH,RIVALRY_TH);
+        int current_queue_len = sys->ques[queue_index]->size_of_enrolment_list;
+
+        for(int student_index = 0; student_index<current_queue_len; student_index++){
+            Student current_student = sys->ques[queue_index]->enrollment_list[student_index]; //TODO change enrollment list & israeli queue nodes
+            IsraeliQueueEnqueue(current_course_queue,current_student);
+        }
+        arr_of_queues[queue_index] = current_course_queue;
+    }
+
+
+
+
+}
+
+/**  for (int i = 0; i < sys->Hackers[hackerIndex]->num_of_desired_courses; ++i)
         {
             int currentCourseId = sys->Hackers[hackerIndex]->desired_courses[i];
             int courseSysIndex = find_course_index_in_system (currentCourseId, sys);
@@ -292,18 +309,10 @@ void hackEnrollment(EnrollmentSystem sys, FILE* out)
                 fprintf(out, "Cannot satisfy costraints for %d\n", *currentHackerPt);
                 fclose(out);
             }
+*/
 
 
-
-
-        }
-
-    }
-
-
-
-
-}//TODO
+//TODO
 //------------------------------------------------
 
 //------------------------------------------------
