@@ -90,7 +90,7 @@ void skip_credits_and_gpa(FILE* stream);
 
 int find_course_index_in_system ( int current_course_id, EnrollmentSystem sys);
 
-int find_hacker_student_index_in_system ( Hacker current_hacker, EnrollmentSystem sys);
+int find_student_index_in_system ( int id, EnrollmentSystem sys);
 
 //------------------------------------------------
 //big mini functions declaration:
@@ -211,31 +211,22 @@ EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
     {
         //get course number id
         char* course_id_temp = malloc(sizeof (char));
-        int q_size_temp = read_string(queues, course_id_temp, ' ',1);
+        read_string(queues, course_id_temp, ' ',1);
         int current_course_id = atoi(course_id_temp);
         free(course_id_temp);
 
         // find course id in courses arr in system
         int course_index = find_course_index_in_system (current_course_id, sys);
-        /*
-        while (current_course_id != (sys ->ques[course_index]->course_id))
-        {
-            course_index++;
-            if(course_index >= sys->num_of_ques)//not supposed to happen
-            {
-                printf("Error no course like that\n");
-                break;
-            }
-        }*/
+
 
         //enter the students ids
        // int size_of_current_course = sys->ques[course_index]->size;
         //int* students_of_current_course_arr = malloc( sizeof (int));
         sys->ques[course_index]->enrollment_list = malloc(sizeof (int));
-        read_arr_of_strings(queues, sys->ques[course_index]->enrollment_list);
+        sys->ques[course_index]->size_of_enrolment_list = read_arr_of_strings(queues, sys->ques[course_index]->enrollment_list);
         sys->ques[course_index]->enrollment_list = realloc(sys->ques[course_index]->enrollment_list,(sys->ques[course_index]->size)*sizeof (int)); /** why */
         //sys->ques[course_index]->enrollment_list = students_of_current_course_arr;
-        sys->ques[course_index]->size_of_enrolment_list = q_size_temp;
+
 
     }
     return sys;
@@ -262,7 +253,9 @@ void hackEnrollment(EnrollmentSystem sys, FILE* out)
         int current_queue_len = sys->ques[queue_index]->size_of_enrolment_list;
 
         for(int student_index = 0; student_index<current_queue_len; student_index++){
-            Student current_student = sys->ques[queue_index]->enrollment_list[student_index]; //TODO change enrollment list & israeli queue nodes
+            int current_student_id = sys->ques[queue_index]->enrollment_list[student_index];
+            int current_student_sys_index = find_student_index_in_system(current_student_id, sys);
+            Student current_student = sys->students[current_student_sys_index]; //TODO change enrollment list & israeli queue nodes
             IsraeliQueueEnqueue(current_course_queue,current_student);
         }
         arr_of_queues[queue_index] = current_course_queue;
@@ -420,7 +413,7 @@ void read_hackers_from_file(FILE* hackers, int num_of_hackers, EnrollmentSystem 
         system->Hackers[i]->desired_courses= malloc(sizeof (int));
         system->Hackers[i]->num_of_desired_courses  = read_arr_of_strings(hackers,system->Hackers[i]->desired_courses);
 
-        int sys_student_index = find_hacker_student_index_in_system(system->Hackers[i], system);
+        int sys_student_index = find_student_index_in_system(system->Hackers[i]->hacker_id, system);
 
         //read friends
        // system->Hackers[i]->friends= malloc(sizeof (int));
@@ -658,10 +651,10 @@ int find_course_index_in_system ( int current_course_id, EnrollmentSystem sys)
 }
 
 //---------------------------------------------------------------------------
-int find_hacker_student_index_in_system ( Hacker current_hacker, EnrollmentSystem sys)
+int find_student_index_in_system ( int id, EnrollmentSystem sys)
 {
     int student_index = 0;
-    while (current_hacker->hacker_id != (sys ->students[student_index]->student_id))
+    while (id != (sys ->students[student_index]->student_id))
     {
         student_index++;
         if(student_index >= sys->num_of_students)//not supposed to happen
