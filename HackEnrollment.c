@@ -204,11 +204,10 @@ EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
     for (int i = 0; i < num_of_queues; ++i)
     {
         //get course number id
-        sys->ques[i] = malloc(sizeof (char));
+        char* course_id_temp = malloc(sizeof (char));
         int q_size_temp = read_string(queues, course_id_temp, ' ',1);
         int current_course_id = atoi(course_id_temp);
         free(course_id_temp);
-
 
         // find course id in courses arr in system
         int course_index = find_course_index_in_system (current_course_id, sys);
@@ -224,11 +223,12 @@ EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
         }*/
 
         //enter the students ids
-        int size_of_current_course = sys->ques[course_index]->size;
-        int* students_of_current_course_arr = malloc( sizeof (int));
-        read_arr_of_strings(queues, students_of_current_course_arr);
-        students_of_current_course_arr = realloc(students_of_current_course_arr,size_of_current_course*sizeof (int));
-        sys->ques[course_index]->enrollment_list = students_of_current_course_arr;
+       // int size_of_current_course = sys->ques[course_index]->size;
+        //int* students_of_current_course_arr = malloc( sizeof (int));
+        sys->ques[course_index]->enrollment_list = malloc(sizeof (int));
+        read_arr_of_strings(queues, sys->ques[course_index]->enrollment_list);
+        sys->ques[course_index]->enrollment_list = realloc(sys->ques[course_index]->enrollment_list,(sys->ques[course_index]->size)*sizeof (int)); /** why */
+        //sys->ques[course_index]->enrollment_list = students_of_current_course_arr;
         sys->ques[course_index]->size_of_enrolment_list = q_size_temp;
 
     }
@@ -316,20 +316,22 @@ void read_student_from_file(FILE* students, int num_of_students, EnrollmentSyste
         skip_credits_and_gpa(students);
 
 
-        char* name_temp = malloc(sizeof (char));
-        int name_len_temp = read_string(students, name_temp, ' ',2);
+       // char* name_temp = malloc(sizeof (char));
+       // int name_len_temp = read_string(students, name_temp, ' ',2);
+        system->students[i]->name = malloc(sizeof (char));
+        read_string(students, system->students[i]->name, ' ',2);
 
 
-        Student student_temp = malloc(sizeof(Student)); /** IMPORTANT*/
-        student_temp->name[name_len_temp]= *name_temp;
+       // Student student_temp = malloc(sizeof(Student)); /** IMPORTANT*/
+       // student_temp->name[name_len_temp]= *name_temp;
 
-        free(name_temp);
+       // free(name_temp);
 
-        student_temp->student_id = atoi(id_temp);
-        system->students[i] = student_temp;
+        system->students[i]->student_id = atoi(id_temp);
+       // system->students[i] = student_temp;
 
         get_to_next_line(students);
-        free(student_temp);     /** IMPORTANT*/
+        //free(student_temp);     /** IMPORTANT*/
 
     }
     fclose(students);
@@ -352,20 +354,24 @@ void read_courses_from_file(FILE* courses, int num_of_courses, EnrollmentSystem 
 
         char* course_id_temp = malloc(sizeof (char));
         read_string(courses, course_id_temp, ' ',1);
-        Courses course_temp = malloc(sizeof (Courses)); /** IMPORTANT*/
-        course_temp ->course_id = atoi(course_id_temp);
+        //Courses course_temp = malloc(sizeof (Courses)); /** IMPORTANT*/
+        //course_temp ->course_id = atoi(course_id_temp);
+
+        system->ques[i] = malloc(sizeof (Courses));
+        system->ques[i]->course_id = atoi(course_id_temp);
 
 
         char* course_size_temp = malloc(sizeof (char));
         read_string(courses, course_id_temp, '\n',1);
-        course_temp ->size =  atoi(course_size_temp);
-        free(course_size_temp);
+        //course_temp ->size =  atoi(course_size_temp);
+        system->ques[i]->size = atoi(course_id_temp);
+        //free(course_size_temp);
         free(course_id_temp);/** IMPORTANT*/
 
-        system ->ques[i]= course_temp;
+        //system ->ques[i]= course_temp;
 
         get_to_next_line(courses);
-        free( course_temp);/** IMPORTANT*/
+        //free( course_temp);/** IMPORTANT*/
 
     }
     fclose(courses);
