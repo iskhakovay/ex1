@@ -21,7 +21,7 @@ const bool capslock = true;
 
 
 
-/*
+/* (:
 typedef struct node{
     int data;
     struct  node* next;
