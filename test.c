@@ -1,5 +1,5 @@
 #include <stdio.h>
-int sum(int a, int b);
+int sum(int a, int b,int c);
 int subtract(int a, int b);
 int mul(int a, int b);
 int div(int a, int b);
@@ -20,10 +20,21 @@ int main() {
     int a = 0;
     return 0;
 }
-int sum(int a, int b)
+int sum(int a, int b,int c)
 {
     return a + b;
 }
+int* (*pt)(void*, void*);
+void hackEnrollment(EnrollmentSystem sys, FILE* out)
+{
+    IsraeliQueue q;
+    q = malloc(sizeof (IsraeliQueue));
+    (q->FriendshipFunction) = (pt);
+    (&pt)[0] = (&student_id_difference); //TODO check pointers
+    (&pt)[1] = (&Name_distance);
+    (&pt)[2] = (&check_hacker_file_friend_status);
+
+}//TODO
 
 int subtract(int a, int b)
 {
