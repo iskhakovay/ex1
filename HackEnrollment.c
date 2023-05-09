@@ -35,15 +35,7 @@ typedef struct Queue{
     int count;
 } * Queue;
 */
-typedef struct student_t{
-    char* name;
-    int student_id;
-    int* friends;
-    int num_of_friends;
-    int* rivals;
-    int num_of_rivals;
 
-}* Student;
 
 typedef struct hacker_t{
     int hacker_id;
@@ -235,8 +227,24 @@ EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
 
 //------------------------------------------------
 
-
 //------------------------------------------------
+bool if_enrollment_success(Hacker current_hacker,EnrollmentSystem system, IsraeliQueue needed_queue, Courses course){
+    int queue_size = IsraeliQueueSize(needed_queue);
+    if(queue_size<=course->size){
+        return true;
+    }
+    int diff = queue_size - course->size;
+    Node tmp = needed_queue->rear;
+    for(int i = 0; i<diff;i++){
+        if(needed_queue->rear->data->student_id == current_hacker->hacker_id){
+            needed_queue->rear = tmp;
+            return false;
+        }
+        needed_queue->rear= needed_queue->rear->next;
+    }
+    needed_queue->rear = tmp;
+    return true;
+}
 int* (*pt)(void*, void*);
 void hackEnrollment(EnrollmentSystem sys, FILE* out)
 {
@@ -246,7 +254,7 @@ void hackEnrollment(EnrollmentSystem sys, FILE* out)
 
     IsraeliQueue* arr_of_queues = malloc(sizeof(IsraeliQueue)*sys->num_of_ques);
 
-
+    // turned all enrollment lists to israeli queues
     for (int queue_index = 0; queue_index<sys->num_of_ques; queue_index++)
     {
         IsraeliQueue current_course_queue = IsraeliQueueCreate(pt,NULL,FRIENDSHIP_TH,RIVALRY_TH);
@@ -259,10 +267,32 @@ void hackEnrollment(EnrollmentSystem sys, FILE* out)
             IsraeliQueueEnqueue(current_course_queue,current_student);
         }
         arr_of_queues[queue_index] = current_course_queue;
+
+    }
+    //put hackers inside of queues
+
+    for(int hacker_index = 0; hacker_index<sys->num_of_hackers; hacker_index++){
+        //checking which courses hacker wants
+        for(int i = 0; i<sys->Hackers[hacker_index]->num_of_desired_courses;i++){
+            int desired_course_id = sys->Hackers[hacker_index]->desired_courses[i];
+            int index_of_current_desired_course = find_course_index_in_system(desired_course_id,sys);
+            int current_hacker_system_index = find_student_index_in_system(sys->Hackers[hacker_index]->hacker_id,sys);
+            Student current_hacker = sys->students[current_hacker_system_index];
+            IsraeliQueueEnqueue(arr_of_queues[index_of_current_desired_course],current_hacker);
+        }
     }
 
-
-
+    for(int hacker_index = 0; hacker_index<sys->num_of_hackers; hacker_index++){
+        for(int i = 0; i<sys->Hackers[hacker_index]->num_of_desired_courses;i++){
+            int desired_course_id = sys->Hackers[hacker_index]->desired_courses[i];
+            int index_of_current_desired_course = find_course_index_in_system(desired_course_id,sys);
+                if(!(if_enrollment_success(sys->Hackers[hacker_index],sys,arr_of_queues[index_of_current_desired_course],sys->ques[index_of_current_desired_course]))){
+                    out = fopen("out.txt", "w");
+                    fprintf(out, "Cannot satisfy constraints for %d\n", sys->Hackers[hacker_index]->hacker_id);
+                    fclose(out);
+                }
+        }
+    }
 
 }
 
