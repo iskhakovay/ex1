@@ -6,16 +6,22 @@
 #include "HackEnrollment.c"
 #include "getopt.h"
 #include "unistd.h"
+#include <sys/stat.h>
 
 #define CAPSLOCK_ON  true
 #define CAPSLOCK_OFF false
+#define CHUNK_SIZE 256
+
 
 bool checkInputFiles(char** argv, int argc);
 int main(int argc, char** argv)//maybe char* argv
 {
-    bool capslock = checkInputFiles(argv,argc);
-    FILE* students, courses, hackers, target,queues;
-    students = argv[0];
+    bool capslock;
+    FILE* students;
+    FILE *courses;
+    FILE *hackers;
+    FILE *target;
+    FILE *queues;
     int option;
     // put ':' at the starting of the string so compiler can distinguish between '?' and ':'
     for(int i = 0; i<argc; i++) {
@@ -26,13 +32,29 @@ int main(int argc, char** argv)//maybe char* argv
                     capslock = CAPSLOCK_OFF;
                     break;
                 case 'f':
-                    if(i == 0){
-
+                    if(i == 1){
+                        students = fopen(argv[1],"r");
+                        fclose(students);
                     }
-                    printf("Given File: %s\n", optarg);
+                    if(i == 2){
+                        courses = fopen(argv[2],"r");
+                        fclose(courses);
+                    }
+                    if(i == 3){
+                        hackers = fopen(argv[3],"r");
+                        fclose(hackers);
+                    }
+                    if(i == 4){
+                        queues = fopen(argv[4],"r");
+                        fclose(queues);
+                    }
+                    if(i == 5){
+                        target = fopen(argv[5],"r");
+                        fclose(target);
+                    }
+
                     break;
                 case ':':
-                    printf("option needs a value\n");
                     break;
                 case '?': //used for some unknown options
                     printf("unknown option: %c\n", optopt);
@@ -40,9 +62,9 @@ int main(int argc, char** argv)//maybe char* argv
             }
         }
     }
-    //EnrollmentSystem sys =createEnrollment(argv[1], courses, hackers);
-    //sys =readEnrollment(sys, queues);
-    //hackEnrollment(sys, FILE* out);
+    EnrollmentSystem sys =createEnrollment(students, courses, hackers);
+    sys =readEnrollment(sys, queues);
+    hackEnrollment(sys, target);
 
 
 
