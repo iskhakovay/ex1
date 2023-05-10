@@ -13,7 +13,7 @@
 #define FRIENDSHIP_TH 20
 #define RIVALRY_TH 0
 
-const bool capslock = true;
+bool capslock;
 
 
 
@@ -640,7 +640,6 @@ void get_to_next_line(FILE* stream)
     return;
 }
 //------------------------------------------------
-
 
 int Name_distance (Student student1,Student student2)
 {

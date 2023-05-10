@@ -15,7 +15,7 @@
 
 int main(int argc, char** argv)//maybe char* argv
 {
-    bool capslock;
+
     FILE* students;
     FILE *courses;
     FILE *hackers;
@@ -26,7 +26,8 @@ int main(int argc, char** argv)//maybe char* argv
         printf("Too many arguments supplied.\n");
     }
     // put ':' at the starting of the string so compiler can distinguish between '?' and ':'
-    int i =0;
+    int i = 1;
+    capslock = CAPSLOCK_ON;
     while ((option = getopt(argc, argv, ":if:i")) != -1) { //get option from the getopt() method
         switch (option) {
             //For option i, r, l, print that these are options
@@ -39,36 +40,39 @@ int main(int argc, char** argv)//maybe char* argv
                 printf("unknown option: %c\n", optopt);
                 break;
         }
-
-
     }
-    while(i<6){
+
+    for(int j = optind; j<argc;j++){
         if(i == 1){
-            students = fopen(argv[1],"r");
-            fclose(students);
+            students = fopen(argv[j],"r");
+            //fclose(students);
         }
         if(i == 2){
-            courses = fopen(argv[2],"r");
-            fclose(courses);
+            courses = fopen(argv[j],"r");
+            //fclose(courses);
         }
         if(i == 3){
-            hackers = fopen(argv[3],"r");
-            fclose(hackers);
+            hackers = fopen(argv[j],"r");
+            //fclose(hackers);
         }
         if(i == 4){
-            queues = fopen(argv[4],"r");
-            fclose(queues);
+            queues = fopen(argv[j],"r");
+            //fclose(queues);
         }
         if(i == 5){
-            target = fopen(argv[5],"r");
-            fclose(target);
+            target = fopen(argv[j],"r");
+            // fclose(target);
         }
         i++;
     }
-    EnrollmentSystem sys =createEnrollment(students, courses, hackers);
-    sys =readEnrollment(sys, queues);
+    EnrollmentSystem sys = createEnrollment(students, courses, hackers);
+    sys = readEnrollment(sys, queues);
     hackEnrollment(sys, target);
 
 
-
+    fclose(target);
+    fclose(students);
+    fclose(courses);
+    fclose(hackers);
+    fclose(queues);
 }
