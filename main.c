@@ -36,7 +36,7 @@ int main(int argc, char** argv)//maybe char* argv
             capslock = CAPSLOCK_OFF;
         } else
         {
-            printf("unknown option: %c\n", argv[1]);
+            printf("unknown option: %s\n", argv[1]);
         }
             students = fopen(argv[2],"r");
             courses = fopen(argv[3],"r");
