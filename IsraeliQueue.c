@@ -32,9 +32,9 @@ typedef struct IsraeliQueue_t{
 int isEmpty(IsraeliQueue q){
     return (q->rear==NULL);
 }
+
 Node* createNode(Student data, Node *next){ /**NEW SHIT IDK*/
-    Node new_node;
-    new_node = malloc(sizeof(Node));
+    Node new_node = malloc(sizeof(Node));
     new_node->data = data;
     new_node->next = next;
     new_node->friendship = FRIEND_QUOTA;
@@ -236,6 +236,7 @@ IsraeliQueueError IsraeliQueueImprovePositions(IsraeliQueue q){ //TODO CHECK
         IsraeliQueueEnqueue(q,tmp);
         q_len--;
     }
+    return ISRAELIQUEUE_SUCCESS;
 
     /**
 
@@ -359,14 +360,17 @@ IsraeliQueue IsraeliQueueMerge(IsraeliQueue* arr,ComparisonFunction comparisonFu
  *
  * Makes the IsraeliQueue provided recognize the FriendshipFunction provided.*/
  //TODO
-IsraeliQueueError IsraeliQueueAddFriendshipMeasure(IsraeliQueue q, FriendshipFunction friendshipFunction){ /**  i don't care i'll just make a new array*/ //TODO CHECK
+IsraeliQueueError IsraeliQueueAddFriendshipMeasure(IsraeliQueue q, FriendshipFunction friendshipFunction)
+{ /**  i don't care i'll just make a new array*/ //TODO CHECK
     int len = q->friendship_function_len+1;
     int* arr[len];
     for(int i = 0; i<len-1;i++){
         arr[i] = (q->FriendshipFunction+i);
     }
     arr[len] = friendshipFunction;
-    q->FriendshipFunction = arr;                /** idk...*/
+    q->FriendshipFunction = arr;                /** idk...*/ ///!!!expect malloc problems
+
+    return ISRAELIQUEUE_SUCCESS;
 
 }
 
@@ -375,6 +379,7 @@ IsraeliQueueError IsraeliQueueAddFriendshipMeasure(IsraeliQueue q, FriendshipFun
 
 IsraeliQueueError IsraeliQueueUpdateFriendshipThreshold(IsraeliQueue q, int new_friendship_th){
     q->friendship_th=new_friendship_th;
+    return ISRAELIQUEUE_SUCCESS;
 }
 
 
@@ -383,17 +388,21 @@ IsraeliQueueError IsraeliQueueUpdateFriendshipThreshold(IsraeliQueue q, int new_
 
 IsraeliQueueError IsraeliQueueUpdateRivalryThreshold(IsraeliQueue q, int new_rival_th){
     q->rivalry_th = new_rival_th;
+    return ISRAELIQUEUE_SUCCESS;
 }
 
 
 /**Returns a new queue with the same elements as the parameter. If the parameter is NULL or any error occured during
 * the execution of the function, NULL is returned.*/
-IsraeliQueue IsraeliQueueClone(IsraeliQueue q){
-    if(isEmpty(q)){
+IsraeliQueue IsraeliQueueClone(IsraeliQueue q)
+{
+    if(isEmpty(q))
+    {
         return NULL;
     }
     IsraeliQueue new_queue = IsraeliQueueCreate(q->FriendshipFunction,q->ComparisonFunction,q->friendship_th,q->rivalry_th);
     Node tmp = q->rear;
+
     while (q->rear->next->next!=NULL){
         new_queue->rear->data = q->rear->data;
         new_queue->rear->next = createNode(q->rear->next->next->data,NULL);
