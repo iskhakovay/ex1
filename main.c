@@ -33,37 +33,37 @@ int main(int argc, char** argv)//maybe char* argv
             case 'i':
                 capslock = CAPSLOCK_OFF;
                 break;
-            case 'f':
-                if(i == 1){
-                    students = fopen(argv[1],"r");
-                    fclose(students);
-                }
-                if(i == 2){
-                    courses = fopen(argv[2],"r");
-                    fclose(courses);
-                }
-                if(i == 3){
-                    hackers = fopen(argv[3],"r");
-                    fclose(hackers);
-                }
-                if(i == 4){
-                    queues = fopen(argv[4],"r");
-                    fclose(queues);
-                }
-                if(i == 5){
-                    target = fopen(argv[5],"r");
-                    fclose(target);
-                }
-
-                break;
             case ':':
                 break;
             case '?': //used for some unknown options
                 printf("unknown option: %c\n", optopt);
                 break;
         }
-        i++;
 
+
+    }
+    while(i<6){
+        if(i == 1){
+            students = fopen(argv[1],"r");
+            fclose(students);
+        }
+        if(i == 2){
+            courses = fopen(argv[2],"r");
+            fclose(courses);
+        }
+        if(i == 3){
+            hackers = fopen(argv[3],"r");
+            fclose(hackers);
+        }
+        if(i == 4){
+            queues = fopen(argv[4],"r");
+            fclose(queues);
+        }
+        if(i == 5){
+            target = fopen(argv[5],"r");
+            fclose(target);
+        }
+        i++;
     }
     EnrollmentSystem sys =createEnrollment(students, courses, hackers);
     sys =readEnrollment(sys, queues);
