@@ -1,12 +1,12 @@
-#include "stdio.h"
-#include "string.h"
-#include "stdlib.h"
-#include "stdbool.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdbool.h>
 #include "HackEnrollment.h"
-#include "HackEnrollment.c"
-#include "getopt.h"
-#include "unistd.h"
-#include <sys/stat.h>
+//#include "HackEnrollment.c"
+//#include "getopt.h"
+//#include "unistd.h"
+//#include <sys/stat.h>
 
 #define CAPSLOCK_ON  true
 #define CAPSLOCK_OFF false
@@ -21,10 +21,58 @@ int main(int argc, char** argv)//maybe char* argv
     FILE *hackers;
     FILE *target;
     FILE *queues;
-    int option;
-    if( argc > 6 ) {
+
+
+    //int option;
+
+    if( argc > 7 ) {
         printf("Too many arguments supplied.\n");
     }
+
+    if (argc == 7)
+    {
+        if(strcmp(argv[1], "-i")== 0)
+        {
+            capslock = CAPSLOCK_OFF;
+        } else
+        {
+            printf("unknown option: %c\n", argv[1]);
+        }
+            students = fopen(argv[2],"r");
+            courses = fopen(argv[3],"r");
+            hackers = fopen(argv[4],"r");
+            queues = fopen(argv[5],"r");
+            target = fopen(argv[6],"w");
+    }
+
+    if (argc == 6)
+    {
+        students = fopen(argv[1],"r");
+        courses = fopen(argv[2],"r");
+        hackers = fopen(argv[3],"r");
+        queues = fopen(argv[4],"r");
+        target = fopen(argv[5],"w");
+    }
+
+    if( argc < 6 ) {
+        printf("not enough arguments supplied.\n");
+    }
+
+    EnrollmentSystem sys = createEnrollment(students, courses, hackers);
+    sys = readEnrollment(sys, queues);
+    hackEnrollment(sys, target);
+
+
+    fclose(target);
+    fclose(students);
+    fclose(courses);
+    fclose(hackers);
+    fclose(queues);
+
+
+
+/*
+
     // put ':' at the starting of the string so compiler can distinguish between '?' and ':'
     int i = 1;
     capslock = CAPSLOCK_ON;
@@ -64,15 +112,5 @@ int main(int argc, char** argv)//maybe char* argv
             // fclose(target);
         }
         i++;
-    }
-    EnrollmentSystem sys = createEnrollment(students, courses, hackers);
-    sys = readEnrollment(sys, queues);
-    hackEnrollment(sys, target);
-
-
-    fclose(target);
-    fclose(students);
-    fclose(courses);
-    fclose(hackers);
-    fclose(queues);
+    }*/
 }

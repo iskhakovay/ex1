@@ -1,6 +1,7 @@
-#include "stdio.h"
-#include "stdlib.h"
-#include "stdbool.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdbool.h>
 #include "IsraeliQueue.h"
 #include "HackEnrollment.h"
 
@@ -8,16 +9,7 @@
 #define FRIEND 1
 #define RIVAL -1
 #define NEUTRAL 0
-// i guess it should be here
-typedef struct student_t{
-    char* name;
-    int student_id;
-    int* friends;
-    int num_of_friends;
-    int* rivals;
-    int num_of_rivals;
 
-}* Student;
 typedef struct node{
     Student data;
     struct  node* next;
@@ -223,7 +215,7 @@ bool IsraeliQueueContains(IsraeliQueue q, void *item){
      Node tmp = q->rear;
      while(q->rear->next!=NULL){
          if(q->rear->data>max){
-             max = q->rear->data;
+             max = q->rear->data->student_id;
          }
      }
      q->rear = tmp;
@@ -306,8 +298,8 @@ int* mergeFriendshipFunctions(IsraeliQueue* arr){//TODO CHECK
     int new_arr[len_of_all_functions_arr];
 
     for(int i = 0; i <len_of_all_functions_arr; i++){
-        for(int j = i; j<(*(arr+i))->friendship_function_len+i; j++)
-            new_arr[i] = (*(arr+j))->FriendshipFunction;
+        for(int j = i; j < (*(arr+i))->friendship_function_len+i; j++)
+            new_arr[j] = (*(arr+j-i))->FriendshipFunction;//TODO WTF
     }
     return new_arr;
 }

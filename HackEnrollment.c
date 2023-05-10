@@ -1,7 +1,7 @@
-#include "stdio.h"
-#include "string.h"
-#include "stdlib.h"
-#include "stdbool.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdbool.h>
 #include "HackEnrollment.h"
 #include "IsraeliQueue.h"
 #include "IsraeliQueue.c"
@@ -13,7 +13,7 @@
 #define FRIENDSHIP_TH 20
 #define RIVALRY_TH 0
 
-bool capslock;
+
 
 
 
@@ -535,6 +535,7 @@ void read_hackers_from_file(FILE* hackers, int num_of_hackers, EnrollmentSystem 
 
 int get_number_of_lines (FILE* file, char* file_name )
 {
+
     if((file = fopen(file_name,"r")) == NULL )/** IMPORTANT*/ /** a lot of warnings of incompatible pointer types in every fopen. must check it*/
     {
         return HACK_ENROLLMENT_FAILED_READ_FILE;
