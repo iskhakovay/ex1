@@ -41,7 +41,7 @@ Returns :
 - res: INT
 absolute value of result.
 */
-int studentIdDifference(Student student1, Student student2);
+int studentIdDifference(void* student1, void* student2);
 
 /**
 checks to see the absolute difference between [ASCII value of Name1] - [ASCII value of Name2]
@@ -61,7 +61,7 @@ Returns :
 - res: INT
 absolute value of result.
 */
-int nameDistance (Student student1, Student student2);
+int nameDistance (void* student1, void* student2);
 
 
 /**
@@ -80,7 +80,7 @@ FRIEND_IN_FILE = 20
 RIVAL_IN_FILE = (-20)
 NEUTRAL_IN_FILE = 0
 */
-int checkHackerFileFriendStatus(Student hacker, Student student );
+int checkHackerFileFriendStatus(void* hacker, void* student );
 
 
 
@@ -341,17 +341,17 @@ EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
 
 //------------------------------------------------
 
-int (**pt)(void*, void*);
+int (*pt)(void*, void*);
 void hackEnrollment(EnrollmentSystem sys, FILE* out)
 {
-    (&pt)[0] = (int (**)(void *, void *)) (&studentIdDifference); //TODO check pointers
-    (&pt)[1] = (int (**)(void *, void *)) (&nameDistance);
-    (&pt)[2] = (int (**)(void *, void *)) (&checkHackerFileFriendStatus);
+    (&pt)[0] = (studentIdDifference); //TODO check pointers
+    (&pt)[1] = (nameDistance);
+    (&pt)[2] = (&checkHackerFileFriendStatus);
 
     IsraeliQueue* arr_of_queues = malloc(sizeof(IsraeliQueue)*sys->num_of_ques);
 
     // turned all enrollment lists to israeli queues
-    turnEnrollmentListToIsrealiQues(sys, arr_of_queues, pt);
+    turnEnrollmentListToIsrealiQues(sys, arr_of_queues, &pt);
 
     //put hackers inside of queues
     enrollHackers(sys, arr_of_queues);
@@ -723,9 +723,11 @@ void getToNextLine(FILE* stream)
 }
 //------------------------------------------------
 
-int nameDistance (Student student1, Student student2)
+int nameDistance (void* student1, void* student2)
 {
-    int res = strAsciiValue(student1->name, capslock) - strAsciiValue(student2->name, capslock);
+    Student *pt1 = (Student*) student1;
+    Student *pt2 = (Student*) student2;
+    int res = strAsciiValue((*pt1)->name, capslock) - strAsciiValue((*pt2)->name, capslock);
     return (res >= 0) ? res : (res * (-1));
 }
 //------------------------------------------------
@@ -767,31 +769,35 @@ int strAsciiValue(char* str, bool caps_lock)
 //------------------------------------------------
 
 
-int studentIdDifference(Student student1, Student student2)
+int studentIdDifference(void* student1, void* student2)
 {
-    int result = student1->student_id - student2->student_id;
+    Student *pt1 = (Student*) student1;
+    Student *pt2 = (Student*) student2;
+    int result = (*pt1)->student_id - (*pt2)->student_id;
     return (result >= 0) ? result : (result * (-1));
 
 }
 
 //------------------------------------------------
 
-int checkHackerFileFriendStatus(Student hacker, Student student )
+int checkHackerFileFriendStatus(void* hacker, void* student )
 {
+    Student *pt1 = (Student*) hacker;
+    Student *pt2 = (Student*) student;
 
     //find if student is in friend list
-    for (int i = 0; i < hacker->num_of_friends; ++i)
+    for (int i = 0; i < (*pt1)->num_of_friends; ++i)
     {
-        if(student->student_id == hacker->friends[i])
+        if((*pt2)->student_id == (*pt2)->friends[i])
         {
             return FRIEND_IN_FILE;
         }
     }
 
     //find if student is in rival list
-    for (int i = 0; i < hacker->num_of_rivals; ++i)
+    for (int i = 0; i < (*pt1)->num_of_rivals; ++i)
     {
-        if(student->student_id == hacker->rivals[i])
+        if((*pt2)->student_id == (*pt1)->rivals[i])
         {
             return RIVAL_IN_FILE;
         }
