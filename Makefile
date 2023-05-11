@@ -1,35 +1,49 @@
-CC = gcc
-CFLAGS = -Wall -Werror -g
+# Directories
+SRC_DIR := src
+BUILD_DIR := build
 
-SRC_DIR = src
-BUILD_DIR = build
+# Compiler options
+CC := gcc
+CFLAGS := -Wall -Wextra -Werror -std=c11
+LDFLAGS :=
 
+# Source files
+SRCS := \
+    $(SRC_DIR)/main.c \
+    $(SRC_DIR)/HackEnrollment.c \
+    $(SRC_DIR)/IsraeliQueues.c \
+    $(SRC_DIR)/capslock.c
 
-MAIN_SRC = $(SRC_DIR)/main.c
-HACK_ENROLLMENT_SRC = $(SRC_DIR)/HackEnrollment.c
-ISRAELI_QUEUES_SRC = $(SRC_DIR)/IsraeliQueues.c
+# Object files
+OBJS := $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 
-MAIN_OBJ = $(BUILD_DIR)/main.o
-HACK_ENROLLMENT_OBJ = $(BUILD_DIR)/HackEnrollment.o
-ISRAELI_QUEUES_OBJ = $(BUILD_DIR)/IsraeliQueues.o
+# Executable
+TARGET := $(BUILD_DIR)/my_program
 
-PROGRAM = HackEnrollment
-
+# Phony targets
 .PHONY: all clean
 
-all: $(PROGRAM)
+# Default target
+all: $(TARGET)
 
-$(PROGRAM): $(MAIN_OBJ) $(HACK_ENROLLMENT_OBJ) $(ISRAELI_QUEUES_OBJ)
-	$(CC) $(CFLAGS) $^ -o $@
+# Linking target
+$(TARGET): $(OBJS)
+	$(CC) $(LDFLAGS) $^ -o $@
 
-$(MAIN_OBJ): $(MAIN_SRC)
+# Compilation targets
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(HACK_ENROLLMENT_OBJ): $(HACK_ENROLLMENT_SRC)
-	$(CC) $(CFLAGS) -c $< -o $@
+# Create build directory if it doesn't exist
+$(BUILD_DIR):
+	mkdir -p $@
 
-$(ISRAELI_QUEUES_OBJ): $(ISRAELI_QUEUES_SRC)
-	$(CC) $(CFLAGS) -c $< -o $@
-
+# Clean target
 clean:
-	rm -rf $(BUILD_DIR) $(PROGRAM)
+	rm -rf $(BUILD_DIR)
+
+# Dependencies
+$(BUILD_DIR)/HackEnrollment.o: $(SRC_DIR)/HackEnrollment.c $(SRC_DIR)/HackEnrollment.h $(SRC_DIR)/IsraeliQueues.h $(SRC_DIR)/headers.h $(SRC_DIR)/capslock.h
+$(BUILD_DIR)/IsraeliQueues.o: $(SRC_DIR)/IsraeliQueues.c $(SRC_DIR)/IsraeliQueues.h $(SRC_DIR)/headers.h
+$(BUILD_DIR)/capslock.o: $(SRC_DIR)/capslock.c $(SRC_DIR)/capslock.h
+$(BUILD_DIR)/main.o: $(SRC_DIR)/main.c $(SRC_DIR)/HackEnrollment.h $(SRC_DIR)/capslock.h $(SRC_DIR)/headers.h $(SRC_DIR)/IsraeliQueues.h
