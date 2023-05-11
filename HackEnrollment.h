@@ -5,8 +5,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "IsraeliQueue.c"
-//#include "Headers.h"
+#include "IsraeliQueue.h"
+#include "Headers.h"
 
 
 bool capslock;

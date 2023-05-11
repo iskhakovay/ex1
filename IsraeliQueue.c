@@ -3,27 +3,13 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "IsraeliQueue.h"
-//#include "Headers.h"
+#include "Headers.h"
 
 
 #define FRIEND 1
 #define RIVAL (-1)
 #define NEUTRAL 0
-typedef struct student_t{
-    char* name;
-    int student_id;
-    int* friends;
-    int num_of_friends;
-    int* rivals;
-    int num_of_rivals;
 
-}* Student;
-typedef struct node{
-    Student data;
-    struct  node* next;
-    int friendship;
-    int rival;
-}*Node;
 //and this too
 
 struct IsraeliQueue_t{
