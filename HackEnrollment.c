@@ -276,7 +276,7 @@ students enrolled in the course.
  * @param course
  * @return true if the hacker can enroll in the course
  */
-bool isEnrollmentSuccess(Hacker current_hacker, EnrollmentSystem system, IsraeliQueue needed_queue, Courses course);
+bool isEnrollmentSuccess(Hacker current_hacker, IsraeliQueue needed_queue, Courses course);
 
 
 
@@ -365,7 +365,7 @@ void hackEnrollment(EnrollmentSystem sys, FILE* out)
         {
             int desired_course_id = sys->Hackers[hacker_index]->desired_courses[i];
             int index_of_current_desired_course = findCourseIndexInSystem(desired_course_id, sys);
-            isEnrollmentSuccess(sys->Hackers[hacker_index], sys, arr_of_queues[index_of_current_desired_course],
+            isEnrollmentSuccess(sys->Hackers[hacker_index],  arr_of_queues[index_of_current_desired_course],
                                 sys->ques[index_of_current_desired_course]);
 
         }
@@ -389,7 +389,7 @@ void hackEnrollment(EnrollmentSystem sys, FILE* out)
 /**===================================================================================================================*/
 
 //------------------------------------------------
-bool isEnrollmentSuccess(Hacker current_hacker, EnrollmentSystem system, IsraeliQueue needed_queue, Courses course)
+bool isEnrollmentSuccess(Hacker current_hacker, IsraeliQueue needed_queue, Courses course)
 {
     int queue_size = IsraeliQueueSize(needed_queue);
     if(queue_size<=course->size){
