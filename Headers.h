@@ -1,7 +1,7 @@
 
 #ifndef EX1_HEADERS_H
 #define EX1_HEADERS_H
-
+#include "IsraeliQueue.h"
 typedef struct student_t{
     char* name;
     int student_id;

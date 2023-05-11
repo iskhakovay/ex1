@@ -3,7 +3,7 @@ CFLAGS = -Wall -Werror -g
 
 SRC_DIR = src
 BUILD_DIR = build
-VPATH = SRC INCLUDE
+
 
 MAIN_SRC = $(SRC_DIR)/main.c
 HACK_ENROLLMENT_SRC = $(SRC_DIR)/HackEnrollment.c
