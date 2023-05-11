@@ -41,7 +41,7 @@ Returns :
 - res: INT
 absolute value of result.
 */
-int student_id_difference(Student student1,Student student2);
+int studentIdDifference(Student student1, Student student2);
 
 /**
 checks to see the absolute difference between [ASCII value of Name1] - [ASCII value of Name2]
@@ -61,7 +61,7 @@ Returns :
 - res: INT
 absolute value of result.
 */
-int Name_distance (Student student1,Student student2);
+int nameDistance (Student student1, Student student2);
 
 
 /**
@@ -80,11 +80,11 @@ FRIEND_IN_FILE = 20
 RIVAL_IN_FILE = (-20)
 NEUTRAL_IN_FILE = 0
 */
-int check_hacker_file_friend_status(Student hacker, Student student );
+int checkHackerFileFriendStatus(Student hacker, Student student );
 
 
 
-// help for Name_distance function
+// help for nameDistance function
 /**
 sums up ASCII value of string
 
@@ -102,7 +102,7 @@ Returns :
 - sum: int
 ASCII value of string.
 */
-int str_ASCII_value(char* str, bool caps_lock);
+int strAsciiValue(char* str, bool caps_lock);
 
 //------------------------------------------------
 //functions for reading files and entering them into system declaration:
@@ -120,7 +120,7 @@ Returns :
 --------
 NONE
  */
-void read_student_from_file(FILE* students, int num_of_students, EnrollmentSystem system);
+void readStudentFromFile(FILE* students, int num_of_students, EnrollmentSystem system);
 
 /**
 reads the courses info (courses_id, size) from file and enters it into system
@@ -135,7 +135,7 @@ Returns :
 --------
 NONE
  */
-void read_courses_from_file(FILE* courses, int num_of_courses, EnrollmentSystem system);
+void readCoursesFromFile(FILE* courses, int num_of_courses, EnrollmentSystem system);
 
 /**
 reads the hackers info from file and enters it into system (ito hacker and student):
@@ -157,10 +157,11 @@ reads the hackers info from file and enters it into system (ito hacker and stude
 --------
 NONE
  */
-void read_hackers_from_file(FILE* hackers, int num_of_hackers, EnrollmentSystem system);
-//------------------------------------------------
+void readHackersFromFile(FILE* hackers, int num_of_hackers, EnrollmentSystem system);
 
+//------------------------------------------------
 //functions to make the file reading nicer declaration:
+
 /**
 reads stream and places it in string until stop_char shows up the number of times (num_of_stops)
 
@@ -175,7 +176,7 @@ Parameters :
 --------
  * @return : len of return string
  */
-int read_string(FILE* stream, char* str,char stop_char ,int num_of_stops);
+int readString(FILE* stream, char* str, char stop_char , int num_of_stops);
 
 /**
 reads list of "int"s that are sperted with a space, antil end o line (or EOF), and plasecs them in arry.
@@ -189,38 +190,65 @@ Returns :
 --------
  * @return : len of arr
  */
-int read_arr_of_strings(FILE* stream, int* arr);
+int readArrOfStrings(FILE* stream, int* arr);
 
+/**
+ * progrsses in stream untill reaches '\n'
+ * @param stream
+ */
+void getToNextLine(FILE* stream);
 
-void get_to_next_line(FILE* stream);
+/**
+ * counts number of lines ('\n') in file.
+ * @param file
+ * @param file_name
+ * @return number of lines in file
+ */
+int getNumberOfLines (FILE* file, char* file_name);
 
-int get_number_of_lines (FILE* file, char* file_name);
-
-void skip_credits_and_gpa(FILE* stream);
-
-
-
-//------------------------------------------------
-
-//mini functions declaration:
-
-void print_new_ques (EnrollmentSystem sys, FILE* out);
-
-void turn_enrollment_list_to_isreali_ques (EnrollmentSystem sys, IsraeliQueue* arr_of_queues, FriendshipFunction *pt);
-void enroll_hackers(EnrollmentSystem sys, IsraeliQueue* arr_of_queues);
-
-void clean_enrollment_queues(EnrollmentSystem sys, IsraeliQueue *arr_of_queues);
-
-bool is_enrollment_success(Hacker current_hacker,EnrollmentSystem system, IsraeliQueue needed_queue, Courses course);
-
-int find_course_index_in_system ( int current_course_id, EnrollmentSystem sys);
-
-int find_student_index_in_system ( int id, EnrollmentSystem sys);
-
-//------------------------------------------------
+/**
+ * skips the " credits" and "GPA" in students info
+ * @param stream
+ */
+void skipCreditsAndGpa(FILE* stream);
 
 
 //------------------------------------------------
+// system orientation functions declaration:
+
+/**
+ * find the index of a course in sys ->ques
+ * @param current_course_id
+ * @param sys
+ * @return course index in system
+ */
+int findCourseIndexInSystem (int current_course_id, EnrollmentSystem sys);
+
+/**
+ * find the index of a student in sys ->students
+ * @param id
+ * @param sys
+ * @return  student index in system
+ */
+int findStudentIndexInSystem (int id, EnrollmentSystem sys);
+
+//------------------------------------------------
+//more functions declaration:
+
+void printNewQues (EnrollmentSystem sys, FILE* out);
+
+void turnEnrollmentListToIsrealiQues (EnrollmentSystem sys, IsraeliQueue* arr_of_queues, FriendshipFunction *pt);
+
+void enrollHackers(EnrollmentSystem sys, IsraeliQueue* arr_of_queues);
+
+void cleanEnrollmentQueues(EnrollmentSystem sys, IsraeliQueue *arr_of_queues);
+
+bool isEnrollmentSuccess(Hacker current_hacker, EnrollmentSystem system, IsraeliQueue needed_queue, Courses course);
+
+
+
+/**===================================================================================================================*/
+//main functions:
 
 EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
 {
@@ -228,49 +256,50 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
     EnrollmentSystem  system;
     system = malloc(sizeof (EnrollmentSystem)); /** IMPORTANT*/
 
-    int num_of_students = get_number_of_lines(students, "students.txt");
+    int num_of_students = getNumberOfLines(students, "students.txt");
     Student* students_arr = malloc(num_of_students*sizeof (Student));
     system->students = students_arr;
-    read_student_from_file(students, num_of_students, system);
+    readStudentFromFile(students, num_of_students, system);
     system->num_of_students = num_of_students;
 
 
-    int num_of_courses = get_number_of_lines(courses,"courses.txt");
+    int num_of_courses = getNumberOfLines(courses, "courses.txt");
     Courses * courses_arr = malloc(num_of_courses*sizeof (Courses));
     system->ques = courses_arr;
     system->num_of_ques = num_of_courses;
-    read_courses_from_file(courses,num_of_courses,system);
+    readCoursesFromFile(courses, num_of_courses, system);
 
 
 
-    int num_of_hackers = get_number_of_lines(hackers,"hackers.txt")/4;
+    int num_of_hackers = getNumberOfLines(hackers, "hackers.txt") / 4;
     Hacker * hacker_arr = malloc(num_of_hackers * sizeof (Hacker));
     system->Hackers = hacker_arr;
-    read_hackers_from_file(hackers,num_of_hackers, system);
+    readHackersFromFile(hackers, num_of_hackers, system);
     system ->num_of_hackers = num_of_hackers;
 
     return system; /** IMPORTANT*/
 }
 
-
+//------------------------------------------------
 EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
 {
-    int num_of_queues = get_number_of_lines(queues,"queues.txt");
+    int num_of_queues = getNumberOfLines(queues, "queues.txt");
     for (int i = 0; i < num_of_queues; ++i)
     {
         //get course number id
         char* course_id_temp = malloc(sizeof (char));
-        read_string(queues, course_id_temp, ' ',1);
+        readString(queues, course_id_temp, ' ', 1);
         int current_course_id = atoi(course_id_temp);
         free(course_id_temp);
 
         // find course id in courses arr in system
-        int course_index = find_course_index_in_system (current_course_id, sys);
+        int course_index = findCourseIndexInSystem(current_course_id, sys);
 
 
         //enter the students ids
         sys->ques[course_index]->enrollment_list = malloc(sizeof (int));
-        sys->ques[course_index]->size_of_enrolment_list = read_arr_of_strings(queues, sys->ques[course_index]->enrollment_list);
+        sys->ques[course_index]->size_of_enrolment_list = readArrOfStrings(queues,
+                                                                           sys->ques[course_index]->enrollment_list);
         sys->ques[course_index]->enrollment_list = realloc(sys->ques[course_index]->enrollment_list,(sys->ques[course_index]->size)*sizeof (int)); /** why */
 
     }
@@ -280,8 +309,54 @@ EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
 
 //------------------------------------------------
 
+int* (*pt)(void*, void*);
+void hackEnrollment(EnrollmentSystem sys, FILE* out)
+{
+    (&pt)[0] = (int *(*)(void *, void *)) (&studentIdDifference); //TODO check pointers
+    (&pt)[1] = (int *(*)(void *, void *)) (&nameDistance);
+    (&pt)[2] = (int *(*)(void *, void *)) (&checkHackerFileFriendStatus);
+
+    IsraeliQueue* arr_of_queues = malloc(sizeof(IsraeliQueue)*sys->num_of_ques);
+
+    // turned all enrollment lists to israeli queues
+    turnEnrollmentListToIsrealiQues(sys, arr_of_queues, pt);
+
+    //put hackers inside of queues
+    enrollHackers(sys, arr_of_queues);
+
+
+
+    for(int hacker_index = 0; hacker_index < sys->num_of_hackers; hacker_index++)
+    {
+        for(int i = 0; i < sys->Hackers[hacker_index]->num_of_desired_courses;i++)
+        {
+            int desired_course_id = sys->Hackers[hacker_index]->desired_courses[i];
+            int index_of_current_desired_course = findCourseIndexInSystem(desired_course_id, sys);
+            isEnrollmentSuccess(sys->Hackers[hacker_index], sys, arr_of_queues[index_of_current_desired_course],
+                                sys->ques[index_of_current_desired_course]);
+
+        }
+        if(sys->Hackers[hacker_index]->register_course_succsesful < 2)
+        {
+            out = fopen("out.txt", "w");
+            fprintf(out, "Cannot satisfy constraints for %d\n", sys->Hackers[hacker_index]->hacker_id);
+            fclose(out);
+            return;
+        }
+
+    }
+    cleanEnrollmentQueues(sys, arr_of_queues);
+
+    printNewQues(sys, out);
+    free(sys);
+    return;
+
+}
+
+/**===================================================================================================================*/
+
 //------------------------------------------------
-bool is_enrollment_success(Hacker current_hacker,EnrollmentSystem system, IsraeliQueue needed_queue, Courses course)
+bool isEnrollmentSuccess(Hacker current_hacker, EnrollmentSystem system, IsraeliQueue needed_queue, Courses course)
 {
     int queue_size = IsraeliQueueSize(needed_queue);
     if(queue_size<=course->size){
@@ -304,7 +379,7 @@ bool is_enrollment_success(Hacker current_hacker,EnrollmentSystem system, Israel
 
 //----------------------------------------------------------------------------
 
-void clean_enrollment_queues(EnrollmentSystem sys, IsraeliQueue *arr_of_queues)
+void cleanEnrollmentQueues(EnrollmentSystem sys, IsraeliQueue *arr_of_queues)
 {
     //going through each course
     IsraeliQueue trash;
@@ -333,73 +408,25 @@ void clean_enrollment_queues(EnrollmentSystem sys, IsraeliQueue *arr_of_queues)
     free(arr_of_queues);
 }
 
-
-
-
-
-int* (*pt)(void*, void*);
-void hackEnrollment(EnrollmentSystem sys, FILE* out)
-{
-    (&pt)[0] = (int *(*)(void *, void *)) (&student_id_difference); //TODO check pointers
-    (&pt)[1] = (int *(*)(void *, void *)) (&Name_distance);
-    (&pt)[2] = (int *(*)(void *, void *)) (&check_hacker_file_friend_status);
-
-    IsraeliQueue* arr_of_queues = malloc(sizeof(IsraeliQueue)*sys->num_of_ques);
-
-    // turned all enrollment lists to israeli queues
-    turn_enrollment_list_to_isreali_ques (sys, arr_of_queues, pt);
-
-    //put hackers inside of queues
-    enroll_hackers(sys, arr_of_queues);
-
-
-
-    for(int hacker_index = 0; hacker_index < sys->num_of_hackers; hacker_index++)
-    {
-        for(int i = 0; i < sys->Hackers[hacker_index]->num_of_desired_courses;i++)
-        {
-            int desired_course_id = sys->Hackers[hacker_index]->desired_courses[i];
-            int index_of_current_desired_course = find_course_index_in_system(desired_course_id,sys);
-            is_enrollment_success(sys->Hackers[hacker_index],sys,arr_of_queues[index_of_current_desired_course],sys->ques[index_of_current_desired_course]);
-
-        }
-        if(sys->Hackers[hacker_index]->register_course_succsesful < 2)
-        {
-            out = fopen("out.txt", "w");
-            fprintf(out, "Cannot satisfy constraints for %d\n", sys->Hackers[hacker_index]->hacker_id);
-            fclose(out);
-            return;
-        }
-
-    }
-    clean_enrollment_queues( sys, arr_of_queues);
-
-    print_new_ques(sys, out);
-    return;
-
-}
-
-
-
-//TODO
 //------------------------------------------------
-void enroll_hackers(EnrollmentSystem sys, IsraeliQueue* arr_of_queues)
+void enrollHackers(EnrollmentSystem sys, IsraeliQueue* arr_of_queues)
 {
     for(int hacker_index = 0; hacker_index < sys->num_of_hackers; hacker_index++)
     {
         //checking which courses hacker wants
         for(int i = 0; i<sys->Hackers[hacker_index]->num_of_desired_courses;i++){
             int desired_course_id = sys->Hackers[hacker_index]->desired_courses[i];
-            int index_of_current_desired_course = find_course_index_in_system(desired_course_id,sys);
-            int current_hacker_system_index = find_student_index_in_system(sys->Hackers[hacker_index]->hacker_id,sys);
+            int index_of_current_desired_course = findCourseIndexInSystem(desired_course_id, sys);
+            int current_hacker_system_index = findStudentIndexInSystem(sys->Hackers[hacker_index]->hacker_id, sys);
             Student current_hacker = sys->students[current_hacker_system_index];
             IsraeliQueueEnqueue(arr_of_queues[index_of_current_desired_course],current_hacker);
         }
     }
 }
+//------------------------------------------------
 
 
-void turn_enrollment_list_to_isreali_ques (EnrollmentSystem sys, IsraeliQueue* arr_of_queues, FriendshipFunction *pt)
+void turnEnrollmentListToIsrealiQues (EnrollmentSystem sys, IsraeliQueue* arr_of_queues, FriendshipFunction *pt)
 {
     for (int queue_index = 0; queue_index<sys->num_of_ques; queue_index++)
     {
@@ -408,7 +435,7 @@ void turn_enrollment_list_to_isreali_ques (EnrollmentSystem sys, IsraeliQueue* a
 
         for(int student_index = 0; student_index<current_queue_len; student_index++){
             int current_student_id = sys->ques[queue_index]->enrollment_list[student_index];
-            int current_student_sys_index = find_student_index_in_system(current_student_id, sys);
+            int current_student_sys_index = findStudentIndexInSystem(current_student_id, sys);
             Student current_student = sys->students[current_student_sys_index]; //TODO change enrollment list & israeli queue nodes
             IsraeliQueueEnqueue(current_course_queue,current_student);
         }
@@ -419,8 +446,9 @@ void turn_enrollment_list_to_isreali_ques (EnrollmentSystem sys, IsraeliQueue* a
 
 }
 
+//------------------------------------------------
 
-void print_new_ques (EnrollmentSystem sys, FILE* out)
+void printNewQues (EnrollmentSystem sys, FILE* out)
 {
     out = fopen("out.txt", "w");
     for (int i = 0; i < sys->num_of_ques; ++i)
@@ -437,14 +465,9 @@ void print_new_ques (EnrollmentSystem sys, FILE* out)
 
 }
 
-
-
-//TODO
 //------------------------------------------------
 
-//------------------------------------------------
-//big mini functions:
-void read_student_from_file(FILE* students, int num_of_students, EnrollmentSystem system)
+void readStudentFromFile(FILE* students, int num_of_students, EnrollmentSystem system)
 {
     if((students = fopen("students.txt","r")) == NULL )/** IMPORTANT*/ /** a lot of warnings of incompatible pointer types in every fopen. must check it*/
     {
@@ -455,15 +478,15 @@ void read_student_from_file(FILE* students, int num_of_students, EnrollmentSyste
         char id_temp[ID_SIZE]="";
 
         fgets(id_temp, ID_SIZE, students); /** IMPORTANT*/
-        skip_credits_and_gpa(students);
+        skipCreditsAndGpa(students);
 
         system->students[i]->name = malloc(sizeof (char));
-        read_string(students, system->students[i]->name, ' ',2);
+        readString(students, system->students[i]->name, ' ', 2);
 
 
         system->students[i]->student_id = atoi(id_temp);
 
-        get_to_next_line(students);
+        getToNextLine(students);
 
     }
     fclose(students);
@@ -475,7 +498,7 @@ void read_student_from_file(FILE* students, int num_of_students, EnrollmentSyste
 
 //------------------------------------------------
 
-void read_courses_from_file(FILE* courses, int num_of_courses, EnrollmentSystem system)
+void readCoursesFromFile(FILE* courses, int num_of_courses, EnrollmentSystem system)
 {
     if((courses = fopen("courses.txt","r")) == NULL ) /** IMPORTANT*/ /** a lot of warnings of incompatible pointer types in every fopen. must check it*/
     {
@@ -485,18 +508,18 @@ void read_courses_from_file(FILE* courses, int num_of_courses, EnrollmentSystem 
     {
 
         char* course_id_temp = malloc(sizeof (char));
-        read_string(courses, course_id_temp, ' ',1);
+        readString(courses, course_id_temp, ' ', 1);
 
         system->ques[i] = malloc(sizeof (Courses));
         system->ques[i]->course_id = atoi(course_id_temp);
 
 
-        read_string(courses, course_id_temp, '\n',1);
+        readString(courses, course_id_temp, '\n', 1);
 
         system->ques[i]->size = atoi(course_id_temp);
         free(course_id_temp);/** IMPORTANT*/
 
-        get_to_next_line(courses);
+        getToNextLine(courses);
 
     }
     fclose(courses);
@@ -508,7 +531,7 @@ void read_courses_from_file(FILE* courses, int num_of_courses, EnrollmentSystem 
 
 //------------------------------------------------
 
-void read_hackers_from_file(FILE* hackers, int num_of_hackers, EnrollmentSystem system)
+void readHackersFromFile(FILE* hackers, int num_of_hackers, EnrollmentSystem system)
 {
     if((hackers = fopen("hackers.txt","r")) == NULL )/** IMPORTANT*/ /** a lot of warnings of incompatible pointer types in every fopen. must check it*/
     {
@@ -528,18 +551,20 @@ void read_hackers_from_file(FILE* hackers, int num_of_hackers, EnrollmentSystem 
 
         //read desired courses
         system->Hackers[i]->desired_courses= malloc(sizeof (int));
-        system->Hackers[i]->num_of_desired_courses  = read_arr_of_strings(hackers,system->Hackers[i]->desired_courses);
+        system->Hackers[i]->num_of_desired_courses  = readArrOfStrings(hackers, system->Hackers[i]->desired_courses);
 
-        int sys_student_index = find_student_index_in_system(system->Hackers[i]->hacker_id, system);
+        int sys_student_index = findStudentIndexInSystem(system->Hackers[i]->hacker_id, system);
 
         //read friends
         system->students[sys_student_index]->friends  = malloc(sizeof (int));
-        system->students[sys_student_index]->num_of_friends = read_arr_of_strings(hackers,system->students[sys_student_index]->friends);
+        system->students[sys_student_index]->num_of_friends = readArrOfStrings(hackers,
+                                                                               system->students[sys_student_index]->friends);
 
 
         //read rivals
         system->students[sys_student_index]->rivals  = malloc(sizeof (int));
-        system->students[sys_student_index]->num_of_rivals = read_arr_of_strings(hackers,system->students[sys_student_index]->rivals);
+        system->students[sys_student_index]->num_of_rivals = readArrOfStrings(hackers,
+                                                                              system->students[sys_student_index]->rivals);
 
     }
     fclose(hackers);
@@ -556,7 +581,7 @@ void read_hackers_from_file(FILE* hackers, int num_of_hackers, EnrollmentSystem 
 
 
 
-int get_number_of_lines (FILE* file, char* file_name )
+int getNumberOfLines (FILE* file, char* file_name )
 {
 
     if((file = fopen(file_name,"r")) == NULL )/** IMPORTANT*/ /** a lot of warnings of incompatible pointer types in every fopen. must check it*/
@@ -583,7 +608,7 @@ int get_number_of_lines (FILE* file, char* file_name )
 //------------------------------------------------
 
 
-int read_string(FILE* stream, char* str,char stop_char ,int num_of_stops)
+int readString(FILE* stream, char* str, char stop_char , int num_of_stops)
 {
     char* char_temp = malloc(sizeof (char ));/** IMPORTANT*/
     int i = 0;
@@ -603,7 +628,7 @@ int read_string(FILE* stream, char* str,char stop_char ,int num_of_stops)
     return i;
 }
 //------------------------------------------------
-int read_arr_of_strings(FILE* stream, int* arr)
+int readArrOfStrings(FILE* stream, int* arr)
 {
 
     char* char_temp = malloc(sizeof (char )); /** IMPORTANT*/
@@ -634,7 +659,7 @@ int read_arr_of_strings(FILE* stream, int* arr)
 
 //------------------------------------------------
 
-void skip_credits_and_gpa(FILE* stream)
+void skipCreditsAndGpa(FILE* stream)
 {
     char* char_temp = malloc(sizeof (char )); /** IMPORTANT*/
     int num_of_spaces = 3;
@@ -653,7 +678,7 @@ void skip_credits_and_gpa(FILE* stream)
 
 
 
-void get_to_next_line(FILE* stream)
+void getToNextLine(FILE* stream)
 {
     char* char_temp = malloc(sizeof (char ));/** IMPORTANT*/
     while (*char_temp != '\n')/** IMPORTANT*/
@@ -666,15 +691,15 @@ void get_to_next_line(FILE* stream)
 }
 //------------------------------------------------
 
-int Name_distance (Student student1,Student student2)
+int nameDistance (Student student1, Student student2)
 {
-    int res = str_ASCII_value(student1->name, capslock) - str_ASCII_value(student2->name, capslock);
+    int res = strAsciiValue(student1->name, capslock) - strAsciiValue(student2->name, capslock);
     return (res >= 0) ? res : (res * (-1));
 }
 //------------------------------------------------
 
 
-int str_ASCII_value(char* str, bool caps_lock)
+int strAsciiValue(char* str, bool caps_lock)
 {
 
 
@@ -710,7 +735,7 @@ int str_ASCII_value(char* str, bool caps_lock)
 //------------------------------------------------
 
 
-int student_id_difference(Student student1,Student student2)
+int studentIdDifference(Student student1, Student student2)
 {
     int result = student1->student_id - student2->student_id;
     return (result >= 0) ? result : (result * (-1));
@@ -719,7 +744,7 @@ int student_id_difference(Student student1,Student student2)
 
 //------------------------------------------------
 
-int check_hacker_file_friend_status(Student hacker, Student student )
+int checkHackerFileFriendStatus(Student hacker, Student student )
 {
 
     //find if student is in friend list
@@ -745,7 +770,7 @@ int check_hacker_file_friend_status(Student hacker, Student student )
 }
 
 //---------------------------------------------------------------------------
-int find_course_index_in_system ( int current_course_id, EnrollmentSystem sys)
+int findCourseIndexInSystem (int current_course_id, EnrollmentSystem sys)
 {
     int course_index = 0;
     while (current_course_id != (sys ->ques[course_index]->course_id))
@@ -761,7 +786,7 @@ int find_course_index_in_system ( int current_course_id, EnrollmentSystem sys)
 }
 
 //---------------------------------------------------------------------------
-int find_student_index_in_system ( int id, EnrollmentSystem sys)
+int findStudentIndexInSystem (int id, EnrollmentSystem sys)
 {
     int student_index = 0;
     while (id != (sys ->students[student_index]->student_id))
