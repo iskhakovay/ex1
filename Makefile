@@ -8,13 +8,13 @@ INC_FLAG = -I.
 $(EXEC): $(OBJS)
 	$(CC) $(DEBUG_FLAG) $(OBJS) -o $@
 
-main.o: main.c HackEnrollment.h Headers.h IsraeliQueues.h
+main.o: main.c HackEnrollment.h Headers.h IsraeliQueue.h
 	$(CC) -c $(DEBUG_FLAG) $(COMP_FLAG) $(INC_FLAG) main.c -o main.o
 
-HackEnrollment.o: HackEnrollment.c HackEnrollment.h IsraeliQueues.h Headers.h
+HackEnrollment.o: HackEnrollment.c HackEnrollment.h IsraeliQueue.h Headers.h
 	$(CC) -c $(DEBUG_FLAG) $(COMP_FLAG) $(INC_FLAG) HackEnrollment.c -o HackEnrollment.o
 
-IsraeliQueues.o: IsraeliQueues.c IsraeliQueues.h Headers.h
+IsraeliQueues.o: IsraeliQueue.c IsraeliQueue.h Headers.h
 	$(CC) -c $(DEBUG_FLAG) $(COMP_FLAG) $(INC_FLAG) IsraeliQueues.c -o IsraeliQueues.o
 
 clean:
