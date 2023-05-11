@@ -88,7 +88,7 @@ int statusCheck(void* item1, void* item2, IsraeliQueue q){
     int  sum = 0, avr = 0;
 
     for(int i = 0; i<len; i++) {
-        int tmp = ((q->FriendshipFunction + i))(item1, item2);
+        int tmp = (*(q->FriendshipFunction)+i)(item1, item2);
         sum+=tmp;
         if(tmp > q->friendship_th){
             return FRIEND;
@@ -278,7 +278,7 @@ IsraeliQueueError IsraeliQueueImprovePositions(IsraeliQueue q){ //TODO CHECK
  * one enqueue an item, in the order defined by q_arr. In the event of any error during execution, return NULL. WHAT THE FUCK IT MEANS*/
 int newFriendshipTh(IsraeliQueue* arr){
     int i  = 0, sum = 0;
-    while((arr+i)!=NULL){
+    while((*(arr+i))!=NULL){
         sum+= (*(arr+i))->friendship_th;
         i++;
     }
@@ -286,7 +286,7 @@ int newFriendshipTh(IsraeliQueue* arr){
 }
 int newRivalTh(IsraeliQueue* arr){
     int i  = 0, sum = 0;
-    while((arr+i)!=NULL){
+    while((*(arr+i))!=NULL){
         sum+= (*(arr+i))->rivalry_th;
         i++;
     }
@@ -326,7 +326,7 @@ IsraeliQueue IsraeliQueueMerge(IsraeliQueue* arr,ComparisonFunction comparisonFu
 
     longest_queue = longestQueue(arr,len_of_arr);
 
-    new_queue = IsraeliQueueCreate((*new_arr),comparisonFunction,new_friendship_th,new_rival_th);
+    new_queue = IsraeliQueueCreate((int (**)(void *, void *)) (new_arr), comparisonFunction, new_friendship_th, new_rival_th);///casting?
 
     Node new_item, next_item, first_item, current_item;
     while(longest_queue->rear!=NULL) {
@@ -361,15 +361,15 @@ IsraeliQueue IsraeliQueueMerge(IsraeliQueue* arr,ComparisonFunction comparisonFu
  *
  * Makes the IsraeliQueue provided recognize the FriendshipFunction provided.*/
  //TODO
+ int* (*new_arr2) (void *, void*);
 IsraeliQueueError IsraeliQueueAddFriendshipMeasure(IsraeliQueue q, FriendshipFunction friendshipFunction)
 { /**  i don't care i'll just make a new array*/ //TODO CHECK
     int len = q->friendship_function_len+1;
-    int* arr[len];
     for(int i = 0; i<len-1;i++){
-        arr[i] = (q->FriendshipFunction+i);
+        (&new_arr2)[i] = (int *(*)(void *, void *)) ((q->FriendshipFunction) + i); ///casting????????????????
     }
-    arr[len] = friendshipFunction;
-    q->FriendshipFunction = arr;                /** idk...*/ ///!!!expect malloc problems
+    (&new_arr2)[len] = (int *(*)(void *, void *)) (friendshipFunction); ///casting????????????????
+    q->FriendshipFunction = (int (*)(void *, void *)) new_arr2;      ///casting????????????????           /** idk...*/ ///!!!expect malloc problems
 
     return ISRAELIQUEUE_SUCCESS;
 
@@ -401,7 +401,7 @@ IsraeliQueue IsraeliQueueClone(IsraeliQueue q)
     {
         return NULL;
     }
-    IsraeliQueue new_queue = IsraeliQueueCreate(q->FriendshipFunction,q->ComparisonFunction,q->friendship_th,q->rivalry_th);
+    IsraeliQueue new_queue = IsraeliQueueCreate(&(q->FriendshipFunction),q->ComparisonFunction,q->friendship_th,q->rivalry_th);
     Node tmp = q->rear;
 
     while (q->rear->next->next!=NULL){
