@@ -13,7 +13,7 @@ main.o: main.c capslock.h HackEnrollment.h
 IsraeliQueue.o: IsraeliQueue.c IsraeliQueue.h Headers.h
 	$(CC) $(CFLAGS) -c IsraeliQueue.c
 
-HackEnrollment.o: HackEnrollment.c HackEnrollment.h IsraeliQueue.h capslock.h
+HackEnrollment.o: HackEnrollment.c HackEnrollment.h IsraeliQueue.h
 	$(CC) $(CFLAGS) -c HackEnrollment.c
 
 clean:
