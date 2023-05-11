@@ -4,10 +4,10 @@ all: HackEnrollment
 HackEnrollment: main.o HackEnrollment.o IsraeliQueue.o
 	gcc main.o HackEnrollment.o IsraeliQueue.o -o HackEnrollment
 
-main.o: main.c HackEnrollment.h IsraeliQueue.h Headers.h
+main.o: main.c HackEnrollment.h
 	gcc -c main.c
 
-HackEnrollment.o: HackEnrollment.c HackEnrollment.h IsraeliQueue.h Headers.h
+HackEnrollment.o: HackEnrollment.c HackEnrollment.h IsraeliQueue.h
 	gcc -c HackEnrollment.c
 
 IsraeliQueue.o: IsraeliQueue.c IsraeliQueue.h Headers.h
