@@ -14,7 +14,7 @@ main.o: main.c HackEnrollment.h Headers.h IsraeliQueue.h
 HackEnrollment.o: HackEnrollment.c HackEnrollment.h IsraeliQueue.h Headers.h
 	$(CC) -c $(DEBUG_FLAG) $(COMP_FLAG) $(INC_FLAG) HackEnrollment.c -o HackEnrollment.o
 
-IsraeliQueues.o: IsraeliQueue.c IsraeliQueue.h Headers.h
+IsraeliQueue.o: IsraeliQueue.c IsraeliQueue.h Headers.h
 	$(CC) -c $(DEBUG_FLAG) $(COMP_FLAG) $(INC_FLAG) IsraeliQueues.c -o IsraeliQueues.o
 
 clean:
