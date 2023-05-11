@@ -1,7 +1,7 @@
 
 #ifndef EX1_HEADERS_H
 #define EX1_HEADERS_H
-bool capslock = true;
+
 typedef struct student_t{
     char* name;
     int student_id;

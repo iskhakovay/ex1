@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "HackEnrollment.h"
-#include "Headers.h"
+#include "capslock.h"
 //#include "HackEnrollment.c"
 //#include "getopt.h"
 //#include "unistd.h"
@@ -34,7 +34,7 @@ int main(int argc, char** argv)//maybe char* argv
     {
         if(strcmp(argv[1], "-i")== 0)
         {
-           // capslock = CAPSLOCK_OFF;
+           capslock = CAPSLOCK_OFF;
         } else
         {
             printf("unknown option: %s\n", argv[1]);

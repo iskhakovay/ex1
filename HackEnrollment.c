@@ -3,7 +3,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "HackEnrollment.h"
-
+//#include "Headers.h"
+#include "capslock.h"
 
 #define ID_SIZE 9
 #define FRIEND_IN_FILE 20

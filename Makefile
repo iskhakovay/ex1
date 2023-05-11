@@ -7,13 +7,13 @@ all: HackEnrollment
 HackEnrollment: main.o IsraeliQueue.o HackEnrollment.o
 	$(CC) $(CFLAGS) main.o IsraeliQueue.o HackEnrollment.o -o HackEnrollment
 
-main.o: main.c Headers.h HackEnrollment.h
+main.o: main.c capslock.h HackEnrollment.h
 	$(CC) $(CFLAGS) -c main.c
 
-IsraeliQueue.o: IsraeliQueue.c IsraeliQueue.h
+IsraeliQueue.o: IsraeliQueue.c IsraeliQueue.h Headers.h
 	$(CC) $(CFLAGS) -c IsraeliQueue.c
 
-HackEnrollment.o: HackEnrollment.c HackEnrollment.h IsraeliQueue.h Headers.h
+HackEnrollment.o: HackEnrollment.c HackEnrollment.h IsraeliQueue.h capslock.h
 	$(CC) $(CFLAGS) -c HackEnrollment.c
 
 clean:
