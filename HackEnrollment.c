@@ -235,14 +235,46 @@ int findStudentIndexInSystem (int id, EnrollmentSystem sys);
 //------------------------------------------------
 //more functions declaration:
 
+/**
+Prints the updated enrollment lists of each course to out.
+ * @param sys : EnrollmentSystem
+ * @param out : FILE*
+ */
 void printNewQues (EnrollmentSystem sys, FILE* out);
 
+/**
+creates IsraeliQueues for each course and adds students to them based on their enrollment.
+ * @param sys : EnrollmentSystem
+ * @param arr_of_queues : array of IsraeliQueue pointers to store the created queues.
+ * @param pt : array of function pointers to be used as friendship functions in the IsraeliQueue.
+ */
 void turnEnrollmentListToIsrealiQues (EnrollmentSystem sys, IsraeliQueue* arr_of_queues, FriendshipFunction *pt);
 
+/**
+ * enrolls hackers into Israeli queues based on their desired courses.
+ * @param sys
+ * @param arr_of_queues
+ */
 void enrollHackers(EnrollmentSystem sys, IsraeliQueue* arr_of_queues);
 
+/**
+cleans up the enrollment queues for each course in the enrollment system by removing students who can't fit in their
+desired courses, and updating the enrollment lists for each course.
+then destroy each queue and free the memory allocated for the array of queue pointers.
+ * @param sys
+ * @param arr_of_queues
+ */
 void cleanEnrollmentQueues(EnrollmentSystem sys, IsraeliQueue *arr_of_queues);
 
+/**
+determines if a hacker can successfully enroll in a course, based on the size of the course and the current number of
+students enrolled in the course.
+ * @param current_hacker
+ * @param system
+ * @param needed_queue
+ * @param course
+ * @return true if the hacker can enroll in the course
+ */
 bool isEnrollmentSuccess(Hacker current_hacker, EnrollmentSystem system, IsraeliQueue needed_queue, Courses course);
 
 
