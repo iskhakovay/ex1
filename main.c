@@ -2,8 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
-//#include "HackEnrollment.h"
-#include "HackEnrollment.c"
+#include "HackEnrollment.h"
+//#include "HackEnrollment.c"
 //#include "getopt.h"
 //#include "unistd.h"
 //#include <sys/stat.h>
