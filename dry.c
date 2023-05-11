@@ -1,3 +1,4 @@
+/**
 #include "stdio.h"
 #include "stdlib.h"
 #include "string.h"
@@ -5,7 +6,7 @@
 
 char* stringDuplicator(char* str, int times)
 {
-    //no need to check if input is valid:
+    //no need to check if input is valid, but can be nice:
     //assert(str != NULL);
     //assert(times > 0);
     int len = strlen(str);
@@ -27,3 +28,4 @@ int main()
     printf("%s",stringDuplicator( str, 3));
     return 0;
 }
+*/
