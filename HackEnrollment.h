@@ -5,20 +5,12 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "IsraeliQueue.c"
+#include "Headers.h"
+
 
 bool capslock;
 
 // i guess it should be here
-typedef struct student_t{
-    char* name;
-    int student_id;
-    int* friends;
-    int num_of_friends;
-    int* rivals;
-    int num_of_rivals;
-
-}* Student;
 
 
 typedef struct hacker_t{
