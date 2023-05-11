@@ -414,7 +414,7 @@ bool isEnrollmentSuccess(Hacker current_hacker, EnrollmentSystem system, Israeli
 void cleanEnrollmentQueues(EnrollmentSystem sys, IsraeliQueue *arr_of_queues)
 {
     //going through each course
-    IsraeliQueue trash;
+    IsraeliQueue trash = IsraeliQueueCreate(NULL,NULL,NULL,NULL);
     for(int course_index = 0; course_index< sys->num_of_ques ;course_index++){
         // taking queue that matches the course index
         int queue_size = IsraeliQueueSize(*(arr_of_queues+course_index));
