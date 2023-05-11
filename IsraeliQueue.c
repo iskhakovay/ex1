@@ -292,7 +292,7 @@ int newRivalTh(IsraeliQueue* arr){
     }
     return  sum/(i-1);
 }
-int* (*new_arr) (void *, void*);
+int (**new_arr) (void *, void*);
 void mergeFriendshipFunctions(IsraeliQueue* arr){
     int len_of_arr = (int)(*(&arr + 1)-arr);///casting
     int len_of_all_functions_arr = 0;
@@ -302,7 +302,7 @@ void mergeFriendshipFunctions(IsraeliQueue* arr){
 
     for(int i = 0; i <len_of_all_functions_arr; i++){
         for(int j = i; j < (*(arr+i))->friendship_function_len+i; j++)
-            (&new_arr)[j] = (int *(*)(void *, void *)) ((*(arr + j))->FriendshipFunction);//TODO WTF
+            (&new_arr)[j] = (int (**)(void *, void *))  ((*(arr + j))->FriendshipFunction);//TODO WTF
     }
 }
 IsraeliQueue longestQueue(IsraeliQueue* arr, int len){
@@ -326,7 +326,7 @@ IsraeliQueue IsraeliQueueMerge(IsraeliQueue* arr,ComparisonFunction comparisonFu
 
     longest_queue = longestQueue(arr,len_of_arr);
 
-    new_queue = IsraeliQueueCreate((int (**)(void *, void *)) (new_arr), comparisonFunction, new_friendship_th, new_rival_th);///casting?
+    new_queue = IsraeliQueueCreate((&(*new_arr)), comparisonFunction, new_friendship_th, new_rival_th);///casting?
 
     Node new_item, next_item, first_item, current_item;
     while(longest_queue->rear!=NULL) {
