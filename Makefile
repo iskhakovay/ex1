@@ -1,22 +1,34 @@
-
 CC = gcc
-CFLAGS = -Wall -g
+CFLAGS = -Wall -Werror -g
 
-all: HackEnrollment
+SRC_DIR = src
+BUILD_DIR = build
 
-HackEnrollment: main.o IsraeliQueue.o HackEnrollment.o
-	$(CC) $(CFLAGS) main.o IsraeliQueue.o HackEnrollment.o -o HackEnrollment
+MAIN_SRC = $(SRC_DIR)/main.c
+HACK_ENROLLMENT_SRC = $(SRC_DIR)/HackEnrollment.c
+ISRAELI_QUEUES_SRC = $(SRC_DIR)/IsraeliQueues.c
 
-main.o: main.c capslock.h HackEnrollment.h
-	$(CC) $(CFLAGS) -c main.c
+MAIN_OBJ = $(BUILD_DIR)/main.o
+HACK_ENROLLMENT_OBJ = $(BUILD_DIR)/HackEnrollment.o
+ISRAELI_QUEUES_OBJ = $(BUILD_DIR)/IsraeliQueues.o
 
-IsraeliQueue.o: IsraeliQueue.c IsraeliQueue.h Headers.h
-	$(CC) $(CFLAGS) -c IsraeliQueue.c
+PROGRAM = HackEnrollment
 
-HackEnrollment.o: HackEnrollment.c HackEnrollment.h IsraeliQueue.h capslock.h Headers.h
-	$(CC) $(CFLAGS) -c HackEnrollment.c
+.PHONY: all clean
+
+all: $(PROGRAM)
+
+$(PROGRAM): $(MAIN_OBJ) $(HACK_ENROLLMENT_OBJ) $(ISRAELI_QUEUES_OBJ)
+	$(CC) $(CFLAGS) $^ -o $@
+
+$(MAIN_OBJ): $(MAIN_SRC)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(HACK_ENROLLMENT_OBJ): $(HACK_ENROLLMENT_SRC)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(ISRAELI_QUEUES_OBJ): $(ISRAELI_QUEUES_SRC)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f *.o HackEnrollment
-
-
+	rm -rf $(BUILD_DIR) $(PROGRAM)
