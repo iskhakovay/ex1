@@ -1,49 +1,23 @@
-# Directories
-SRC_DIR := src
-BUILD_DIR := build
+CC = gcc
+OBJS = main.o HackEnrollment.o IsraeliQueues.o capslock.o
+EXEC = my_program
+DEBUG_FLAG =
+COMP_FLAG = -std=c99 -Wall -Wextra -Werror
 
-# Compiler options
-CC := gcc
-CFLAGS := -Wall -Wextra -Werror -std=c11
-LDFLAGS :=
+$(EXEC): $(OBJS)
+	$(CC) $(DEBUG_FLAG) $(OBJS) -o $@
 
-# Source files
-SRCS := \
-    $(SRC_DIR)/main.c \
-    $(SRC_DIR)/HackEnrollment.c \
-    $(SRC_DIR)/IsraeliQueues.c \
-    $(SRC_DIR)/capslock.c
+main.o: main.c HackEnrollment.h capslock.h headers.h IsraeliQueues.h
+	$(CC) -c $(DEBUG_FLAG) $(COMP_FLAG) main.c -o main.o
 
-# Object files
-OBJS := $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
+HackEnrollment.o: HackEnrollment.c HackEnrollment.h IsraeliQueues.h headers.h capslock.h
+	$(CC) -c $(DEBUG_FLAG) $(COMP_FLAG) HackEnrollment.c -o HackEnrollment.o
 
-# Executable
-TARGET := $(BUILD_DIR)/my_program
+IsraeliQueues.o: IsraeliQueues.c IsraeliQueues.h headers.h
+	$(CC) -c $(DEBUG_FLAG) $(COMP_FLAG) IsraeliQueues.c -o IsraeliQueues.o
 
-# Phony targets
-.PHONY: all clean
+capslock.o: capslock.c capslock.h
+	$(CC) -c $(DEBUG_FLAG) $(COMP_FLAG) capslock.c -o capslock.o
 
-# Default target
-all: $(TARGET)
-
-# Linking target
-$(TARGET): $(OBJS)
-	$(CC) $(LDFLAGS) $^ -o $@
-
-# Compilation targets
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-# Create build directory if it doesn't exist
-$(BUILD_DIR):
-	mkdir -p $@
-
-# Clean target
 clean:
-	rm -rf $(BUILD_DIR)
-
-# Dependencies
-$(BUILD_DIR)/HackEnrollment.o: $(SRC_DIR)/HackEnrollment.c $(SRC_DIR)/HackEnrollment.h $(SRC_DIR)/IsraeliQueues.h $(SRC_DIR)/headers.h $(SRC_DIR)/capslock.h
-$(BUILD_DIR)/IsraeliQueues.o: $(SRC_DIR)/IsraeliQueues.c $(SRC_DIR)/IsraeliQueues.h $(SRC_DIR)/headers.h
-$(BUILD_DIR)/capslock.o: $(SRC_DIR)/capslock.c $(SRC_DIR)/capslock.h
-$(BUILD_DIR)/main.o: $(SRC_DIR)/main.c $(SRC_DIR)/HackEnrollment.h $(SRC_DIR)/capslock.h $(SRC_DIR)/headers.h $(SRC_DIR)/IsraeliQueues.h
+	rm -f $(OBJS) $(EXEC)
