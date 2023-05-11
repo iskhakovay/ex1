@@ -9,7 +9,7 @@
 #include "Headers.h"
 
 
-bool capslock;
+
 
 // i guess it should be here
 
