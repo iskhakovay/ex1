@@ -1,17 +1,22 @@
 
+CC = gcc
+CFLAGS = -Wall -g
+
 all: HackEnrollment
 
-HackEnrollment: main.o HackEnrollment.o IsraeliQueue.o
-	gcc main.o HackEnrollment.o IsraeliQueue.o -o HackEnrollment
+HackEnrollment: main.o IsraeliQueue.o HackEnrollment.o
+	$(CC) $(CFLAGS) main.o IsraeliQueue.o HackEnrollment.o -o HackEnrollment
 
-main.o: main.c HackEnrollment.h
-	gcc -c main.c
+main.o: main.c Headers.h IsraeliQueue.h HackEnrollment.h
+	$(CC) $(CFLAGS) -c main.c
+
+IsraeliQueue.o: IsraeliQueue.c IsraeliQueue.h
+	$(CC) $(CFLAGS) -c IsraeliQueue.c
 
 HackEnrollment.o: HackEnrollment.c HackEnrollment.h IsraeliQueue.h
-	gcc -c HackEnrollment.c
-
-IsraeliQueue.o: IsraeliQueue.c IsraeliQueue.h Headers.h
-	gcc -c IsraeliQueue.c
+	$(CC) $(CFLAGS) -c HackEnrollment.c
 
 clean:
 	rm -f *.o HackEnrollment
+
+
