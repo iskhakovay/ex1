@@ -15,7 +15,7 @@ HackEnrollment.o: HackEnrollment.c HackEnrollment.h IsraeliQueue.h Headers.h
 	$(CC) -c $(DEBUG_FLAG) $(COMP_FLAG) $(INC_FLAG) HackEnrollment.c -o HackEnrollment.o
 
 IsraeliQueue.o: IsraeliQueue.c IsraeliQueue.h Headers.h
-	$(CC) -c $(DEBUG_FLAG) $(COMP_FLAG) $(INC_FLAG) IsraeliQueues.c -o IsraeliQueues.o
+	$(CC) -c $(DEBUG_FLAG) $(COMP_FLAG) $(INC_FLAG) IsraeliQueue.c -o IsraeliQueues.o
 
 clean:
 	rm -f $(OBJS) $(EXEC)
