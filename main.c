@@ -20,7 +20,7 @@ int main(int argc, char** argv)//maybe char* argv
     FILE* students;
     FILE *courses;
     FILE *hackers;
-    FILE *target;
+    FILE *out;
     FILE *queues;
 
 
@@ -43,7 +43,7 @@ int main(int argc, char** argv)//maybe char* argv
             courses = fopen(argv[3],"r");
             hackers = fopen(argv[4],"r");
             queues = fopen(argv[5],"r");
-            target = fopen(argv[6],"w");
+            out = fopen(argv[6],"w");
     }
 
     if (argc == 6)
@@ -52,7 +52,7 @@ int main(int argc, char** argv)//maybe char* argv
         courses = fopen(argv[2],"r");
         hackers = fopen(argv[3],"r");
         queues = fopen(argv[4],"r");
-        target = fopen(argv[5],"w");
+        out = fopen(argv[5],"w");
     }
 
     if( argc < 6 ) {
@@ -61,10 +61,10 @@ int main(int argc, char** argv)//maybe char* argv
 
     EnrollmentSystem sys = createEnrollment(students, courses, hackers);
     sys = readEnrollment(sys, queues);
-    hackEnrollment(sys, target);
+    hackEnrollment(sys, out);
 
 
-    fclose(target);
+    fclose(out);
     fclose(students);
     fclose(courses);
     fclose(hackers);
