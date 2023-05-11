@@ -19,8 +19,8 @@ typedef struct node{
 //and this too
 
 struct IsraeliQueue_t{
-    int (*FriendshipFunction)(void*,void*);
-    int (*ComparisonFunction)(void*,void*);
+    FriendshipFunction *friendshipFunction;
+    ComparisonFunction comparisonFunction;
     int friendship_function_len;
     int friendship_th;
     int rivalry_th;
@@ -57,11 +57,11 @@ IsraeliQueue IsraeliQueueCreate(FriendshipFunction *friendshipFunction, Comparis
     new_queue->count = 0;
     new_queue->friendship_th = friendship_th;
     new_queue->rivalry_th = rivalry_th;
-    new_queue->FriendshipFunction = (*friendshipFunction);
+    new_queue->friendshipFunction = (friendshipFunction);
     new_queue->friendship_function_len =(int) (*(&friendshipFunction+1) - friendshipFunction);///casting
     new_queue->front = NULL;
     new_queue->rear = NULL;
-    new_queue->ComparisonFunction = comparisonFunction;
+    new_queue->comparisonFunction = comparisonFunction;
     return new_queue; //pointer?
 }
 
@@ -88,7 +88,7 @@ int statusCheck(void* item1, void* item2, IsraeliQueue q){
     int  sum = 0, avr = 0;
 
     for(int i = 0; i<len; i++) {
-        int tmp = (*(q->FriendshipFunction)+i)(item1, item2);
+        int tmp = (q->friendshipFunction[i])(item1,item2);
         sum+=tmp;
         if(tmp > q->friendship_th){
             return FRIEND;
@@ -204,7 +204,7 @@ int IsraeliQueueSize(IsraeliQueue q){
 bool IsraeliQueueContains(IsraeliQueue q, void *item){
     Node copy = q->rear;
     while(copy->next!=NULL){
-        if(q->ComparisonFunction(&(q->rear->data),item)){
+        if(q->comparisonFunction(&(q->rear->data),item)){
             return true;
         }
     }
@@ -302,7 +302,7 @@ void mergeFriendshipFunctions(IsraeliQueue* arr){
 
     for(int i = 0; i <len_of_all_functions_arr; i++){
         for(int j = i; j < (*(arr+i))->friendship_function_len+i; j++)
-            (&new_arr)[j] = (int (**)(void *, void *))  ((*(arr + j))->FriendshipFunction);//TODO WTF
+            (&new_arr)[j] = &((*(arr + j))->friendshipFunction[j-i]);//TODO WTF
     }
 }
 IsraeliQueue longestQueue(IsraeliQueue* arr, int len){
@@ -361,15 +361,15 @@ IsraeliQueue IsraeliQueueMerge(IsraeliQueue* arr,ComparisonFunction comparisonFu
  *
  * Makes the IsraeliQueue provided recognize the FriendshipFunction provided.*/
  //TODO
- int* (*new_arr2) (void *, void*);
+ int (**new_arr2) (void *, void*);
 IsraeliQueueError IsraeliQueueAddFriendshipMeasure(IsraeliQueue q, FriendshipFunction friendshipFunction)
 { /**  i don't care i'll just make a new array*/ //TODO CHECK
     int len = q->friendship_function_len+1;
     for(int i = 0; i<len-1;i++){
-        (&new_arr2)[i] = (int *(*)(void *, void *)) ((q->FriendshipFunction) + i); ///casting????????????????
+        (&new_arr2)[i] = &((q->friendshipFunction[i])); ///casting????????????????
     }
-    (&new_arr2)[len] = (int *(*)(void *, void *)) (friendshipFunction); ///casting????????????????
-    q->FriendshipFunction = (int (*)(void *, void *)) new_arr2;      ///casting????????????????           /** idk...*/ ///!!!expect malloc problems
+    (&new_arr2)[len] = &(friendshipFunction); ///casting????????????????
+    q->friendshipFunction = new_arr2;      ///casting????????????????           /** idk...*/ ///!!!expect malloc problems
 
     return ISRAELIQUEUE_SUCCESS;
 
@@ -401,7 +401,7 @@ IsraeliQueue IsraeliQueueClone(IsraeliQueue q)
     {
         return NULL;
     }
-    IsraeliQueue new_queue = IsraeliQueueCreate(&(q->FriendshipFunction),q->ComparisonFunction,q->friendship_th,q->rivalry_th);
+    IsraeliQueue new_queue = IsraeliQueueCreate((q->friendshipFunction),q->comparisonFunction,q->friendship_th,q->rivalry_th);
     Node tmp = q->rear;
 
     while (q->rear->next->next!=NULL){
