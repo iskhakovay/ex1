@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include "HackEnrollment.h"
 #include "capslock.h"
+#include "Headers.h"
 //#include "HackEnrollment.c"
 //#include "getopt.h"
 //#include "unistd.h"
