@@ -341,12 +341,12 @@ EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
 
 //------------------------------------------------
 
-int* (*pt)(void*, void*);
+int (**pt)(void*, void*);
 void hackEnrollment(EnrollmentSystem sys, FILE* out)
 {
-    (&pt)[0] = (int *(*)(void *, void *)) (&studentIdDifference); //TODO check pointers
-    (&pt)[1] = (int *(*)(void *, void *)) (&nameDistance);
-    (&pt)[2] = (int *(*)(void *, void *)) (&checkHackerFileFriendStatus);
+    (&pt)[0] = (&studentIdDifference); //TODO check pointers
+    (&pt)[1] =  (&nameDistance);
+    (&pt)[2] = (&checkHackerFileFriendStatus);
 
     IsraeliQueue* arr_of_queues = malloc(sizeof(IsraeliQueue)*sys->num_of_ques);
 
