@@ -12,16 +12,7 @@
 
 //and this too
 
-struct IsraeliQueue_t{
-    FriendshipFunction *friendshipFunction;
-    ComparisonFunction comparisonFunction;
-    int friendship_function_len;
-    int friendship_th;
-    int rivalry_th;
-    Node front;
-    Node rear;
-    int count;
-};
+
 
 int isEmpty(IsraeliQueue q){
     return (q->rear==NULL);

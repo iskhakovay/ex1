@@ -16,4 +16,14 @@ typedef struct node{
     int friendship;
     int rival;
 }*Node;
+struct IsraeliQueue_t{
+    FriendshipFunction *friendshipFunction;
+    ComparisonFunction comparisonFunction;
+    int friendship_function_len;
+    int friendship_th;
+    int rivalry_th;
+    Node front;
+    Node rear;
+    int count;
+};
 #endif //EX1_HEADERS_H
