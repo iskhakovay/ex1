@@ -1,5 +1,5 @@
 CC = gcc
-OBJS = main.o HackEnrollment.o IsraeliQueues.o
+OBJS = main.o HackEnrollment.o IsraeliQueue.o
 EXEC = my_program
 DEBUG_FLAG =
 COMP_FLAG = -std=c99 -Wall -Wextra -Werror
