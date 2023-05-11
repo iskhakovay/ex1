@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "HackEnrollment.h"
+#include "Headers.h"
 //#include "HackEnrollment.c"
 //#include "getopt.h"
 //#include "unistd.h"

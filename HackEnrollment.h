@@ -8,7 +8,7 @@
 #include "IsraeliQueue.h"
 #include "Headers.h"
 
-bool capslock = true;
+
 
 
 
