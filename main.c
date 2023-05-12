@@ -64,7 +64,9 @@ int main(int argc, char** argv)//maybe char* argv
     {
         printf("yhayy\n");
         fflush(stdout);
-        students = fopen(argv[1],"r");
+        if((students = fopen(argv[1],"r")==NULL)){
+            printf("fopen error");
+        };
         courses = fopen(argv[2],"r");
         hackers = fopen(argv[3],"r");
         queues = fopen(argv[4],"r");
