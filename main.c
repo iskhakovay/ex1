@@ -82,6 +82,9 @@ int main(int argc, char** argv)//maybe char* argv
         printf("input files problem");
     }
     printf("before hack");
+    char srr[10];
+    fgets(srr,10,students);
+    printf("%s ",srr);
     EnrollmentSystem sys = createEnrollment(students, courses, hackers);
     sys = readEnrollment(sys, queues);
     hackEnrollment(sys, out);

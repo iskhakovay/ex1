@@ -641,21 +641,21 @@ int getNumberOfLines (FILE* file, char* file_name )
         return HACK_ENROLLMENT_FAILED_READ_FILE;
     }
 
-    char str_temp[3];
-    fgets(str_temp, 2, file);
-    printf("%s", str_temp);
+   // char str_temp[3];
+    //fgets(str_temp, 2, file);
+    //printf("%s", str_temp);
 
 
     int lines_counter = 0;
     char* char_temp = malloc(sizeof (char ));/** IMPORTANT*/
     fgets(char_temp, 1, file);
-    while (*char_temp != EOF) /** IMPORTANT*/ /** warning says endless loop + changed to *char temp and says it is no longer endless*/
+    while (strcmp(char_temp,EOF)!=0) /** IMPORTANT*/ /** warning says endless loop + changed to *char temp and says it is no longer endless*/
     {
-        if (*char_temp == '\n') /** IMPORTANT*/
+        if (strcmp(char_temp,"\n")==0) /** IMPORTANT*/
         {
             lines_counter++;
         }
-        fgets(char_temp, 2, file); /** IMPORTANT*/ /** UNREACHABLE CODE DOWN - somehow already reachable lol*/
+        fgets(char_temp, 1, file); /** IMPORTANT*/ /** UNREACHABLE CODE DOWN - somehow already reachable lol*/
     }
     free(char_temp);
     fclose( file);
