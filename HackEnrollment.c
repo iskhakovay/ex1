@@ -639,11 +639,11 @@ int getNumberOfLines (FILE* file, char* file_name )
     //fgets(id_temp, ID_SIZE, students);
 
     printf("number of lines opened");
-    fclose(file);
-    if((file = fopen(file_name,"r")) == NULL )
-    {
-        return HACK_ENROLLMENT_FAILED_READ_FILE;
-    }
+   // fclose(file);
+   // if((file = fopen(file_name,"r")) == NULL )
+   // {
+   //     return HACK_ENROLLMENT_FAILED_READ_FILE;
+   // }
 
    // char str_temp[3];
     //fgets(str_temp, 2, file);
