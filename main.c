@@ -71,7 +71,9 @@ int main(int argc, char** argv)//maybe char* argv
         out = fopen(argv[5],"w");
 
         printf("nhayy\n");
-        fflush(stdout);
+        if(fflush(stdout)!=0){
+            printf("fflush error");
+        };
     }
 
     if( argc < 6 ) {
