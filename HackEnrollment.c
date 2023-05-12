@@ -635,9 +635,10 @@ void readHackersFromFile(FILE* hackers, int num_of_hackers, EnrollmentSystem sys
 int getNumberOfLines (FILE* file, char* file_name )
 {
     return 2;
+    /**
     printf("number of lines opened");
 
-    if((file = fopen(file_name,"r")) == NULL )/** IMPORTANT*/ /** a lot of warnings of incompatible pointer types in every fopen. must check it*/
+    if((file = fopen(file_name,"r")) == NULL )
     {
         return HACK_ENROLLMENT_FAILED_READ_FILE;
     }
@@ -648,19 +649,19 @@ int getNumberOfLines (FILE* file, char* file_name )
 
 
     int lines_counter = 0;
-    char* char_temp = malloc(sizeof (char ));/** IMPORTANT*/
+    char* char_temp = malloc(sizeof (char ));
     fgets(char_temp, 1, file);
-    while (strcmp(char_temp,EOF)!=0) /** IMPORTANT*/ /** warning says endless loop + changed to *char temp and says it is no longer endless*/
+    while (strcmp(char_temp,EOF)!=0)
     {
-        if (strcmp(char_temp,"\n")==0) /** IMPORTANT*/
+        if (strcmp(char_temp,"\n")==0)
         {
             lines_counter++;
         }
-        fgets(char_temp, 1, file); /** IMPORTANT*/ /** UNREACHABLE CODE DOWN - somehow already reachable lol*/
+        fgets(char_temp, 1, file);
     }
     free(char_temp);
     fclose( file);
-    return lines_counter;
+    return lines_counter;*/
 }
 
 
