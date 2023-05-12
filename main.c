@@ -23,7 +23,7 @@
 
 int main(int argc, char** argv)//maybe char* argv
 {
-    printf("yhayy");
+    printf("%d argc\n", argc);
 
     FILE* students;
     FILE *courses;
@@ -41,6 +41,7 @@ int main(int argc, char** argv)//maybe char* argv
 
     if (argc == 7)
     {
+        printf("yhayy");
         if(strcmp(argv[1], "-i")== 0)
         {
             defineCapsLock(CAPSLOCK_OFF);
@@ -50,22 +51,27 @@ int main(int argc, char** argv)//maybe char* argv
             printf("unknown option: %s\n", argv[1]);
         }
 
-        printf("yhayy");
+
             students = fopen(argv[2],"r");
             courses = fopen(argv[3],"r");
             hackers = fopen(argv[4],"r");
             queues = fopen(argv[5],"r");
             out = fopen(argv[6],"w");
     }
+    //printf("yhayy");
 
     if (argc == 6)
     {
-        printf("yhayy");
+        printf("yhayy\n");
+        fflush(stdout);
         students = fopen(argv[1],"r");
         courses = fopen(argv[2],"r");
         hackers = fopen(argv[3],"r");
         queues = fopen(argv[4],"r");
         out = fopen(argv[5],"w");
+
+        printf("nhayy\n");
+        fflush(stdout);
     }
 
     if( argc < 6 ) {
