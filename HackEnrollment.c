@@ -634,8 +634,10 @@ void readHackersFromFile(FILE* hackers, int num_of_hackers, EnrollmentSystem sys
 
 int getNumberOfLines (FILE* file, char* file_name )
 {
-    return 2;
-    /**
+   // char id_temp[ID_SIZE]="";
+
+    //fgets(id_temp, ID_SIZE, students);
+
     printf("number of lines opened");
 
     if((file = fopen(file_name,"r")) == NULL )
@@ -649,7 +651,7 @@ int getNumberOfLines (FILE* file, char* file_name )
 
 
     int lines_counter = 0;
-    char* char_temp = malloc(sizeof (char ));
+    char char_temp[1] ="";
     fgets(char_temp, 1, file);
     while (strcmp(char_temp,EOF)!=0)
     {
@@ -661,7 +663,7 @@ int getNumberOfLines (FILE* file, char* file_name )
     }
     free(char_temp);
     fclose( file);
-    return lines_counter;*/
+    return lines_counter;
 }
 
 
