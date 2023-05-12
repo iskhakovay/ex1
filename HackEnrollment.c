@@ -634,22 +634,6 @@ void readHackersFromFile(FILE* hackers, int num_of_hackers, EnrollmentSystem sys
 
 int getNumberOfLines (FILE* file, char* file_name )
 {
-   // char id_temp[ID_SIZE]="";
-
-    //fgets(id_temp, ID_SIZE, students);
-
-    printf("number of lines opened");
-   // fclose(file);
-   // if((file = fopen(file_name,"r")) == NULL )
-   // {
-   //     return HACK_ENROLLMENT_FAILED_READ_FILE;
-   // }
-
-   // char str_temp[3];
-    //fgets(str_temp, 2, file);
-    //printf("%s", str_temp);
-
-
     int lines_counter = 0;
     char char_temp[1] ="";
     fgets(char_temp, 1, file);
