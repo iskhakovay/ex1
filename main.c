@@ -82,6 +82,7 @@ int main(int argc, char** argv)//maybe char* argv
         printf("input files problem");
     }
     printf("before hack");
+    fflush(stdout);
     char* srr = malloc(sizeof(char)*256);
     srr[255] = '\0';
     fgets(srr,250,students);
