@@ -313,7 +313,6 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
     readStudentFromFile(students, num_of_students, system);
     system->num_of_students = num_of_students;
 
-
     int num_of_courses = getNumberOfLines(courses, "courses.txt");
     Courses * courses_arr = malloc(num_of_courses*sizeof (Courses));
     system->ques = courses_arr;
@@ -520,27 +519,32 @@ void printNewQues (EnrollmentSystem sys, FILE* out)
 
 void readStudentFromFile(FILE* students, int num_of_students, EnrollmentSystem system)
 {
-    if((students = fopen("students.txt","r")) == NULL )/** IMPORTANT*/ /** a lot of warnings of incompatible pointer types in every fopen. must check it*/
-    {
-        //HACK_ENROLLMENT_FAILED_READ_FILE;
-    }
+    // if((students = fopen("students.txt","r")) == NULL )/** IMPORTANT*/ /** a lot of warnings of incompatible pointer types in every fopen. must check it*/
+    // {
+    //     //HACK_ENROLLMENT_FAILED_READ_FILE;
+    // }
+    rewind(students);
     for (int i= 0; i < num_of_students; i++)
     {
         char id_temp[ID_SIZE]="";
 
         fgets(id_temp, ID_SIZE, students); /** IMPORTANT*/
+        printf("Here0");
+        fflush(stdout);
         skipCreditsAndGpa(students);
 
+        printf("Here1");
+        fflush(stdout);
         system->students[i]->name = malloc(sizeof (char));
         readString(students, system->students[i]->name, ' ', 2);
-
+        printf("Here2");
+        fflush(stdout);
 
         system->students[i]->student_id = atoi(id_temp);
 
         getToNextLine(students);
 
     }
-    fclose(students);
     return;
 
 
@@ -634,23 +638,42 @@ void readHackersFromFile(FILE* hackers, int num_of_hackers, EnrollmentSystem sys
 
 int getNumberOfLines (FILE* file, char* file_name )
 {
-    if((fopen(file_name,"r"))==NULL){
-        return HACK_ENROLLMENT_FAILED_READ_FILE;
-    }
-    int lines_counter = 0;
-    char* char_temp = malloc(sizeof (char));
-    fgets(char_temp, 1, file);
-    while ((*char_temp)!=EOF)
+    // if((fopen(file_name,"r"))==NULL){
+    //     return HACK_ENROLLMENT_FAILED_READ_FILE;
+    // }
+    rewind(file);
+    int lines = 0;
+    char tmp_char = fgetc(file);
+    while (tmp_char != EOF)
     {
-        if (strcmp(char_temp,"\n")==0)
+        tmp_char = fgetc(file);
+        if (tmp_char == '\n')
         {
-            lines_counter++;
+            lines++;
         }
-        fgets(char_temp, 1, file);
     }
-    free(char_temp);
-    fclose( file);
-    return lines_counter;
+    return lines;
+    // // if((fopen(file_name,"r"))==NULL){
+    // //     return HACK_ENROLLMENT_FAILED_READ_FILE;
+    // // }
+    // int lines_counter = 0;
+    // char* char_temp = malloc(sizeof (char));
+    // fgets(char_temp, 1, file);
+    // while ((*char_temp)!=EOF)
+    // {
+    //     // printf("\nHere\n");
+    //     printf("%c", *char_temp);
+    //     // printf("%c", *char_temp);
+    //     // if (strcmp(char_temp,"\n")==0)
+    //     if (*char_temp == '\n')
+    //     {
+    //         lines_counter++;
+    //     }
+    //     fgets(char_temp, 1, file);
+    // }
+    // free(char_temp);
+    // fclose( file);
+    // return lines_counter;
 }
 
 
@@ -710,18 +733,27 @@ int readArrOfStrings(FILE* stream, int* arr)
 
 void skipCreditsAndGpa(FILE* stream)
 {
-    char* char_temp = malloc(sizeof (char )); /** IMPORTANT*/
     int num_of_spaces = 3;
-    while (num_of_spaces > 0 )
-    {
-        fgets(char_temp, 1, stream);
-        if (*char_temp == ' ')/** IMPORTANT*/
-        {
+    char char_temp = fgetc(stream);
+    while (num_of_spaces > 0) {
+        if (char_temp == ' ') {
             num_of_spaces--;
         }
+        char_temp = fgetc(stream);
     }
-    free(char_temp);
     return;
+    // char* char_temp = malloc(sizeof (char )); /** IMPORTANT*/
+    // int num_of_spaces = 3;
+    // while (num_of_spaces > 0 )
+    // {
+    //     fgets(char_temp, 1, stream);
+    //     if (*char_temp == ' ')/** IMPORTANT*/
+    //     {
+    //         num_of_spaces--;
+    //     }
+    // }
+    // free(char_temp);
+    // return;
 
 }
 
