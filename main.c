@@ -64,18 +64,14 @@ int main(int argc, char** argv)//maybe char* argv
     {
         printf("yhayy\n");
         fflush(stdout);
-        if((students = fopen(argv[1],"r")==NULL)){
-            printf("fopen error");
-        };
+        students = fopen(argv[1],"r");
         courses = fopen(argv[2],"r");
         hackers = fopen(argv[3],"r");
         queues = fopen(argv[4],"r");
         out = fopen(argv[5],"w");
 
         printf("nhayy\n");
-        if(fflush(stdout)!=0){
-            printf("fflush error");
-        };
+        //fflush(stdout);
     }
 
     if( argc < 6 ) {
@@ -85,6 +81,7 @@ int main(int argc, char** argv)//maybe char* argv
     if(students==NULL || courses == NULL || hackers == NULL){
         printf("input files problem");
     }
+    printf("before hack");
     EnrollmentSystem sys = createEnrollment(students, courses, hackers);
     sys = readEnrollment(sys, queues);
     hackEnrollment(sys, out);
