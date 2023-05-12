@@ -78,7 +78,9 @@ int main(int argc, char** argv)//maybe char* argv
         printf("not enough arguments supplied.\n");
         return 0;
     }
-
+    if(students==NULL || courses == NULL || hackers == NULL){
+        printf("input files problem");
+    }
     EnrollmentSystem sys = createEnrollment(students, courses, hackers);
     sys = readEnrollment(sys, queues);
     hackEnrollment(sys, out);
