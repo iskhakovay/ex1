@@ -636,15 +636,15 @@ int getNumberOfLines (FILE* file, char* file_name )
 {
     fopen(file_name,"r");
     int lines_counter = 0;
-    char char_temp[1] ="";
-    fgets(char_temp, 1, file);
-    while (strcmp(char_temp,EOF)!=0)
+    char char_temp[3] ="s\0";
+    fgets(char_temp, 3, file);
+    while ((*char_temp)!=EOF)
     {
         if (strcmp(char_temp,"\n")==0)
         {
             lines_counter++;
         }
-        fgets(char_temp, 1, file);
+        fgets(char_temp, 3, file);
     }
     free(char_temp);
     fclose( file);
