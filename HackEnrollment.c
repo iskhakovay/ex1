@@ -634,6 +634,7 @@ void readHackersFromFile(FILE* hackers, int num_of_hackers, EnrollmentSystem sys
 
 int getNumberOfLines (FILE* file, char* file_name )
 {
+    fopen(file_name,"r");
     int lines_counter = 0;
     char char_temp[1] ="";
     fgets(char_temp, 1, file);
