@@ -291,12 +291,24 @@ bool isEnrollmentSuccess(Hacker current_hacker, IsraeliQueue needed_queue, Cours
 
 EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
 {
+    printf("inside of createEnrollment");
 
     EnrollmentSystem  system;
     system = malloc(sizeof (EnrollmentSystem)); /** IMPORTANT*/
+    if(system!=NULL){
+        printf("memory allocated");
+    }else{
+        printf("memory error");
+    }
 
     int num_of_students = getNumberOfLines(students, "students.txt");
     Student* students_arr = malloc(num_of_students*sizeof (Student));
+    if(num_of_students==0){
+        printf("error: count lines");
+    }
+    if(students_arr==NULL){
+        printf("memory error student arr");
+    }
     system->students = students_arr;
     readStudentFromFile(students, num_of_students, system);
     system->num_of_students = num_of_students;
@@ -622,6 +634,7 @@ void readHackersFromFile(FILE* hackers, int num_of_hackers, EnrollmentSystem sys
 
 int getNumberOfLines (FILE* file, char* file_name )
 {
+    printf("number of lines opened");
 
     if((file = fopen(file_name,"r")) == NULL )/** IMPORTANT*/ /** a lot of warnings of incompatible pointer types in every fopen. must check it*/
     {
