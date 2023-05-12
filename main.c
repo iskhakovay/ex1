@@ -2,9 +2,13 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
+
+
 #include "HackEnrollment.h"
-#include "capslock.h"
+//#include "capslock.h"
 #include "Headers.h"
+
+
 //#include "HackEnrollment.c"
 //#include "getopt.h"
 //#include "unistd.h"
@@ -15,8 +19,11 @@
 #define CHUNK_SIZE 256
 
 
+
+
 int main(int argc, char** argv)//maybe char* argv
 {
+    printf("yhayy");
 
     FILE* students;
     FILE *courses;
@@ -29,17 +36,21 @@ int main(int argc, char** argv)//maybe char* argv
 
     if( argc > 7 ) {
         printf("Too many arguments supplied.\n");
+        return 0;
     }
 
     if (argc == 7)
     {
         if(strcmp(argv[1], "-i")== 0)
         {
-           capslock = CAPSLOCK_OFF;
+            defineCapsLock(CAPSLOCK_OFF);
+           //capslock = CAPSLOCK_OFF;
         } else
         {
             printf("unknown option: %s\n", argv[1]);
         }
+
+        printf("yhayy");
             students = fopen(argv[2],"r");
             courses = fopen(argv[3],"r");
             hackers = fopen(argv[4],"r");
@@ -49,6 +60,7 @@ int main(int argc, char** argv)//maybe char* argv
 
     if (argc == 6)
     {
+        printf("yhayy");
         students = fopen(argv[1],"r");
         courses = fopen(argv[2],"r");
         hackers = fopen(argv[3],"r");
@@ -58,6 +70,7 @@ int main(int argc, char** argv)//maybe char* argv
 
     if( argc < 6 ) {
         printf("not enough arguments supplied.\n");
+        return 0;
     }
 
     EnrollmentSystem sys = createEnrollment(students, courses, hackers);

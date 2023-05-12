@@ -1,7 +1,7 @@
 CC = gcc
 OBJS = main.o HackEnrollment.o IsraeliQueue.o
-EXEC = program
-DEBUG_FLAG =
+EXEC = HackEnrollment
+DEBUG_FLAG = -g
 COMP_FLAG = -std=c99 -Wall -Werror
 
 $(EXEC) : $(OBJS)

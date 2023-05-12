@@ -1,6 +1,17 @@
-cmake_minimum_required(VERSION 3.23)
-project(ex1 C)
+cmake_minimum_required(VERSION 3.0.0)
+project(HackEnrollment VERSION 0.1.0)
 
-set(CMAKE_C_STANDARD 99)
+include(CTest)
+enable_testing()
 
-add_executable(ex1 main.c HackEnrollment.c Headers.h capslock.h)
+set(SOURCES
+        main.c
+        IsraeliQueue.c
+        HackEnrollment.c
+)
+
+set(CPACK_PROJECT_NAME ${PROJECT_NAME})
+set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
+include(CPack)
+
+add_executable(HackEnrollment ${SOURCES})

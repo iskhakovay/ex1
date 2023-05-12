@@ -5,7 +5,7 @@
 #include "HackEnrollment.h"
 #include "IsraeliQueue.h"
 #include "Headers.h"
-#include "capslock.h"
+
 
 #define ID_SIZE 9
 #define FRIEND_IN_FILE 20
@@ -14,7 +14,13 @@
 #define FRIENDSHIP_TH 20
 #define RIVALRY_TH 0
 
-
+//------------------------------------------------
+bool capslock = true;
+void defineCapsLock(bool caps_lock)
+{
+   capslock = caps_lock;
+   return;
+}
 
 //------------------------------------------------
 /** main functions are declared in HackEnrollment.h:

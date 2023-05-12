@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "Headers.h"
-
+//#include "capslock.h"
 
 
 
@@ -101,6 +101,8 @@ If successful, it prints the new queues and returns. Otherwise, it prints an err
  NONE
  */
 void hackEnrollment(EnrollmentSystem sys, FILE* out);
+
+void defineCapsLock(bool caps_lock);
 
 
 
