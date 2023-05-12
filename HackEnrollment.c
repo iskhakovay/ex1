@@ -640,6 +640,12 @@ int getNumberOfLines (FILE* file, char* file_name )
     {
         return HACK_ENROLLMENT_FAILED_READ_FILE;
     }
+
+    char str_temp[3];
+    fgets(str_temp, 2, file);
+    printf("%s", str_temp);
+
+
     int lines_counter = 0;
     char* char_temp = malloc(sizeof (char ));/** IMPORTANT*/
     fgets(char_temp, 1, file);
