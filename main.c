@@ -83,14 +83,14 @@ int main(int argc, char** argv)//maybe char* argv
     }
     printf("before hack");
     //fflush(stdout);
-    char* srr = malloc(sizeof(char)*256);
-    if(srr ==NULL){
-        printf("Null");
-    }
-    srr[255] = '\0';
-    fgets(srr,250,students);
-    printf("%s",srr);
-    fflush(stdout);
+   // char* srr = malloc(sizeof(char)*256);
+  //  if(srr ==NULL){
+  //      printf("Null");
+  //  }
+   // srr[255] = '\0';
+  //  fgets(srr,250,students);
+   // printf("%s",srr);
+   // fflush(stdout);
     EnrollmentSystem sys = createEnrollment(students, courses, hackers);
     sys = readEnrollment(sys, queues);
     hackEnrollment(sys, out);
