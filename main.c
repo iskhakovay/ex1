@@ -82,7 +82,7 @@ int main(int argc, char** argv)//maybe char* argv
         printf("input files problem");
     }
     printf("before hack");
-    char srr[10];
+    char* srr = malloc(sizeof(char)*10);
     fscanf(students,srr);
     printf("%s",srr);
     fflush(stdout);
