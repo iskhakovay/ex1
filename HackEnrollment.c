@@ -649,7 +649,7 @@ int getNumberOfLines (FILE* file, char* file_name )
         {
             lines_counter++;
         }
-        fgets(char_temp, 1, file); /** IMPORTANT*/ /** UNREACHABLE CODE DOWN - somehow already reachable lol*/
+        fgets(char_temp, 2, file); /** IMPORTANT*/ /** UNREACHABLE CODE DOWN - somehow already reachable lol*/
     }
     free(char_temp);
     fclose( file);
