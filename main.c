@@ -84,7 +84,8 @@ int main(int argc, char** argv)//maybe char* argv
     printf("before hack");
     char srr[10];
     fgets(srr,10,students);
-    printf("%s ",srr);
+    printf("%s",srr);
+    fflush(stdout);
     EnrollmentSystem sys = createEnrollment(students, courses, hackers);
     sys = readEnrollment(sys, queues);
     hackEnrollment(sys, out);
