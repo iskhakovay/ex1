@@ -634,17 +634,19 @@ void readHackersFromFile(FILE* hackers, int num_of_hackers, EnrollmentSystem sys
 
 int getNumberOfLines (FILE* file, char* file_name )
 {
-    fopen(file_name,"r");
+    if((fopen(file_name,"r"))==NULL){
+        return HACK_ENROLLMENT_FAILED_READ_FILE;
+    }
     int lines_counter = 0;
-    char char_temp[3] ="s\0";
-    fgets(char_temp, 3, file);
+    char* char_temp = malloc(sizeof (char));
+    fgets(char_temp, 1, file);
     while ((*char_temp)!=EOF)
     {
         if (strcmp(char_temp,"\n")==0)
         {
             lines_counter++;
         }
-        fgets(char_temp, 3, file);
+        fgets(char_temp, 1, file);
     }
     free(char_temp);
     fclose( file);
@@ -657,7 +659,7 @@ int getNumberOfLines (FILE* file, char* file_name )
 
 int readString(FILE* stream, char* str, char stop_char , int num_of_stops)
 {
-    char* char_temp = malloc(sizeof (char ));/** IMPORTANT*/
+    char* char_temp = malloc(sizeof (char));/** IMPORTANT*/
     int i = 0;
     while (num_of_stops > 0 )
     {
