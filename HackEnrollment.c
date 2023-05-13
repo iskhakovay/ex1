@@ -517,7 +517,12 @@ void printNewQues (EnrollmentSystem sys, FILE* out)
 }
 
 //------------------------------------------------
-
+void putStringInSys(EnrollmentSystem sys, int i, char* str){
+    int len = strlen(str);
+    for(int j = 0; j<len; j++){
+        sys->students[i]->name[j] = *(str+j);
+    }
+}
 void readStudentFromFile(FILE* students, int num_of_students, EnrollmentSystem system)
 {
     if((students = fopen("students.txt","r")) == NULL )/** IMPORTANT*/ /** a lot of warnings of incompatible pointer types in every fopen. must check it*/
@@ -533,7 +538,7 @@ void readStudentFromFile(FILE* students, int num_of_students, EnrollmentSystem s
 
         char* name_tmp = malloc(sizeof (char));
         readString(students, name_tmp, ' ', 2);
-        system->students[i]->name = name_tmp;
+        putStringInSys(system,i,name_tmp);
 
         system->students[i]->student_id = atoi(id_temp);
 
