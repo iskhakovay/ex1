@@ -639,13 +639,16 @@ int getNumberOfLines (FILE* file, char* file_name )
     } //
     rewind(file);
     int lines = 0;
-    int tmp_char = fgetc(file);
-    while (tmp_char != EOF)
+    int tmp_char;// = fgetc(file);
+    while ((tmp_char = fgetc(file))!=EOF)
     {
-        tmp_char = fgetc(file);
-        if (tmp_char == (int)'\n')
+        if (tmp_char == '\n')
         {
             lines++;
+        }
+        if(ferror(file)){
+            printf("Read Error\n");
+            break;
         }
     }
     return lines;
