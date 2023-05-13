@@ -183,7 +183,7 @@ Parameters :
 --------
  * @return : len of return string
  */
-int readString(FILE* stream, char* str, char stop_char , int num_of_stops);
+int readString(FILE* stream, char* str, char stop_char , int num_of_stops, int skip_num_of_stops, char skip_char_stop);
 
 /**
 reads list of "int"s that are sperted with a space, antil end o line (or EOF), and plasecs them in arry.
@@ -217,7 +217,7 @@ int getNumberOfLines (FILE* file, char* file_name);
  * skips the " credits" and "GPA" in students info
  * @param stream
  */
-void skipCreditsAndGpa(FILE* stream);
+void skipWords(FILE* stream,int num_of_stops, char stop_char);
 
 
 //------------------------------------------------
@@ -317,6 +317,7 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
 
     int num_of_courses = getNumberOfLines(courses, "courses.txt");
     Courses * courses_arr = malloc(num_of_courses*sizeof (Courses));
+    system->ques = realloc(system->ques,num_of_courses*sizeof (Courses));
     system->ques = courses_arr;
     system->num_of_ques = num_of_courses;
     readCoursesFromFile(courses, num_of_courses, system);
@@ -325,6 +326,7 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
 
     int num_of_hackers = getNumberOfLines(hackers, "hackers.txt") / 4;
     Hacker * hacker_arr = malloc(num_of_hackers * sizeof (Hacker));
+    system->Hackers = realloc(system->Hackers,num_of_hackers*sizeof (Hacker));
     system->Hackers = hacker_arr;
     readHackersFromFile(hackers, num_of_hackers, system);
     system ->num_of_hackers = num_of_hackers;
@@ -340,7 +342,7 @@ EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
     {
         //get course number id
         char* course_id_temp = malloc(sizeof (char));
-        readString(queues, course_id_temp, ' ', 1);
+        readString(queues, course_id_temp, ' ', 1,0,' ');
         int current_course_id = atoi(course_id_temp);
         free(course_id_temp);
 
@@ -536,10 +538,10 @@ void readStudentFromFile(FILE* students, int num_of_students, EnrollmentSystem s
         char id_temp[ID_SIZE]="";
 
         fgets(id_temp, ID_SIZE, students); /** IMPORTANT*/
-        skipCreditsAndGpa(students);
+        skipWords(students,3,' ');
 
         char* name_tmp = malloc(sizeof (char));
-        readString(students, name_tmp, ' ', 2);
+        readString(students, name_tmp, ' ', 2,3,' ');
         //q
         system->students[i]->name = realloc(system->students[i]->name ,sizeof (char)* strlen(name_tmp));
        //putStringInSys(system,i,name_tmp);
@@ -569,13 +571,13 @@ void readCoursesFromFile(FILE* courses, int num_of_courses, EnrollmentSystem sys
     {
 
         char* course_id_temp = malloc(sizeof (char));
-        readString(courses, course_id_temp, ' ', 1);
+        readString(courses, course_id_temp, ' ', 1,1,' ');
 
-        system->ques[i] = malloc(sizeof (Courses));
+        system->ques[i] = realloc(system->ques[i],sizeof (Courses));
         system->ques[i]->course_id = atoi(course_id_temp);
 
 
-        readString(courses, course_id_temp, '\n', 1);
+        readString(courses, course_id_temp, '\n', 1,0,' ');
 
         system->ques[i]->size = atoi(course_id_temp);
         free(course_id_temp);/** IMPORTANT*/
@@ -602,6 +604,7 @@ void readHackersFromFile(FILE* hackers, int num_of_hackers, EnrollmentSystem sys
     {
 
         //read hacker id
+        system->Hackers[i] = realloc(system->Hackers[i],sizeof (Hacker));
         char id_temp[ID_SIZE]="";
         fgets(id_temp, ID_SIZE, hackers); /** IMPORTANT*/
         system->Hackers[i]->hacker_id= atoi(id_temp);
@@ -611,7 +614,7 @@ void readHackersFromFile(FILE* hackers, int num_of_hackers, EnrollmentSystem sys
 
 
         //read desired courses
-        system->Hackers[i]->desired_courses= malloc(sizeof (int));
+        system->Hackers[i]->desired_courses= realloc(system->Hackers[i]->desired_courses,sizeof (int));
         system->Hackers[i]->num_of_desired_courses  = readArrOfStrings(hackers, system->Hackers[i]->desired_courses);
 
         int sys_student_index = findStudentIndexInSystem(system->Hackers[i]->hacker_id, system);
@@ -688,12 +691,14 @@ int getStrLen(FILE* stream,char stop_char, int num_of_stops){
     return len;
 }
 
-int readString(FILE* stream, char* str, char stop_char , int num_of_stops)
+int readString(FILE* stream, char* str, char stop_char , int num_of_stops, int skip_num_of_stops, char skip_char_stop)
 {
     int char_temp;/** IMPORTANT*/
     int len = getStrLen(stream,stop_char,num_of_stops);
     rewind(stream);
-    skipCreditsAndGpa(stream);
+    if(skip_num_of_stops!=0) {
+        skipWords(stream, skip_num_of_stops, skip_char_stop);
+    }
     str = realloc(str, (len+1) * sizeof(char));
     int i = 0;
     while (num_of_stops > 0 )
@@ -715,27 +720,30 @@ int readString(FILE* stream, char* str, char stop_char , int num_of_stops)
 int readArrOfStrings(FILE* stream, int* arr)
 {
 
-    char* char_temp = malloc(sizeof (char )); /** IMPORTANT*/
+    int char_temp = 0;/** IMPORTANT*/
     int j = 0;
 
-    while (*char_temp != '\n') /** IMPORTANT*/
+    while (char_temp != '\n') /** IMPORTANT*/
     {
         char* str_temp = malloc(sizeof (char));
-        int i = 1;
-        fgets(char_temp, 1, stream);
-        str_temp[0]= *char_temp;/** IMPORTANT*/
-        while (*char_temp != ' ')
+        int str_lne = readString(stream,str_temp,' ',1,1,' ');
+        /*int i = 1;
+        char_temp = fgetc(stream);
+        str_temp[0]= (char)char_temp;
+        while (char_temp != ' ')
         {
             i++;
-            fgets(char_temp, 1, stream);
+            char_temp = fgetc(stream);
             str_temp = realloc(str_temp, i * sizeof(char));
-            str_temp[i]= *char_temp;
+            str_temp[i]= (char)char_temp;
         }
-        arr = realloc(arr, (j+1)*sizeof (int));
+        */
+        arr = realloc(arr, (str_lne+1)*sizeof (int));
         arr[j]= atoi(str_temp);
+        j++;
         free( str_temp);
     }
-    free(char_temp);
+   // free(char_temp);
     return j;
 
 }
@@ -743,14 +751,14 @@ int readArrOfStrings(FILE* stream, int* arr)
 
 //------------------------------------------------
 
-void skipCreditsAndGpa(FILE* stream)
+void skipWords(FILE* stream, int num_of_stops, char stop_char)
 {
-    int num_of_spaces = 3;
+    //int num_of_spaces = 3;
     int char_temp;// = fgetc(stream);
-    while (num_of_spaces > 0) {
+    while (num_of_stops > 0) {
         char_temp = fgetc(stream);
-        if (char_temp == ' ') {
-            num_of_spaces--;
+        if (char_temp == stop_char) {
+            num_of_stops--;
         }
     }
     return;
