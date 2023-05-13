@@ -655,7 +655,7 @@ void readHackersFromFile(FILE* hackers, int num_of_hackers, EnrollmentSystem sys
 
         //read desired courses
         system->Hackers[i]->desired_courses= realloc(system->Hackers[i]->desired_courses,sizeof (int));
-        system->Hackers[i]->num_of_desired_courses  = readArrOfStrings(hackers, system->Hackers[i]->desired_courses,' ');
+        system->Hackers[i]->num_of_desired_courses  = readArrOfStrings(hackers, (system->Hackers[i]->desired_courses),' ');
 
         int sys_student_index = findStudentIndexInSystem(system->Hackers[i]->hacker_id, system);
 
@@ -783,7 +783,7 @@ int readArrOfStrings(FILE* stream, int* arr,char stop)
         }
         str_temp[i+1]= '\0';
         arr = realloc(arr, (i+1)*sizeof (int));
-        arr[j]= atoi(str_temp);
+        *(arr+j)= atoi(str_temp);
         j++;
         free( str_temp);
     }
