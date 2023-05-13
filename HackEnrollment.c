@@ -572,15 +572,15 @@ void readCoursesFromFile(FILE* courses, int num_of_courses, EnrollmentSystem sys
     {
 
         char* course_id_temp = malloc(sizeof (char));
-        readString(courses, course_id_temp, ' ', 1,1,' ');
+        readString(courses, course_id_temp, ' ', 1,0,' ');
 
         system->ques[i] = realloc(system->ques[i],sizeof (Courses));
         system->ques[i]->course_id = atoi(course_id_temp);
 
+        char* size_tmp = malloc(sizeof (char));
+        readString(courses, size_tmp, '\n', 1,1,' ');
 
-        readString(courses, course_id_temp, '\n', 1,0,' ');
-
-        system->ques[i]->size = atoi(course_id_temp);
+        system->ques[i]->size = atoi(size_tmp);
         free(course_id_temp);/** IMPORTANT*/
 
         getToNextLine(courses);
