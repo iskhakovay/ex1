@@ -79,9 +79,9 @@ int main(int argc, char** argv)//maybe char* argv
         return 0;
     }
     if(students==NULL || courses == NULL || hackers == NULL){
-        printf("input files problem");
+        printf("input files problem\n");
     }
-    printf("before hack");
+    printf("before hack\n");
     //fflush(stdout);
    // char* srr = malloc(sizeof(char)*256);
   //  if(srr ==NULL){
@@ -92,15 +92,36 @@ int main(int argc, char** argv)//maybe char* argv
    // printf("%s",srr);
    // fflush(stdout);
     EnrollmentSystem sys = createEnrollment(students, courses, hackers);
+    printf("create enrollment yessssssssss\n");
+
     sys = readEnrollment(sys, queues);
+    printf("read enrollment yessssssssss\n");
+
     hackEnrollment(sys, out);
+    printf("hack enrollment yessssssssss\n");
 
 
-    fclose(out);
-    fclose(students);
-    fclose(courses);
-    fclose(hackers);
-    fclose(queues);
+    if(out != NULL)
+    {
+        fclose(out);
+    }
+    if(students != NULL)
+    {
+        fclose(students);
+    }
+    if(courses != NULL)
+    {
+        fclose(courses);
+    }
+    if(hackers != NULL)
+    {
+        fclose(hackers);
+    }
+    if(queues != NULL)
+    {
+        fclose(queues);
+    }
+
 
 
 
