@@ -782,13 +782,13 @@ void skipWords(FILE* stream, int num_of_stops, char stop_char)
 
 void getToNextLine(FILE* stream)
 {
-    char* char_temp = malloc(sizeof (char ));/** IMPORTANT*/
-    while (*char_temp != '\n')/** IMPORTANT*/
+    int char_temp = 0;/** IMPORTANT*/
+    while (char_temp != '\n')/** IMPORTANT*/
     {
-        fgets(char_temp, 1, stream);
+        char_temp = fgetc(stream);
 
     }
-    free(char_temp);/** IMPORTANT*/
+    //free(char_temp);/** IMPORTANT*/
     return;
 }
 //------------------------------------------------
