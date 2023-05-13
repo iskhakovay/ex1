@@ -606,7 +606,7 @@ void readHackersFromFile(FILE* hackers, int num_of_hackers, EnrollmentSystem sys
     {
 
         //read hacker id
-        system->Hackers[i] = realloc(system->Hackers[i],sizeof (Hacker));
+        system->Hackers[i] = malloc(sizeof (Hacker));
         char id_temp[ID_SIZE]="";
         fgets(id_temp, ID_SIZE, hackers); /** IMPORTANT*/
         system->Hackers[i]->hacker_id= atoi(id_temp);
