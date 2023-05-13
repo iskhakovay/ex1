@@ -537,7 +537,7 @@ void readStudentFromFile(FILE* students, int num_of_students, EnrollmentSystem s
         skipCreditsAndGpa(students);
 
         char* name_tmp = malloc(sizeof (char));
-        int len = readString(students, name_tmp, ' ', 2);
+        readString(students, name_tmp, ' ', 2);
         system->students[i]->name = malloc(sizeof (char)* strlen(name_tmp));
         putStringInSys(system,i,name_tmp);
 
