@@ -697,9 +697,9 @@ int readString(FILE* stream, char* str, char stop_char , int num_of_stops, int s
     int char_temp;/** IMPORTANT*/
    // int len = getStrLen(stream,stop_char,num_of_stops);
    // rewind(stream);
-    if(skip_num_of_stops!=0) {
-        skipWords(stream, skip_num_of_stops, skip_char_stop);
-    }
+   // if(skip_num_of_stops!=0) {
+   //     skipWords(stream, skip_num_of_stops, skip_char_stop);
+   // }
    // str = realloc(str, (len+1) * sizeof(char));
     int i = 0;
     while (num_of_stops > 0 )
