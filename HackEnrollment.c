@@ -285,6 +285,7 @@ students enrolled in the course.
 bool isEnrollmentSuccess(Hacker current_hacker, IsraeliQueue needed_queue, Courses course);
 
 
+void freeSys (EnrollmentSystem sys);
 
 /**===================================================================================================================*/
 //main functions:
@@ -355,7 +356,8 @@ EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
         sys->ques[course_index]->enrollment_list = malloc(sizeof (int));
         sys->ques[course_index]->size_of_enrolment_list = readArrOfStrings(queues,
                                                                            sys->ques[course_index]->enrollment_list,' ');
-        sys->ques[course_index]->enrollment_list = realloc(sys->ques[course_index]->enrollment_list,(sys->ques[course_index]->size)*sizeof (int)); /** why */
+        sys->ques[course_index]->enrollment_list = realloc(sys->ques[course_index]->enrollment_list,
+                                                           (sys->ques[course_index]->size)*sizeof (int)); /** why */
 
     }
     return sys;
@@ -403,7 +405,7 @@ void hackEnrollment(EnrollmentSystem sys, FILE* out)
     cleanEnrollmentQueues(sys, arr_of_queues);
 
     printNewQues(sys, out);
-    free(sys);
+    freeSys(sys);
     return;
 
 }
@@ -461,6 +463,40 @@ void cleanEnrollmentQueues(EnrollmentSystem sys, IsraeliQueue *arr_of_queues)
         IsraeliQueueDestroy(arr_of_queues[course_index]);
     }
     free(arr_of_queues);
+}
+
+//------------------------------------------------
+void freeSys (EnrollmentSystem sys)
+{
+    //free students
+    for (int i = 0; i < sys->num_of_students; ++i)
+    {
+        free(sys->students[i]->name);
+        free(sys->students[i]->rivals);
+        free(sys->students[i]->friends);
+        free(sys->students[i]);
+    }
+    free(sys->students);
+
+    //free hackers
+    for (int i = 0; i < sys->num_of_hackers; ++i)
+    {
+        free(sys->Hackers[i]->desired_courses);
+        free(sys->Hackers[i]);
+    }
+    free(sys->Hackers);
+
+    //free courses
+    for (int i = 0; i < sys->num_of_ques; ++i)
+    {
+        free(sys->ques[i]->enrollment_list);
+        free(sys->ques[i]);
+
+    }
+    free(sys->ques);
+
+    free(sys);
+
 }
 
 //------------------------------------------------
