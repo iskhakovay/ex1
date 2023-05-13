@@ -766,22 +766,13 @@ int readArrOfStrings(FILE* stream, int* arr,char stop)
 
     int char_temp = 0;/** IMPORTANT*/
     int j = 0;
-
-    while (char_temp != '\n') /** IMPORTANT*/
+    while (j>=0) /** IMPORTANT*/
     {
-        char* str_temp = malloc(sizeof (char));
+        char* str_temp= malloc(sizeof (char));
         int str_lne = readString(stream,str_temp,stop,1,1,' ');
-        /*int i = 1;
-        char_temp = fgetc(stream);
-        str_temp[0]= (char)char_temp;
-        while (char_temp != ' ')
-        {
-            i++;
-            char_temp = fgetc(stream);
-            str_temp = realloc(str_temp, i * sizeof(char));
-            str_temp[i]= (char)char_temp;
+        if(str_temp==""){
+            break;
         }
-        */
         arr = realloc(arr, (str_lne+1)*sizeof (int));
         arr[j]= atoi(str_temp);
         j++;
