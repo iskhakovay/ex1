@@ -660,13 +660,13 @@ void readHackersFromFile(FILE* hackers, int num_of_hackers, EnrollmentSystem sys
         int sys_student_index = findStudentIndexInSystem(system->Hackers[i]->hacker_id, system);
 
         //read friends
-        system->students[sys_student_index]->friends  = malloc(sizeof (int));
+        system->students[sys_student_index]->friends  = realloc(system->students[sys_student_index]->friends,sizeof (int));
         system->students[sys_student_index]->num_of_friends = readArrOfStrings(hackers,
                                                                                system->students[sys_student_index]->friends,' ');
 
 
         //read rivals
-        system->students[sys_student_index]->rivals  = malloc(sizeof (int));
+        system->students[sys_student_index]->rivals  = realloc(system->students[sys_student_index]->rivals,sizeof (int));
         system->students[sys_student_index]->num_of_rivals = readArrOfStrings(hackers,
                                                                               system->students[sys_student_index]->rivals,' ');
 
