@@ -704,10 +704,10 @@ int readString(FILE* stream, char* str, char stop_char , int num_of_stops, int s
     int i = 0;
     while (num_of_stops > 0 )
     {
-        i++;
         char_temp = fgetc(stream);
         //str = realloc(str, (i+1) * sizeof(char*));
         *(str+i)= (char)char_temp; /** IMPORTANT*/
+        i++;
         if (char_temp == stop_char)/** IMPORTANT*/
         {
             num_of_stops--;
