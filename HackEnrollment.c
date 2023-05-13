@@ -519,7 +519,7 @@ void printNewQues (EnrollmentSystem sys, FILE* out)
 
 //------------------------------------------------
 void putStringInSys(EnrollmentSystem sys, int i, char* str){
-    int len = strlen(str);
+    int len =(int) strlen(str);
     for(int j = 0; j<len; j++){
         sys->students[i]->name[j] = *(str+j);
     }
