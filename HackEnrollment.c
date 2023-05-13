@@ -607,12 +607,14 @@ void readHackersFromFile(FILE* hackers, int num_of_hackers, EnrollmentSystem sys
 
         //read hacker id
         system->Hackers[i] = malloc(sizeof (Hacker));
-        char id_temp[ID_SIZE]="";
-        fgets(id_temp, ID_SIZE, hackers); /** IMPORTANT*/
+        char* id_temp = malloc(sizeof (char));
+        readString(hackers, id_temp, '\n', 1,0,' ');
+       // char id_temp[ID_SIZE]="";
+       // fgets(id_temp, ID_SIZE, hackers); /** IMPORTANT*/
         system->Hackers[i]->hacker_id= atoi(id_temp);
 
-        char* trash =""; /** IMPORTANT*/
-        fgets(trash, 1, hackers);
+       // char* trash =""; /** IMPORTANT*/
+       // fgets(trash, 1, hackers);
 
 
         //read desired courses
