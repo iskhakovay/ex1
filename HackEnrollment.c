@@ -682,6 +682,8 @@ int readString(FILE* stream, char* str, char stop_char , int num_of_stops)
 {
     int char_temp;/** IMPORTANT*/
     int len = getStrLen(stream,stop_char,num_of_stops);
+    rewind(stream);
+    skipCreditsAndGpa(stream);
     str = realloc(str, (len+1) * sizeof(char));
     int i = 0;
     while (num_of_stops > 0 )
@@ -734,12 +736,12 @@ int readArrOfStrings(FILE* stream, int* arr)
 void skipCreditsAndGpa(FILE* stream)
 {
     int num_of_spaces = 3;
-    char char_temp = fgetc(stream);
+    int char_temp;// = fgetc(stream);
     while (num_of_spaces > 0) {
+        char_temp = fgetc(stream);
         if (char_temp == ' ') {
             num_of_spaces--;
         }
-        char_temp = fgetc(stream);
     }
     return;
     /*
