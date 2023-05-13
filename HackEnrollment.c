@@ -706,13 +706,17 @@ int readString(FILE* stream, char* str, char stop_char , int num_of_stops, int s
     while (num_of_stops > 0 )
     {
         char_temp = fgetc(stream);
-        str = realloc(str, (i+1) * sizeof(char*));
-        *(str+i)= (char)char_temp; /** IMPORTANT*/
-        i++;
         if (char_temp == stop_char)/** IMPORTANT*/
         {
             num_of_stops--;
+            if(num_of_stops==0){
+                break;
+            }
         }
+        str = realloc(str, (i+1) * sizeof(char*));
+        *(str+i)= (char)char_temp; /** IMPORTANT*/
+        i++;
+
     }
     str[i+1]= '\0';
    // free(char_temp);
