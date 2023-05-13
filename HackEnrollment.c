@@ -197,7 +197,7 @@ Returns :
 --------
  * @return : len of arr
  */
-int readArrOfStrings(FILE* stream, int* arr);
+int readArrOfStrings(FILE* stream, int* arr, char stop);
 
 /**
  * progrsses in stream untill reaches '\n'
@@ -354,7 +354,7 @@ EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
         //enter the students ids
         sys->ques[course_index]->enrollment_list = malloc(sizeof (int));
         sys->ques[course_index]->size_of_enrolment_list = readArrOfStrings(queues,
-                                                                           sys->ques[course_index]->enrollment_list);
+                                                                           sys->ques[course_index]->enrollment_list,' ');
         sys->ques[course_index]->enrollment_list = realloc(sys->ques[course_index]->enrollment_list,(sys->ques[course_index]->size)*sizeof (int)); /** why */
 
     }
@@ -619,20 +619,20 @@ void readHackersFromFile(FILE* hackers, int num_of_hackers, EnrollmentSystem sys
 
         //read desired courses
         system->Hackers[i]->desired_courses= realloc(system->Hackers[i]->desired_courses,sizeof (int));
-        system->Hackers[i]->num_of_desired_courses  = readArrOfStrings(hackers, system->Hackers[i]->desired_courses);
+        system->Hackers[i]->num_of_desired_courses  = readArrOfStrings(hackers, system->Hackers[i]->desired_courses,' ');
 
         int sys_student_index = findStudentIndexInSystem(system->Hackers[i]->hacker_id, system);
 
         //read friends
         system->students[sys_student_index]->friends  = malloc(sizeof (int));
         system->students[sys_student_index]->num_of_friends = readArrOfStrings(hackers,
-                                                                               system->students[sys_student_index]->friends);
+                                                                               system->students[sys_student_index]->friends,' ');
 
 
         //read rivals
         system->students[sys_student_index]->rivals  = malloc(sizeof (int));
         system->students[sys_student_index]->num_of_rivals = readArrOfStrings(hackers,
-                                                                              system->students[sys_student_index]->rivals);
+                                                                              system->students[sys_student_index]->rivals,' ');
 
     }
     fclose(hackers);
@@ -725,7 +725,7 @@ int readString(FILE* stream, char* str, char stop_char , int num_of_stops, int s
     return i;
 }
 //------------------------------------------------
-int readArrOfStrings(FILE* stream, int* arr)
+int readArrOfStrings(FILE* stream, int* arr,char stop)
 {
 
     int char_temp = 0;/** IMPORTANT*/
@@ -734,7 +734,7 @@ int readArrOfStrings(FILE* stream, int* arr)
     while (char_temp != '\n') /** IMPORTANT*/
     {
         char* str_temp = malloc(sizeof (char));
-        int str_lne = readString(stream,str_temp,' ',1,1,' ');
+        int str_lne = readString(stream,str_temp,stop,1,1,' ');
         /*int i = 1;
         char_temp = fgetc(stream);
         str_temp[0]= (char)char_temp;
