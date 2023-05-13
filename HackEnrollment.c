@@ -7,7 +7,7 @@
 #include "Headers.h"
 
 
-#define ID_SIZE 9
+#define ID_SIZE 10
 #define FRIEND_IN_FILE 20
 #define RIVAL_IN_FILE (-20)
 #define NEUTRAL_IN_FILE 0
