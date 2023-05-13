@@ -708,7 +708,7 @@ int readString(FILE* stream, char* str, char stop_char , int num_of_stops, int s
     while (num_of_stops > 0 )
     {
         char_temp = fgetc(stream);
-        if (char_temp == stop_char)/** IMPORTANT*/
+        if (char_temp == stop_char || char_temp=='\n')/** IMPORTANT*/
         {
             num_of_stops--;
             if(num_of_stops==0){
