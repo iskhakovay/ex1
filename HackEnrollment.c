@@ -643,29 +643,12 @@ int getNumberOfLines (FILE* file, char* file_name )
     while (tmp_char != EOF)
     {
         tmp_char = fgetc(file);
-        if (tmp_char == '\n')
+        if (tmp_char == (int)'\n')
         {
             lines++;
         }
     }
     return lines;
-
-
-    /*
-    int lines_counter = 0;
-    char* char_temp = malloc(sizeof (char));
-    fgets(char_temp, 1, file);
-    while ((*char_temp)!=EOF)
-    {
-        if (strcmp(char_temp,"\n")==0)
-        {
-            lines_counter++;
-        }
-        fgets(char_temp, 1, file);
-    }
-    free(char_temp);
-    fclose( file);
-    return lines_counter;*/
 }
 
 
