@@ -538,7 +538,7 @@ void readStudentFromFile(FILE* students, int num_of_students, EnrollmentSystem s
 
         char* name_tmp = malloc(sizeof (char));
         readString(students, name_tmp, ' ', 2);
-        system->students[i]->name = malloc(sizeof (char)* strlen(name_tmp));
+        system->students[i]->name = realloc(system->students[i]->name ,sizeof (char)* strlen(name_tmp));
         putStringInSys(system,i,name_tmp);
 
         system->students[i]->student_id = atoi(id_temp);
