@@ -667,7 +667,7 @@ int readString(FILE* stream, char* str, char stop_char , int num_of_stops)
     {
         i++;
         char_temp = fgetc(stream);
-        str = realloc(str, (i+1) * sizeof(char));
+        str = realloc(str, (i+1) * sizeof(char*));
         *(str+i)= (char)char_temp; /** IMPORTANT*/
         if (char_temp == stop_char)/** IMPORTANT*/
         {
