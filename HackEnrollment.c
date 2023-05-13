@@ -531,9 +531,9 @@ void readStudentFromFile(FILE* students, int num_of_students, EnrollmentSystem s
         fgets(id_temp, ID_SIZE, students); /** IMPORTANT*/
         skipCreditsAndGpa(students);
 
-       // system->students[i]->name = malloc(sizeof (char));
-        readString(students, system->students[i]->name, ' ', 2);
-
+        char* name_tmp = malloc(sizeof (char*));
+        readString(students, name_tmp, ' ', 2);
+        system->students[i]->name = name_tmp;
 
         system->students[i]->student_id = atoi(id_temp);
 
@@ -661,21 +661,21 @@ int getNumberOfLines (FILE* file, char* file_name )
 
 int readString(FILE* stream, char* str, char stop_char , int num_of_stops)
 {
-    char* char_temp = malloc(sizeof (char));/** IMPORTANT*/
+    int char_temp;/** IMPORTANT*/
     int i = 0;
     while (num_of_stops > 0 )
     {
         i++;
-        fgets(char_temp, 1, stream);
+        char_temp = fgetc(stream);
         str = realloc(str, (i+1) * sizeof(char));
-        str[i]= *char_temp; /** IMPORTANT*/
-        if (*char_temp == stop_char)/** IMPORTANT*/
+        str[i]= (char)char_temp; /** IMPORTANT*/
+        if (char_temp == stop_char)/** IMPORTANT*/
         {
             num_of_stops--;
         }
     }
     str[i+1]= '\0';
-    free(char_temp);
+   // free(char_temp);
     return i;
 }
 //------------------------------------------------
