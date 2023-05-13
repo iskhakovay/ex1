@@ -695,17 +695,17 @@ int getStrLen(FILE* stream,char stop_char, int num_of_stops){
 int readString(FILE* stream, char* str, char stop_char , int num_of_stops, int skip_num_of_stops, char skip_char_stop)
 {
     int char_temp;/** IMPORTANT*/
-    int len = getStrLen(stream,stop_char,num_of_stops);
-    rewind(stream);
+   // int len = getStrLen(stream,stop_char,num_of_stops);
+   // rewind(stream);
     if(skip_num_of_stops!=0) {
         skipWords(stream, skip_num_of_stops, skip_char_stop);
     }
-    str = realloc(str, (len+1) * sizeof(char));
+   // str = realloc(str, (len+1) * sizeof(char));
     int i = 0;
     while (num_of_stops > 0 )
     {
         char_temp = fgetc(stream);
-        //str = realloc(str, (i+1) * sizeof(char*));
+        str = realloc(str, (i+1) * sizeof(char*));
         *(str+i)= (char)char_temp; /** IMPORTANT*/
         i++;
         if (char_temp == stop_char)/** IMPORTANT*/
