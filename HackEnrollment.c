@@ -317,7 +317,8 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
 
     int num_of_courses = getNumberOfLines(courses, "courses.txt");
     Courses * courses_arr = malloc(num_of_courses*sizeof (Courses));
-    system->ques = realloc(system->ques,num_of_courses*sizeof (Courses));
+   // system->ques = realloc(system->ques,num_of_courses*sizeof (Courses));
+    system->ques = malloc(num_of_courses*sizeof (Courses));
     system->ques = courses_arr;
     system->num_of_ques = num_of_courses;
     readCoursesFromFile(courses, num_of_courses, system);
