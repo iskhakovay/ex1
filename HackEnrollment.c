@@ -634,9 +634,9 @@ void readHackersFromFile(FILE* hackers, int num_of_hackers, EnrollmentSystem sys
 
 int getNumberOfLines (FILE* file, char* file_name )
 {
-    if((fopen(file_name,"r"))==NULL){
+    if((fopen(file_name,"r"))==NULL) {
         return HACK_ENROLLMENT_FAILED_READ_FILE;
-    }
+    } //
     rewind(file);
     int lines = 0;
     int tmp_char = fgetc(file);
