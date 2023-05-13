@@ -634,7 +634,20 @@ void readHackersFromFile(FILE* hackers, int num_of_hackers, EnrollmentSystem sys
 
 int getNumberOfLines (FILE* file, char* file_name )
 {
-    if((fopen(file_name,"r"))==NULL){
+    rewind(file);
+    int lines = 0;
+    char tmp_char = fgetc(file);
+    while (tmp_char != EOF)
+    {
+        tmp_char = fgetc(file);
+        if (tmp_char == '\n')
+        {
+            lines++;
+        }
+    }
+    return lines;
+
+    /*if((fopen(file_name,"r"))==NULL){
         return HACK_ENROLLMENT_FAILED_READ_FILE;
     }
     int lines_counter = 0;
@@ -650,7 +663,7 @@ int getNumberOfLines (FILE* file, char* file_name )
     }
     free(char_temp);
     fclose( file);
-    return lines_counter;
+    return lines_counter;*/
 }
 
 
@@ -710,18 +723,28 @@ int readArrOfStrings(FILE* stream, int* arr)
 
 void skipCreditsAndGpa(FILE* stream)
 {
-    char* char_temp = malloc(sizeof (char )); /** IMPORTANT*/
+    int num_of_spaces = 3;
+    char char_temp = fgetc(stream);
+    while (num_of_spaces > 0) {
+        if (char_temp == ' ') {
+            num_of_spaces--;
+        }
+        char_temp = fgetc(stream);
+    }
+    return;
+    /*
+    char* char_temp = malloc(sizeof (char ));
     int num_of_spaces = 3;
     while (num_of_spaces > 0 )
     {
         fgets(char_temp, 1, stream);
-        if (*char_temp == ' ')/** IMPORTANT*/
+        if (*char_temp == ' ')
         {
             num_of_spaces--;
         }
     }
     free(char_temp);
-    return;
+    return;*/
 
 }
 
