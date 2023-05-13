@@ -734,12 +734,6 @@ int getStrLen(FILE* stream,char stop_char, int num_of_stops){
 int readString(FILE* stream, char* str, char stop_char , int num_of_stops, int skip_num_of_stops, char skip_char_stop)
 {
     int char_temp;/** IMPORTANT*/
-   // int len = getStrLen(stream,stop_char,num_of_stops);
-   // rewind(stream);
-   // if(skip_num_of_stops!=0) {
-   //     skipWords(stream, skip_num_of_stops, skip_char_stop);
-   // }
-   // str = realloc(str, (len+1) * sizeof(char));
     int i = 0;
     while (num_of_stops > 0 )
     {
@@ -763,17 +757,32 @@ int readString(FILE* stream, char* str, char stop_char , int num_of_stops, int s
 //------------------------------------------------
 int readArrOfStrings(FILE* stream, int* arr,char stop)
 {
-
-    int char_temp = 0;/** IMPORTANT*/
+    int char_temp = 0;
+    //int char_temp = 0;/** IMPORTANT*/
     int j = 0;
-    while (j>=0) /** IMPORTANT*/
+    while (char_temp!='\n') /** IMPORTANT*/
     {
-        char* str_temp= malloc(sizeof (char));
-        int str_lne = readString(stream,str_temp,stop,1,1,' ');
-        if(str_temp==""){
-            break;
+        char* str_temp = malloc(sizeof (char));
+        int num_of_stops = 1;
+        /** IMPORTANT*/
+        int i = 0;
+        while (num_of_stops > 0 )
+        {
+            char_temp = fgetc(stream);
+            if (char_temp == stop || char_temp=='\n')/** IMPORTANT*/
+            {
+                num_of_stops--;
+                if(num_of_stops==0){
+                    break;
+                }
+            }
+            str_temp = realloc(str_temp, (i+1) * sizeof(char*));
+            *(str_temp+i)= (char)char_temp; /** IMPORTANT*/
+            i++;
+
         }
-        arr = realloc(arr, (str_lne+1)*sizeof (int));
+        str_temp[i+1]= '\0';
+        arr = realloc(arr, (i+1)*sizeof (int));
         arr[j]= atoi(str_temp);
         j++;
         free( str_temp);
