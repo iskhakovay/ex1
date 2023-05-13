@@ -660,9 +660,10 @@ int getNumberOfLines (FILE* file, char* file_name )
 //------------------------------------------------
 int getStrLen(FILE* stream,char stop_char, int num_of_stops){
     int len = 0, loop_runs = 0;
-    int tmp_char;// = fgetc(file);
+    int tmp_char = 0;// = fgetc(file);
     while (num_of_stops>0)
     {
+        tmp_char = fgetc(stream);
         loop_runs++;
         len++;
         if(tmp_char == stop_char){
