@@ -638,10 +638,11 @@ int getNumberOfLines (FILE* file, char* file_name )
         return HACK_ENROLLMENT_FAILED_READ_FILE;
     } //
     rewind(file);
-    int lines = 0;
+    int lines = 0, loop_runs = 0;
     int tmp_char;// = fgetc(file);
     while ((tmp_char = fgetc(file))!=EOF)
     {
+        loop_runs++;
         if (tmp_char == '\n')
         {
             lines++;
