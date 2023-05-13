@@ -582,9 +582,9 @@ void readCoursesFromFile(FILE* courses, int num_of_courses, EnrollmentSystem sys
 
         system->ques[i]->size = atoi(size_tmp);
         free(course_id_temp);/** IMPORTANT*/
-        if(i<num_of_courses-1) {
-            getToNextLine(courses);
-        }
+        //if(i<num_of_courses-1) {
+       //     getToNextLine(courses);
+       // }
 
     }
     fclose(courses);
