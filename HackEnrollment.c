@@ -532,6 +532,7 @@ void readStudentFromFile(FILE* students, int num_of_students, EnrollmentSystem s
     }
     for (int i= 0; i < num_of_students; i++)
     {
+        system->students[i] = realloc(system->students[i],sizeof (Student));
         char id_temp[ID_SIZE]="";
 
         fgets(id_temp, ID_SIZE, students); /** IMPORTANT*/
